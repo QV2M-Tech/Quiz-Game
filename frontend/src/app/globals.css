@@ -30,4 +30,20 @@
 	.text-balance {
 		text-wrap: balance;
 	}
+	body {
+		@apply bg-sky-100;
+	}
+	*,
+	:hover {
+		@apply transition duration-200;
+	}
+	h1 {
+		@apply text-4xl;
+	}
+	h2 {
+		@apply text-2xl;
+	}
+	.btn-tw {
+		@apply px-4 py-2 rounded-lg;
+	}
 }
