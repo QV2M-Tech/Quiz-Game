@@ -31,7 +31,7 @@ export default function Leaderboard() {
 				</thead>
 				<tbody className="divide-y divide-sky-200">
 					{rows.map((row, index) => (
-						<tr key={index} className="h-10 hover:bg-sky-100">
+						<tr key={index} className="h-10 hover:bg-primary">
 							<td>{row.rank}</td>
 							<td>{row.name}</td>
 							<td>{row.score}</td>
