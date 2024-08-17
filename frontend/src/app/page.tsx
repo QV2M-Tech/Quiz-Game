@@ -12,6 +12,7 @@ const LoginUserPage = () => {
 	const [password, setPassword] = useState<string>("");
 	const [usernamer, setUsernamer] = useState<string>("");
 	const [passwordr, setPasswordr] = useState<string>("");
+	const [popup, setpopup] = useState<boolean>(false);
 
 	const router = useRouter(); // ใช้ useRouter จาก next/navigation
 
@@ -19,18 +20,7 @@ const LoginUserPage = () => {
 	const handleSubmit = async (isLogin: boolean) => {
 		try {
 			if (isLogin) {
-				// สำหรับการเข้าสู่ระบบ (นักเรียน)
-				const response = await axios.post("http://localhost:3000/", {
-					Name: username,
-				});
-				const { token } = response.data;
-
-				if (token) {
-					localStorage.setItem("token", token);
-					router.push("/game");
-				}
-			} else {
-				// สำหรับการลงทะเบียน (แอดมิน)
+				// สำหรับการเข้าสู่ระบบ
 				const response = await axios.post("http://localhost:3000/", {
 					Name: username,
 					Password: password,
@@ -39,7 +29,19 @@ const LoginUserPage = () => {
 
 				if (token) {
 					localStorage.setItem("token", token);
-					router.push("/dashboard");
+					router.push("/game");
+				}
+			} else {
+				// สำหรับการลงทะเบียน
+				const response = await axios.post("http://localhost:3000/", {
+					Name: usernamer,
+					Password: passwordr,
+				});
+				const { token } = response.data;
+
+				if (token) {
+					localStorage.setItem("token", token);
+					setpopup(true);
 				}
 			}
 		} catch (error) {
@@ -48,25 +50,40 @@ const LoginUserPage = () => {
 		}
 	};
 
+	const pop = () => {
+		router.push("/dashboard");
+	};
+
 	return (
 		<div className="bg-sky-100 h-full">
-			<section className="forms-section h-full">
+			<section className="forms-section h-full relative">
 				<Image
 					src="/LogoLaSalleChote.png"
 					alt="Landscape picture"
 					width={200}
 					height={200}
 				/>
-				<div className="bg-white rounded-lg p-6 shadow-lg text-center">
-					<h2 className="text-xl font-semibold mb-4">สร้างบัญชีสำเร็จ</h2>
-					{/* <p className="mb-6">{message}</p> */}
-					<button
-						// onClick={handleSubmit}
-						className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
-					>
-						เข้าสู่ระบบ
-					</button>
-				</div>
+
+				{popup && (
+					<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+						<div className="relative bg-white rounded-lg p-6 shadow-lg text-center">
+							<button
+								className="absolute top-2 right-2 text-red-600 hover:text-red-800"
+								onClick={() => setpopup(false)}
+							>
+								&times;
+							</button>
+							<h2 className="text-xl font-semibold mb-4">สร้างบัญชีสำเร็จ</h2>
+							<button
+								onClick={pop}
+								className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+							>
+								เข้าสู่ระบบ
+							</button>
+						</div>
+					</div>
+				)}
+
 				<div className="forms">
 					{/* Login Form */}
 					<div className={`form-wrapper ${isLogin ? "is-active" : ""}`}>
