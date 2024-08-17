@@ -1,66 +1,42 @@
 export default function Leaderboard() {
+	let rank = 1;
+
+	function createData(name: string, score: number) {
+		return { rank: rank++, name, score };
+	}
+
+	const rows = [
+		createData("Frozen yoghurt", 100),
+		createData("Frozen yoghurt", 100),
+		createData("Frozen yoghurt", 100),
+		createData("Frozen yoghurt", 100),
+		createData("Frozen yoghurt", 100),
+		createData("Frozen yoghurt", 100),
+		createData("Frozen yoghurt", 100),
+		createData("Frozen yoghurt", 100),
+		createData("Frozen yoghurt", 100),
+		createData("Frozen yoghurt", 100),
+	];
+
 	return (
-		<div className="flex flex-col gap-6 bg-white w-2/6 h-5/6 rounded-3xl shadow-xl py-6 px-8">
-			<h1 className="text-center mb-">คะแนนสูงสุด 10 อันดับ</h1>
+		<div className="flex flex-col gap-6 w-2/6 tw-box">
+			<h1 className="text-center">คะแนนสูงสุด 10 อันดับ</h1>
 			<table className="w-full text-center">
 				<thead>
-					<tr>
-						<th className="h-12">อันดับ</th>
-						<th>ชื่อ</th>
-						<th>คะแนน</th>
+					<tr className="h-12">
+						<th className="w-1/5">อันดับ</th>
+						<th className="w-3/5">ชื่อ</th>
+						<th className="w-1/5">คะแนน</th>
 					</tr>
 				</thead>
-				<tbody className="divide-y divide-gray-200">
-					<tr>
-						<td className="h-10">1</td>
-						<td>a</td>
-						<td>100</td>
-					</tr>
-					<tr>
-						<td className="h-10">2</td>
-						<td>a</td>
-						<td>100</td>
-					</tr>
-					<tr>
-						<td className="h-10">3</td>
-						<td>a</td>
-						<td>100</td>
-					</tr>
-					<tr>
-						<td className="h-10">4</td>
-						<td>a</td>
-						<td>100</td>
-					</tr>
-					<tr>
-						<td className="h-10">5</td>
-						<td>a</td>
-						<td>100</td>
-					</tr>
-					<tr>
-						<td className="h-10">6</td>
-						<td>a</td>
-						<td>100</td>
-					</tr>
-					<tr>
-						<td className="h-10">7</td>
-						<td>a</td>
-						<td>100</td>
-					</tr>
-					<tr>
-						<td className="h-10">8</td>
-						<td>a</td>
-						<td>100</td>
-					</tr>
-					<tr>
-						<td className="h-10">9</td>
-						<td>a</td>
-						<td>100</td>
-					</tr>
-					<tr>
-						<td className="h-10">10</td>
-						<td>a</td>
-						<td>100</td>
-					</tr>
+				<tbody className="divide-y divide-sky-200">
+					{rows.map((row, index) => (
+						<tr key={index} className="h-10 hover:bg-sky-100">
+							<td>{row.rank}</td>
+							<td>{row.name}</td>
+							<td>{row.score}</td>
+						</tr>
+					))}
 				</tbody>
 			</table>
 		</div>
