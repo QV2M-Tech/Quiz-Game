@@ -1,31 +1,84 @@
 "use client";
 
 import React from "react";
-import { Home, School, Folder, Settings, Logout } from "@mui/icons-material";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+	MenuBookRounded,
+	StarsRounded,
+	ManageAccountsRounded,
+	TopicRounded,
+	Logout,
+} from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 
-const NavRail: React.FC = () => (
-	<div className="flex flex-col justify-between w-16 bg-primary shadow-md h-screen fixed left-0 top-0">
-		<div className="flex flex-col items-center py-4 space-y-4">
-			<IconButton>
-				<Home />
-			</IconButton>
-			<IconButton>
-				<School />
-			</IconButton>
-			<IconButton>
-				<Folder />
-			</IconButton>
-			<IconButton>
-				<Settings />
-			</IconButton>
+interface LinkItem {
+	name: string;
+	path: string;
+	icon: React.ReactNode;
+}
+
+const links: LinkItem[] = [
+	{
+		name: "เลือกหมวดหมู่",
+		path: "/selectgame",
+		icon: <MenuBookRounded />,
+	},
+	{
+		name: "สรุปคะแนนรวม",
+		path: "/score",
+		icon: <StarsRounded />,
+	},
+	{
+		name: "จัดการผู้ใช้",
+		path: "/user",
+		icon: <ManageAccountsRounded />,
+	},
+	{
+		name: "จัดการหัวข้อ",
+		path: "/topic",
+		icon: <TopicRounded />,
+	},
+];
+
+const NavRail: React.FC = () => {
+	const pathname = usePathname();
+
+	// Hide NavRail on /login and /register routes
+	if (pathname === "/login" || pathname === "/register") {
+		return null;
+	}
+
+	return (
+		<div className="flex flex-col flex-basis px-3 py-4 bg-gray-50">
+			<div className="flex flex-col items-center space-y-4 py-4">
+				{links.map((link, index) => (
+					<React.Fragment key={link.name}>
+						<Link
+							href={link.path}
+							className="flex flex-col items-center space-y-2"
+						>
+							<IconButton
+								color={pathname === link.path ? "secondary" : "default"}
+							>
+								{link.icon}
+							</IconButton>
+							<span className="text-sm">{link.name}</span>
+						</Link>
+						{index === 0 && <div className="w-3/4 h-px bg-gray-300 my-2" />}
+					</React.Fragment>
+				))}
+			</div>
+			<div className="flex justify-center items-center py-4">
+				<Link href="/login" className="flex flex-col items-center space-y-2">
+					<IconButton>
+						<Logout />
+					</IconButton>
+					<span className="text-sm">ออกจากระบบ</span>
+				</Link>
+			</div>
 		</div>
-		<div className="flex justify-center items-center py-4 space-y-4">
-			<IconButton>
-				<Logout />
-			</IconButton>
-		</div>
-	</div>
-);
+	);
+};
 
 export default NavRail;
