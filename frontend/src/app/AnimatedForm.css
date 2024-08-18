@@ -385,9 +385,6 @@ span {
 }
 
 /* Hover effects */
-span:hover {
-	transform: rotateY(20deg) rotateZ(28deg) scale(1.2);
-}
 
 /* Keyframes for underline and color animations */
 @keyframes colorflash {
