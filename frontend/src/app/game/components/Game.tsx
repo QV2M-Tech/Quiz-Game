@@ -1,26 +1,12 @@
-import { useRouter } from "next/navigation";
-
 export default function Game({
-	reload,
-	setReload,
 	time,
-	setShowTimeout,
+	handleRestart,
+	setShowExit,
 }: {
-	reload: boolean;
-	setReload: Function;
 	time: number;
-	setShowTimeout: Function;
+	handleRestart: Function;
+	setShowExit: Function;
 }) {
-	const router = useRouter();
-
-	function handleRestart(): void {
-		setShowTimeout(false);
-		setReload(!reload);
-	}
-	function handleExit(): void {
-		router.push("/");
-	}
-
 	return (
 		<div className="flex flex-col justify-between gap-6 w-3/6 tw-box">
 			<div className="flex flex-col items-center gap-4">
@@ -64,13 +50,13 @@ export default function Game({
 				</div>
 				<div className="flex gap-2">
 					<button
-						onClick={handleRestart}
+						onClick={() => handleRestart()}
 						className="tw-btn bg-white border border-secondary shadow-md hover:bg-secondary/20"
 					>
 						เริ่มเกมใหม่
 					</button>
 					<button
-						onClick={handleExit}
+						onClick={() => setShowExit(true)}
 						className="tw-btn bg-secondary text-white shadow-md hover:bg-secondary-hover"
 					>
 						ออกจากเกม
