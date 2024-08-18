@@ -8,16 +8,32 @@ const config: Config = {
 	],
 	theme: {
 		extend: {
-			screens: {
-				sm: "640px",  // Small screens (mobile)
-				md: "768px",  // Medium screens (tablets)
-				lg: "1024px", // Large screens (laptops)
-				xl: "1280px", // Extra large screens (desktops)
-				
+			colors: {
+				primary: "#e0f2fe",
+				secondary: "#0c4a6e",
+				"secondary-hover": "#082f49",
+				accent: "#7dd3fc",
+				"accent-hover": "#38bdf8",
 			},
 			backgroundImage: {
 				"gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-				"gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+				"gradient-conic":
+					"conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+			},
+			animation: {
+				"slide-down": "slideDown 0.5s ease-out",
+			},
+			keyframes: {
+				slideDown: {
+					"0%": {
+						transform: "translateY(-100%) translateX(-50%)",
+						opacity: "0",
+					},
+					"100%": {
+						transform: "translateY(-50%) translateX(-50%)",
+						opacity: "1",
+					},
+				},
 			},
 		},
 	},
