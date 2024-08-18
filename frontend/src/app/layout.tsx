@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import NavRail from "@/components/ui/NavRail";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,12 +12,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
 	children,
-}: Readonly<{
+}: {
 	children: React.ReactNode;
-}>) {
+}) {
 	return (
 		<html lang="en">
-			<body className={inter.className}>{children}</body>
+			<body className={inter.className}>
+				<div id="app-container" className="flex">
+					<NavRail />
+					<main className="flex-1 ml-16 p-4 md:p-6 lg:p-8">{children}</main>
+				</div>
+			</body>
 		</html>
 	);
 }
