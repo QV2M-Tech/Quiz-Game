@@ -10,13 +10,13 @@ import ModalExit from "./components/ModalExit";
 export default function GamePage() {
 	const router = useRouter();
 	const [reload, setReload] = useState<boolean>(false);
-	const [time, setTime] = useState<number>(3000);
+	const [time, setTime] = useState<number>(30000);
 	const [start, setStart] = useState<boolean>(false);
 	const [showTimeout, setShowTimeout] = useState<boolean>(false);
 	const [showExit, setShowExit] = useState<boolean>(false);
 
 	useEffect(() => {
-		setTime(3000);
+		setTime(30000);
 
 		const timeoutId = setTimeout(() => {
 			setStart(true);
