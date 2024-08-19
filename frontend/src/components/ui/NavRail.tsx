@@ -45,7 +45,7 @@ const NavRail: React.FC = () => {
 	const pathname = usePathname();
 
 	// Hide NavRail on /login and /register routes
-	if (pathname === "/login" || pathname === "/register") {
+	if (pathname === "/" || pathname === "/register") {
 		return null;
 	}
 
