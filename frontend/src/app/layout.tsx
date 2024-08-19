@@ -20,7 +20,7 @@ export default function RootLayout({
 			<body className={inter.className}>
 				<div id="app-container" className="flex">
 					<NavRail />
-					<main className="flex-1 ml-16 p-4 md:p-6 lg:p-8">{children}</main>
+					<main className="flex-1 ml-28 p-4 md:p-6 lg:p-8">{children}</main>
 				</div>
 			</body>
 		</html>

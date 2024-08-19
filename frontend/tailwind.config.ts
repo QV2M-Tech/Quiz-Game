@@ -1,29 +1,72 @@
 import type { Config } from "tailwindcss";
 
-const config: Config = {
+const config = {
+	darkMode: ["class"],
 	content: [
 		"./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
 		"./src/components/**/*.{js,ts,jsx,tsx,mdx}",
 		"./src/app/**/*.{js,ts,jsx,tsx,mdx}",
 	],
 	theme: {
+		container: {
+			center: true,
+			padding: "2rem",
+			screens: {
+				"2xl": "1400px",
+			},
+		},
 		extend: {
 			colors: {
+				border: "hsl(var(--border))",
+				input: "hsl(var(--input))",
+				ring: "hsl(var(--ring))",
+				background: "hsl(var(--background))",
+				foreground: "hsl(var(--foreground))",
 				primary: "#e0f2fe",
-				secondary: "#0c4a6e",
-				"secondary-hover": "#082f49",
-				accent: "#7dd3fc",
-				"accent-hover": "#38bdf8",
+				secondary: {
+					DEFAULT: "#0c4a6e",
+					hover: "#082f49",
+				},
+				destructive: {
+					DEFAULT: "hsl(var(--destructive))",
+					foreground: "hsl(var(--destructive-foreground))",
+				},
+				muted: {
+					DEFAULT: "hsl(var(--muted))",
+					foreground: "hsl(var(--muted-foreground))",
+				},
+				accent: {
+					DEFAULT: "#7dd3fc",
+					hover: "#38bdf8",
+				},
+				popover: {
+					DEFAULT: "hsl(var(--popover))",
+					foreground: "hsl(var(--popover-foreground))",
+				},
+				card: {
+					DEFAULT: "hsl(var(--card))",
+					foreground: "hsl(var(--card-foreground))",
+				},
 			},
-			backgroundImage: {
-				"gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-				"gradient-conic":
-					"conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+			borderRadius: {
+				lg: "var(--radius)",
+				md: "calc(var(--radius) - 2px)",
+				sm: "calc(var(--radius) - 4px)",
 			},
 			animation: {
+				"accordion-down": "accordion-down 0.2s ease-out",
+				"accordion-up": "accordion-up 0.2s ease-out",
 				"slide-down": "slideDown 0.5s ease-out",
 			},
 			keyframes: {
+				"accordion-down": {
+					from: { height: "0" },
+					to: { height: "var(--radix-accordion-content-height)" },
+				},
+				"accordion-up": {
+					from: { height: "var(--radix-accordion-content-height)" },
+					to: { height: "0" },
+				},
 				slideDown: {
 					"0%": {
 						transform: "translateY(-100%) translateX(-50%)",
@@ -35,9 +78,14 @@ const config: Config = {
 					},
 				},
 			},
+			backgroundImage: {
+				"gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+				"gradient-conic":
+					"conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+			},
 		},
 	},
-	plugins: [],
-};
+	plugins: [require("tailwindcss-animate")],
+} satisfies Config;
 
 export default config;
