@@ -15,6 +15,7 @@ const config = {
 				"2xl": "1400px",
 			},
 		},
+
 		extend: {
 			colors: {
 				border: "hsl(var(--border))",
@@ -48,16 +49,19 @@ const config = {
 					foreground: "hsl(var(--card-foreground))",
 				},
 			},
+
 			borderRadius: {
 				lg: "var(--radius)",
 				md: "calc(var(--radius) - 2px)",
 				sm: "calc(var(--radius) - 4px)",
 			},
+
 			animation: {
 				"accordion-down": "accordion-down 0.2s ease-out",
 				"accordion-up": "accordion-up 0.2s ease-out",
 				"slide-down": "slideDown 0.5s ease-out",
 			},
+
 			keyframes: {
 				"accordion-down": {
 					from: { height: "0" },
@@ -78,6 +82,7 @@ const config = {
 					},
 				},
 			},
+
 			backgroundImage: {
 				"gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
 				"gradient-conic":

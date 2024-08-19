@@ -50,31 +50,29 @@ const NavRail: React.FC = () => {
 	}
 
 	return (
-		<div className="flex flex-col h-screen w-28 px-3 py-4 justify-between bg-gray-50 fixed">
-			<div className="flex flex-col items-center space-y-4 py-4">
+		<div className="flex flex-col justify-between fixed gap-4 h-screen w-20 px-3 py-4 bg-white shadow-md">
+			<div className="flex flex-col items-center gap-4">
 				{links.map((link, index) => (
 					<React.Fragment key={link.name}>
-						<Link
-							href={link.path}
-							className="flex flex-col items-center space-y-2"
-						>
+						<Link href={link.path} className="flex flex-col items-center gap-2">
 							<IconButton
-								color={pathname === link.path ? "secondary" : "default"}
+								// color={pathname === link.path ? "primary" : "default"}
+								className={`${pathname === link.path ? "bg-accent" : ""}`}
 							>
 								{link.icon}
 							</IconButton>
-							<span className="text-sm">{link.name}</span>
+							<span className="text-xs text-center">{link.name}</span>
 						</Link>
-						{index === 0 && <div className="w-3/4 h-px bg-gray-300 my-2" />}
+						{index === 0 && <div className="w-3/4 h-px bg-gray-300" />}
 					</React.Fragment>
 				))}
 			</div>
-			<div className="flex justify-center items-center py-4">
-				<Link href="/login" className="flex flex-col items-center space-y-2">
+			<div className="flex justify-center items-center">
+				<Link href="/" className="flex flex-col items-center gap-2">
 					<IconButton>
 						<Logout />
 					</IconButton>
-					<span className="text-sm">ออกจากระบบ</span>
+					<span className="text-xs text-center">ออกจากระบบ</span>
 				</Link>
 			</div>
 		</div>
