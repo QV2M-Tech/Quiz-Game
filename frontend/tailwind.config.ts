@@ -27,6 +27,7 @@ const config = {
 				secondary: {
 					DEFAULT: "#0c4a6e",
 					hover: "#082f49",
+					foreground: "#fff",
 				},
 				destructive: {
 					DEFAULT: "hsl(var(--destructive))",

@@ -49,6 +49,11 @@
 	h2 {
 		@apply text-2xl;
 	}
+	input,
+	select,
+	textarea {
+		@apply outline-none;
+	}
 	.tw-btn {
 		@apply px-4 py-2 rounded-lg;
 	}
