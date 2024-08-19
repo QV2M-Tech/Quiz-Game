@@ -5,6 +5,7 @@ import {
 	Table,
 	TableBody,
 	TableCell,
+	TableFooter,
 	TableHead,
 	TableHeader,
 	TableRow,
@@ -85,110 +86,114 @@ export default function ScorePage() {
 	}
 
 	return (
-		<div className="flex flex-col items-center">
-			<div className="p-4 space-y-4 w-11/12 ">
-				<h2 className="font-bold">สรุปรายการคะแนน</h2>
+		<div className="flex flex-col items-center py-10">
+			<div className="w-11/12 ">
+				<Table>
+					<TableHeader>
+						<TableRow>
+							<TableCell colSpan={8}>
+								<div className="flex justify-between items-center">
+									<h2 className="font-bold">สรุปรายการคะแนน</h2>
+									<div className="flex gap-4">
+										<Input
+											className="w-64"
+											placeholder="ค้นหา"
+											value={searchTerm}
+											onChange={(e) => setSearchTerm(e.target.value)}
+										/>
+										<Button
+											variant="outline"
+											className="hover:bg-secondary/20 border-secondary"
+										>
+											เลือกวันที่
+										</Button>
+										<Button variant="secondary">ตัวกรอง</Button>
+									</div>
+								</div>
+							</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableHead className="text-center">
+								<Checkbox />
+							</TableHead>
+							<TableHead
+								onClick={() => requestSort("date")}
+								className="cursor-pointer text-center"
+							>
+								วันที่เล่น{" "}
+								<ArrowUpDown className="inline-block ml-2" size={16} />
+							</TableHead>
+							<TableHead
+								onClick={() => requestSort("name")}
+								className="cursor-pointer text-center"
+							>
+								ชื่อผู้ใช้{" "}
+								<ArrowUpDown className="inline-block ml-2" size={16} />
+							</TableHead>
+							<TableHead
+								onClick={() => requestSort("category")}
+								className="cursor-pointer text-center"
+							>
+								หมวดหมู่ <ArrowUpDown className="inline-block ml-2" size={16} />
+							</TableHead>
+							<TableHead
+								onClick={() => requestSort("topic")}
+								className="cursor-pointer text-center"
+							>
+								หัวข้อ <ArrowUpDown className="inline-block ml-2" size={16} />
+							</TableHead>
+							<TableHead
+								onClick={() => requestSort("subtopic")}
+								className="cursor-pointer text-center"
+							>
+								หัวข้อย่อย{" "}
+								<ArrowUpDown className="inline-block ml-2" size={16} />
+							</TableHead>
+							<TableHead
+								onClick={() => requestSort("score")}
+								className="cursor-pointer text-center"
+							>
+								คะแนน <ArrowUpDown className="inline-block ml-2" size={16} />
+							</TableHead>
+							<TableHead className="text-center">ตัวเลือก</TableHead>
+						</TableRow>
+					</TableHeader>
 
-				<div className="flex justify-between mb-4">
-					<Input
-						className="w-64"
-						placeholder="ค้นหา"
-						value={searchTerm}
-						onChange={(e) => setSearchTerm(e.target.value)}
-					/>
-					<div className="space-x-2">
-						<Button
-							variant="outline"
-							className="hover:bg-secondary/20 border-secondary"
-						>
-							เลือกวันที่
-						</Button>
-						<Button variant="secondary">ตัวกรอง</Button>
-					</div>
-				</div>
-
-				<div className="border rounded-lg overflow-hidden bg-white shadow">
-					<Table>
-						<TableHeader>
-							<TableRow>
-								<TableHead className="w-12 text-center">
+					<TableBody>
+						{data.map((item) => (
+							<TableRow key={item._id}>
+								<TableCell>
 									<Checkbox />
-								</TableHead>
-								<TableHead
-									onClick={() => requestSort("date")}
-									className="cursor-pointer text-center"
-								>
-									วันที่เล่น{" "}
-									<ArrowUpDown className="inline-block ml-2" size={16} />
-								</TableHead>
-								<TableHead
-									onClick={() => requestSort("name")}
-									className="cursor-pointer text-center"
-								>
-									ชื่อผู้ใช้{" "}
-									<ArrowUpDown className="inline-block ml-2" size={16} />
-								</TableHead>
-								<TableHead
-									onClick={() => requestSort("category")}
-									className="cursor-pointer text-center"
-								>
-									หมวดหมู่{" "}
-									<ArrowUpDown className="inline-block ml-2" size={16} />
-								</TableHead>
-								<TableHead
-									onClick={() => requestSort("topic")}
-									className="cursor-pointer text-center"
-								>
-									หัวข้อ <ArrowUpDown className="inline-block ml-2" size={16} />
-								</TableHead>
-								<TableHead
-									onClick={() => requestSort("subtopic")}
-									className="cursor-pointer text-center"
-								>
-									หัวข้อย่อย{" "}
-									<ArrowUpDown className="inline-block ml-2" size={16} />
-								</TableHead>
-								<TableHead
-									onClick={() => requestSort("score")}
-									className="cursor-pointer text-center"
-								>
-									คะแนน <ArrowUpDown className="inline-block ml-2" size={16} />
-								</TableHead>
-								<TableHead className="text-center">ตัวเลือก</TableHead>
+								</TableCell>
+								<TableCell>{item.date}</TableCell>
+								<TableCell className="text-left">
+									<div className="font-medium">{item.name}</div>
+									<div className="text-sm text-gray-500">{item.username}</div>
+								</TableCell>
+								<TableCell>
+									<CategoryBadge category={item.category} />
+								</TableCell>
+								<TableCell>{item.topic}</TableCell>
+								<TableCell>{item.subtopic}</TableCell>
+								<TableCell className="text-center">{item.score}</TableCell>
+								<TableCell className="text-center">ลบ</TableCell>
 							</TableRow>
-						</TableHeader>
-
-						<TableBody>
-							{data.map((item) => (
-								<TableRow key={item._id}>
-									<TableCell>
-										<Checkbox />
-									</TableCell>
-									<TableCell>{item.date}</TableCell>
-									<TableCell className="text-left">
-										<div className="font-medium">{item.name}</div>
-										<div className="text-sm text-gray-500">{item.username}</div>
-									</TableCell>
-									<TableCell>
-										<CategoryBadge category={item.category} />
-									</TableCell>
-									<TableCell>{item.topic}</TableCell>
-									<TableCell>{item.subtopic}</TableCell>
-									<TableCell className="text-center">{item.score}</TableCell>
-									<TableCell className="text-center">ลบ</TableCell>
-								</TableRow>
-							))}
-						</TableBody>
-					</Table>
-				</div>
-
-				<Pagination
-					currentPage={currentPage}
-					totalPages={totalPages}
-					onPageChange={setCurrentPage}
-					itemsPerPage={itemsPerPage}
-					totalItems={sortedData.length}
-				/>
+						))}
+					</TableBody>
+					<TableFooter>
+						<TableRow>
+							<TableCell colSpan={8}>
+								<Pagination
+									currentPage={currentPage}
+									totalPages={totalPages}
+									onPageChange={setCurrentPage}
+									itemsPerPage={itemsPerPage}
+									totalItems={sortedData.length}
+								/>
+							</TableCell>
+						</TableRow>
+					</TableFooter>
+				</Table>
 			</div>
 		</div>
 	);

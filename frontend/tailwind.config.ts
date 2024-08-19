@@ -23,7 +23,10 @@ const config = {
 				ring: "hsl(var(--ring))",
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",
-				primary: "#e0f2fe",
+				primary: {
+					DEFAULT: "#e0f2fe",
+					hover: "#bae6fd",
+				},
 				secondary: {
 					DEFAULT: "#0c4a6e",
 					hover: "#082f49",

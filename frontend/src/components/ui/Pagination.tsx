@@ -46,7 +46,8 @@ const Pagination: React.FC<PaginationProps> = ({
 			buttons.push(
 				<Button
 					key="start-ellipsis"
-					variant="ghost"
+					variant="default"
+					className="hover:bg-accent"
 					size="icon"
 					onClick={() => onPageChange(1)}
 				>
@@ -66,7 +67,10 @@ const Pagination: React.FC<PaginationProps> = ({
 			buttons.push(
 				<Button
 					key={i}
-					variant={currentPage === i ? "default" : "ghost"}
+					variant={currentPage === i ? "secondary" : "default"}
+					className={
+						currentPage === i ? "hover:bg-secondary-hover" : "hover:bg-accent"
+					}
 					onClick={() => onPageChange(i)}
 				>
 					{i}
@@ -85,7 +89,8 @@ const Pagination: React.FC<PaginationProps> = ({
 			buttons.push(
 				<Button
 					key="end-ellipsis"
-					variant="ghost"
+					variant="default"
+					className="hover:bg-accent"
 					size="icon"
 					onClick={() => onPageChange(totalPages)}
 				>
@@ -98,7 +103,7 @@ const Pagination: React.FC<PaginationProps> = ({
 	};
 
 	return (
-		<div className="flex items-center justify-between mt-4">
+		<div className="flex items-center justify-between bg-white">
 			<div className="text-sm text-gray-700">
 				แสดง {(currentPage - 1) * itemsPerPage + 1} ถึง{" "}
 				{Math.min(currentPage * itemsPerPage, totalItems)} จาก {totalItems}{" "}
