@@ -1,18 +1,18 @@
 import mongoose from "mongoose";
 
-const userScoreSchema = mongoose.Schema({
+const scoreSchema = new mongoose.Schema({
 	userId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "User",
+		ref: "users",
 		required: true,
 	},
 	subTopicId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "Subtopic",
+		ref: "subtopics",
 		required: true,
 	},
 	score: {
-		type: String,
+		type: Number,
 		required: true,
 	},
 	timeSpent: {
@@ -21,10 +21,8 @@ const userScoreSchema = mongoose.Schema({
 	},
 	createOn: {
 		type: Date,
-		default: Date.now,
+		default: new Date().getTime(),
 	},
 });
 
-const UserScore = mongoose.model("UserScore", userScoreSchema);
-
-export default UserScore;
+export default mongoose.model("Score", scoreSchema);
