@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import "./AnimatedForm.css";
 import Image from "next/image";
+import UploadProfileImage from "../components/login/UploadProfileImage"; // Import component ที่สร้าง
 
 const LoginUserPage = () => {
 	const [isLogin, setIsLogin] = useState<boolean>(true);
@@ -14,6 +15,7 @@ const LoginUserPage = () => {
 	const [usernamer, setUsernamer] = useState<string>("");
 	const [passwordr, setPasswordr] = useState<string>("");
 	const [popup, setpopup] = useState<boolean>(false);
+	const [profile, setprofile] = useState<string>("");
 
 	const router = useRouter(); // ใช้ useRouter จาก next/navigation
 
@@ -33,13 +35,14 @@ const LoginUserPage = () => {
 
 				if (token) {
 					localStorage.setItem("token", token);
-					router.push("/game");
+					router.push("/selectgame");
 				}
 			} else {
 				// สำหรับการลงทะเบียน
 				const response = await axios.post(
 					"http://localhost:6969/api/users/register",
 					{
+						profile: profile,
 						name: name,
 						username: usernamer,
 						password: passwordr,
@@ -59,7 +62,7 @@ const LoginUserPage = () => {
 	};
 
 	const pop = () => {
-		router.push("/dashboard");
+		router.push("/selectgame");
 	};
 
 	return (
@@ -68,8 +71,8 @@ const LoginUserPage = () => {
 				<Image
 					src="/LogoLaSalleChote.png"
 					alt="Landscape picture"
-					width={200}
-					height={200}
+					width={120}
+					height={120}
 				/>
 
 				{popup && (
@@ -144,7 +147,7 @@ const LoginUserPage = () => {
 						</form>
 					</div>
 
-					{/* Sign Up Form */}
+					{/*------------------------ Sign Up Form --------------------------------------------------------------------------------------------*/}
 					<div className={`form-wrapper ${!isLogin ? "is-active" : ""}`}>
 						<button
 							type="button"
@@ -159,8 +162,11 @@ const LoginUserPage = () => {
 							onSubmit={(e) => e.preventDefault()}
 						>
 							<fieldset>
+								<UploadProfileImage
+									onImageUpload={(imageUrl: any) => setprofile(imageUrl)} // ส่ง URL ของภาพที่อัปโหลดมาอัปเดต state profile
+								/>
 								<div className="input-block">
-									<label htmlFor="signup-username">ชื่อ</label>
+									<label htmlFor="signup-name">ชื่อ</label>
 									<input
 										id="signup-name"
 										value={name}
