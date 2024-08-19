@@ -50,7 +50,7 @@ const NavRail: React.FC = () => {
 	}
 
 	return (
-		<div className="flex flex-col flex-basis px-3 py-4 bg-gray-50">
+		<div className="flex flex-col h-screen w-28 px-3 py-4 justify-between bg-gray-50 fixed">
 			<div className="flex flex-col items-center space-y-4 py-4">
 				{links.map((link, index) => (
 					<React.Fragment key={link.name}>
