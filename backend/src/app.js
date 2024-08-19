@@ -6,6 +6,10 @@ import { rateLimit } from "express-rate-limit";
 
 //Import Router
 import userRoutes from "./routes/userRoutes.js";
+import scoreRoutes from "./routes/scoreRoutes.js";
+// import topicRoutes from "./routes/topicRoutes.js";
+// import subtopicRoutes from "./routes/subtopicRoutes.js";
+// import questionRoutes from "./routes/questionRoutes.js";
 
 const app = express();
 
@@ -23,5 +27,9 @@ app.use(express.urlencoded({ extended: true })); //แปลงข้อมู�
 
 //Router
 app.use("/api/users", userRoutes);
+app.use("/api/scores", scoreRoutes);
+// app.use("/api/topics", topicRoutes);
+// app.use("/api/subtopics", subtopicRoutes);
+// app.use("/api/questions", questionRoutes);
 
 export default app;
