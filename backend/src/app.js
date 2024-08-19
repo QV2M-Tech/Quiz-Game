@@ -5,11 +5,11 @@ import helmet from "helmet";
 import { rateLimit } from "express-rate-limit";
 
 //Import Router
-import userRoutes from "./routes/userRoutes.js";
-import scoreRoutes from "./routes/scoreRoutes.js";
-// import topicRoutes from "./routes/topicRoutes.js";
-// import subtopicRoutes from "./routes/subtopicRoutes.js";
-// import questionRoutes from "./routes/questionRoutes.js";
+import userRoute from "./routes/userRoute.js";
+import scoreRoute from "./routes/scoreRoute.js";
+// import topicRoute from "./routes/topicRoute.js";
+// import subtopicRoute from "./routes/subtopicRoute.js";
+// import questionRoute from "./routes/questionRoute.js";
 
 const app = express();
 
@@ -26,10 +26,10 @@ app.use(helmet());
 app.use(express.urlencoded({ extended: true })); //แปลงข้อมูลที่ซับซ้อนกว่าได้ เช่น array object ที่ซ็อนกัน
 
 //Router
-app.use("/api/users", userRoutes);
-app.use("/api/scores", scoreRoutes);
-// app.use("/api/topics", topicRoutes);
-// app.use("/api/subtopics", subtopicRoutes);
-// app.use("/api/questions", questionRoutes);
+app.use("/api/users", userRoute);
+app.use("/api/scores", scoreRoute);
+// app.use("/api/topics", topicRoute);
+// app.use("/api/subtopics", subtopicRoute);
+// app.use("/api/questions", questionRoute);
 
 export default app;
