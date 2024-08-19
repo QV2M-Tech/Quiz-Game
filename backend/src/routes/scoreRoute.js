@@ -4,7 +4,7 @@ import {
 	browseScore,
 	createScore,
 	deleteScore,
-} from "../controllers/scoreController";
+} from "../controllers/scoreController.js";
 
 const router = express.Router();
 
