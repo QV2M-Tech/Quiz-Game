@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import "./AnimatedForm.css";
 import Image from "next/image";
+import UploadProfileImage from "../components/login/UploadProfileImage";
 
 const LoginUserPage = () => {
 	const [isLogin, setIsLogin] = useState<boolean>(true);
@@ -14,6 +15,7 @@ const LoginUserPage = () => {
 	const [usernamer, setUsernamer] = useState<string>("");
 	const [passwordr, setPasswordr] = useState<string>("");
 	const [popup, setpopup] = useState<boolean>(false);
+	const [profile, setprofile] = useState<string>("");
 
 	const router = useRouter(); // ใช้ useRouter จาก next/navigation
 
@@ -33,13 +35,14 @@ const LoginUserPage = () => {
 
 				if (token) {
 					localStorage.setItem("token", token);
-					router.push("/game");
+					router.push("/selectgame");
 				}
 			} else {
 				// สำหรับการลงทะเบียน
 				const response = await axios.post(
 					"http://localhost:6969/api/users/register",
 					{
+						profile: profile,
 						name: name,
 						username: usernamer,
 						password: passwordr,
@@ -59,11 +62,20 @@ const LoginUserPage = () => {
 	};
 
 	const pop = () => {
-		router.push("/dashboard");
+		router.push("/selectgame");
 	};
 
 	return (
-		<div className="bg-sky-100 h-full">
+		<div
+			className="bg-sky-100 h-full"
+			style={{
+				transform: "translate(-33%, -33%) scale(0.67)",
+				transformOrigin: "top left",
+				position: "absolute",
+				top: "50%",
+				left: "50%",
+			}}
+		>
 			<section className="forms-section h-full relative">
 				<Image
 					src="/LogoLaSalleChote.png"
@@ -73,8 +85,8 @@ const LoginUserPage = () => {
 				/>
 
 				{popup && (
-					<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-						<div className="relative bg-white rounded-lg p-6 shadow-lg text-center">
+					<div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50 ">
+						<div className="relative bg-cyan-100 rounded-lg p-6 text-center border ">
 							<button
 								className="absolute top-2 right-2 text-red-600 hover2:text-red-800"
 								onClick={() => setpopup(false)}
@@ -84,7 +96,7 @@ const LoginUserPage = () => {
 							<h2 className="text-xl font-semibold mb-4">สร้างบัญชีสำเร็จ</h2>
 							<button
 								onClick={pop}
-								className="bg-blue-600 text-white py-2 px-4 rounded hover2:bg-blue-700"
+								className="bg-blue-950 text-white py-2 px-4 rounded hover2:bg-blue-700"
 							>
 								เข้าสู่ระบบ
 							</button>
@@ -159,6 +171,9 @@ const LoginUserPage = () => {
 							onSubmit={(e) => e.preventDefault()}
 						>
 							<fieldset>
+								<UploadProfileImage
+									onImageUpload={(imageUrl: any) => setprofile(imageUrl)} // ส่ง URL ของภาพที่อัปโหลดมาอัปเดต state profile
+								/>
 								<div className="input-block">
 									<label htmlFor="signup-username">ชื่อ</label>
 									<input

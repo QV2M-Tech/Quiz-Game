@@ -2,8 +2,8 @@ import { registerUser, loginUser } from "../services/userService.js";
 
 export const register = async (req, res, next) => {
 	try {
-		const { name, username, password } = req.body;
-		const data = await registerUser({ name, username, password });
+		const { profile, name, username, password } = req.body;
+		const data = await registerUser({ profile, name, username, password });
 		res.status(201).json(data);
 	} catch (error) {
 		res.status(400);

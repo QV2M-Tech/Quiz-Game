@@ -2,7 +2,7 @@ import User from "../models/User.js";
 import { hashPassword, comparePassword } from "../utils/hash.js";
 import { sign } from "../utils/token.js";
 
-export const registerUser = async ({ name, username, password }) => {
+export const registerUser = async ({ profile, name, username, password }) => {
 	const existingUser = await User.findOne({ username });
 
 	if (existingUser) {
@@ -12,6 +12,7 @@ export const registerUser = async ({ name, username, password }) => {
 	const hashedPassword = await hashPassword(password);
 
 	const newUser = new User({
+		profile,
 		name,
 		username,
 		password: hashedPassword,
