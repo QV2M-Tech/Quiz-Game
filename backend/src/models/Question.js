@@ -1,20 +1,9 @@
 import mongoose from "mongoose";
 
-const optionSchema = mongoose.Schema({
-	text: {
-		type: String,
-		required: true,
-	},
-	isCorrect: {
-		type: Boolean,
-		required: true,
-	},
-});
-
-const questionSchema = mongoose.Schema({
-	subTopicId: {
+const questionSchema = new mongoose.Schema({
+	subtopicId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "Subtopic",
+		ref: "subtopics",
 		required: true,
 	},
 	questionName: {
@@ -25,14 +14,23 @@ const questionSchema = mongoose.Schema({
 		type: String,
 	},
 	option: {
-		type: [optionSchema],
-		required: true,
+		text: {
+			type: String,
+			required: true,
+		},
+		isCorrect: {
+			type: Boolean,
+			required: true,
+		},
 	},
 	hint: {
 		type: String,
+		required: true,
+	},
+	createOn: {
+		type: Date,
+		default: new Date().getTime(),
 	},
 });
 
-const Question = mongoose.model("Question", questionSchema);
-
-export default Question;
+export default mongoose.model("Question", questionSchema);

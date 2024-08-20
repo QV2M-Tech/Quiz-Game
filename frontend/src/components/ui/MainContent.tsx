@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { Tabs, Tab, Card } from "@mui/material";
 import Button from "@mui/joy/Button";

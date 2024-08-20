@@ -5,7 +5,7 @@ import MainContent from "@/components/ui/MainContent";
 
 const SelectGame: React.FC = () => {
 	return (
-		<div className="h-screen min-w-full justify-center items-center bg-sky-200">
+		<div className="h-screen min-w-full justify-center items-center ">
 			<MainContent />
 		</div>
 	);

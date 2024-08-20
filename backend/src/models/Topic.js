@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 
-const topicSchema = mongoose.Schema({
+const topicSchema = new mongoose.Schema({
 	category: {
 		type: String,
+		enum: ["วิชาการ", "บันเทิง"],
 		required: true,
 	},
 	topicName: {
@@ -11,6 +12,4 @@ const topicSchema = mongoose.Schema({
 	},
 });
 
-const Topic = mongoose.model("Topic", topicSchema);
-
-export default Topic;
+export default mongoose.model("Topic", topicSchema);

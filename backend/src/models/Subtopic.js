@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
-const subtopicSchema = mongoose.Schema({
+const subtopicSchema = new mongoose.Schema({
 	topicId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "Topic",
+		ref: "topics",
 		required: true,
 	},
-	subTopicName: {
+	subtopicName: {
 		type: String,
 		required: true,
 	},
@@ -16,6 +16,4 @@ const subtopicSchema = mongoose.Schema({
 	},
 });
 
-const Subtopic = mongoose.model("Subtopic", subtopicSchema);
-
-export default Subtopic;
+export default mongoose.model("Subtopic", subtopicSchema);
