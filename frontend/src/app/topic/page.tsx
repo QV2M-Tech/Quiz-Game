@@ -1,9 +1,85 @@
+// app/topic/page.tsx
+
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import TopicTable from "@/app/topic/components/TopicTable";
+import { DataItem, generateMockData } from "@/lib/mockData";
 
-const Topic = () => {
-	return <div>Topic</div>;
-};
+export default function TopicPage() {
+	const [data, setData] = useState<DataItem[]>([]);
+	const [itemsPerPage, setItemsPerPage] = useState(10);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [isLoading, setIsLoading] = useState(true);
+	const [searchTerm, setSearchTerm] = useState("");
+	const [sortConfig, setSortConfig] = useState<{
+		key: keyof DataItem;
+		direction: "asc" | "desc";
+	} | null>(null);
 
-export default Topic;
+	useEffect(() => {
+		const mockData = generateMockData();
+		setData(mockData);
+		setIsLoading(false);
+	}, []);
+
+	const filteredData = data.filter((item) =>
+		Object.values(item).some(
+			(value) =>
+				value != null &&
+				value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+		)
+	);
+
+	const sortedData = React.useMemo(() => {
+		let sortableItems = [...filteredData];
+		if (sortConfig !== null) {
+			sortableItems.sort((a, b) => {
+				if (a[sortConfig.key] < b[sortConfig.key]) {
+					return sortConfig.direction === "asc" ? -1 : 1;
+				}
+				if (a[sortConfig.key] > b[sortConfig.key]) {
+					return sortConfig.direction === "asc" ? 1 : -1;
+				}
+				return 0;
+			});
+		}
+		return sortableItems;
+	}, [filteredData, sortConfig]);
+
+	const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+	const paginatedData = sortedData.slice(
+		(currentPage - 1) * itemsPerPage,
+		currentPage * itemsPerPage
+	);
+
+	const requestSort = (key: keyof DataItem) => {
+		let direction: "asc" | "desc" = "asc";
+		if (
+			sortConfig &&
+			sortConfig.key === key &&
+			sortConfig.direction === "asc"
+		) {
+			direction = "desc";
+		}
+		setSortConfig({ key, direction });
+	};
+
+	if (isLoading) {
+		return <div>กำลังโหลด...</div>;
+	}
+
+	return (
+		<TopicTable
+			searchTerm={searchTerm}
+			setSearchTerm={setSearchTerm}
+			requestSort={requestSort}
+			paginatedData={paginatedData}
+			currentPage={currentPage}
+			totalPages={totalPages}
+			setCurrentPage={setCurrentPage}
+			itemsPerPage={itemsPerPage}
+			sortedData={sortedData}
+		/>
+	);
+}
