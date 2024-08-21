@@ -42,3 +42,31 @@ export const loginUser = async ({ username, password }) => {
 
 	return { token, user };
 };
+
+export const modifyUser = async (id, name) => {
+	const user = await User.findById(id);
+
+	if (!user) {
+		throw new Error("User not found");
+	}
+
+	user.name = name;
+	await user.save();
+
+	return user;
+};
+
+export const removeUser = async (id) => {
+	const user = await User.findByIdAndDelete(id);
+
+	if (!user) {
+		throw new Error("User not found");
+	}
+
+	return;
+};
+
+export const fetchAllUsers = async () => {
+	const users = await User.find({});
+	return users;
+};
