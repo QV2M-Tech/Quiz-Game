@@ -5,7 +5,7 @@ import {
 	TableHead,
 } from "@/components/ui/table";
 import { ArrowUpDown } from "lucide-react";
-import SearchBar from "@/components/SearchBar";
+import SearchBar from "@/app/topic/components/SearchBar";
 
 interface TableHeaderSectionProps {
 	requestSort: (column: string) => void;
@@ -28,14 +28,14 @@ const TableHeaderSection: React.FC<TableHeaderSectionProps> = ({
 			</TableCell>
 		</TableRow>
 		<TableRow>
-			<TableHead className="text-center">หัวข้อ</TableHead>
+			<TableHead className=" w-3/5 text-center">หัวข้อ</TableHead>
 			<TableHead
 				onClick={() => requestSort("category")}
-				className="cursor-pointer text-center"
+				className="cursor-pointer text-center w-1/5"
 			>
 				หมวดหมู่ <ArrowUpDown className="inline-block ml-2" size={16} />
 			</TableHead>
-			<TableHead className="text-center">Action</TableHead>
+			<TableHead className="text-center w-1/5">Action</TableHead>
 		</TableRow>
 	</TableHeader>
 );

@@ -3,7 +3,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import TopicTable from "@/components/TopicTable";
+import TopicTable from "@/app/topic/components/TopicTable";
 import { DataItem, generateMockData } from "@/lib/mockData";
 
 export default function TopicPage() {

@@ -2,7 +2,7 @@
 
 import { TableRow, TableCell } from "@/components/ui/table";
 import TableActions from "./TableActions";
-import CategoryBadge from "./ui/badge/CategoryBadge";
+import CategoryBadge from "../../../components/ui/badge/CategoryBadge";
 
 const TableRowWithActions = ({ item }: { item: any }) => (
 	<TableRow key={item._id}>

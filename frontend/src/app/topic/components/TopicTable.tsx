@@ -1,8 +1,8 @@
 // components/MainComponent.tsx
 
 import React from "react";
-import TableHeaderSection from "@/components/TableHeaderSection";
-import TableRowWithActions from "@/components/TableRowWithAction";
+import TableHeaderSection from "@/app/topic/components/TableHeaderSection";
+import TableRowWithActions from "@/app/topic/components/TableRowWithAction";
 import Pagination from "@/components/ui/Pagination";
 import {
 	Table,
