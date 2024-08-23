@@ -1,5 +1,16 @@
 import mongoose from "mongoose";
 
+const optionSchema = new mongoose.Schema({
+	text: {
+		type: String,
+		required: true,
+	},
+	isCorrect: {
+		type: Boolean,
+		required: true,
+	},
+});
+
 const questionSchema = new mongoose.Schema({
 	subtopicId: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -14,14 +25,8 @@ const questionSchema = new mongoose.Schema({
 		type: String,
 	},
 	option: {
-		text: {
-			type: String,
-			required: true,
-		},
-		isCorrect: {
-			type: Boolean,
-			required: true,
-		},
+		type: [optionSchema], // เปลี่ยนเป็นอาร์เรย์ของ optionSchema
+		required: true,
 	},
 	hint: {
 		type: String,
