@@ -9,7 +9,7 @@ import userRoute from "./routes/userRoute.js";
 import scoreRoute from "./routes/scoreRoute.js";
 import topicRoute from "./routes/topicRoute.js";
 import subtopicRoute from "./routes/subtopicRoute.js";
-// import questionRoute from "./routes/questionRoute.js";
+import questionRoute from "./routes/questionRoute.js";
 
 const app = express();
 
@@ -30,6 +30,6 @@ app.use("/api/users", userRoute);
 app.use("/api/scores", scoreRoute);
 app.use("/api/topics", topicRoute);
 app.use("/api/subtopics", subtopicRoute);
-// app.use("/api/questions", questionRoute);
+app.use("/api/questions", questionRoute);
 
 export default app;
