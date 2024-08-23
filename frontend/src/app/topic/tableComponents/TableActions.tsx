@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/tooltip";
 import { TableCell } from "@/components/ui/table";
 import { useTopicNavigation } from "@/hooks/useTopicNavigation";
+import { ModalTopicEdit } from "../tableComponents/ModalTopicEdit";
 
 interface EditTopicButtonProps {
 	topicId: string;
@@ -22,16 +23,26 @@ const EditTopicButton: React.FC<EditTopicButtonProps> = ({ topicId }) => {
 	};
 
 	return (
-		<TooltipProvider>
-			<Tooltip>
-				<TooltipTrigger>
-					<Button variant="ghost" size="sm" onClick={handleEditClick}>
-						<Edit className="inline-block" size={16} />
-					</Button>
-				</TooltipTrigger>
-				<TooltipContent>แก้ไขหัวข้อ</TooltipContent>
-			</Tooltip>
-		</TooltipProvider>
+		<>
+			<TooltipProvider>
+				<Tooltip>
+					<TooltipTrigger>
+						<Button variant="ghost" size="sm" onClick={handleEditClick}>
+							<Edit className="inline-block" size={16} />
+						</Button>
+					</TooltipTrigger>
+					<TooltipContent>แก้ไขหัวข้อ</TooltipContent>
+				</Tooltip>
+			</TooltipProvider>
+
+			<ModalTopicEdit
+				isOpen={isModalOpen}
+				setIsOpen={setIsModalOpen}
+				onSubmit={function (data: { title: string; category: string }): void {
+					throw new Error("Function not implemented.");
+				}}
+			/>
+		</>
 	);
 };
 

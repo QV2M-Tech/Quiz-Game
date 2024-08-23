@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { DataItem } from "@/lib/mockData";
 import CategoryBadge from "@/components/ui/badge/CategoryBadge";
-import TableActions from "./TableActions";
+import TableActions from "@/app/topic/tableComponents/TableActions";
 
 // Define interfaces for the props
 interface TopicTableProps {
@@ -23,6 +23,7 @@ interface TopicTableProps {
 	setCurrentPage: (page: number) => void;
 	itemsPerPage: number;
 	sortedData: Array<any>;
+	topicId: string | React.ReactNode;
 }
 
 const TopicTable: React.FC<TopicTableProps> = ({

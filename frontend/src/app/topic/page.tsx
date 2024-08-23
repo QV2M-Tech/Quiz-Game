@@ -31,6 +31,9 @@ export default function TopicPage() {
 			currentPage={currentPage}
 			totalPages={totalPages}
 			setCurrentPage={setCurrentPage}
-			itemsPerPage={itemsPerPage} sortedData={[]}		/>
+			itemsPerPage={itemsPerPage}
+			sortedData={[]}
+			topicId={undefined}
+		/>
 	);
 }
