@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const questionSchema = new mongoose.Schema({
 	subtopicId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "subtopics",
+		ref: "Subtopic",
 		required: true,
 	},
 	questionName: {

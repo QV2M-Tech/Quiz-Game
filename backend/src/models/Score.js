@@ -3,12 +3,12 @@ import mongoose from "mongoose";
 const scoreSchema = new mongoose.Schema({
 	userId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "users",
+		ref: "User",
 		required: true,
 	},
 	subTopicId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "subtopics",
+		ref: "Subtopic",
 		required: true,
 	},
 	score: {
