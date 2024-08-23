@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/tooltip";
 import { TableCell } from "@/components/ui/table";
 import { useTopicNavigation } from "@/hooks/useTopicNavigation";
-import { SubtopicModal } from "../subTableComponents/EditSubTopicModal";
+import { EditSubtopicModal } from "./EditSubTopicModal";
 
 const SubTopicTableActions = ({ id_Subtopic }: { id_Subtopic: string }) => {
 	const { navigateToQuestion, deleteTopic, updateTopic } = useTopicNavigation();
@@ -62,7 +62,7 @@ const SubTopicTableActions = ({ id_Subtopic }: { id_Subtopic: string }) => {
 				</Tooltip>
 			</TooltipProvider>
 
-			<SubtopicModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+			<EditSubtopicModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
 		</TableCell>
 	);
 };

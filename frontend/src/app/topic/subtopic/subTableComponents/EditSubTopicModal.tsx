@@ -17,12 +17,12 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 
-interface SubtopicModalProps {
+interface EditSubtopicModalProps {
 	isOpen: boolean;
 	setIsOpen: (isOpen: boolean) => void;
 }
 
-export function SubtopicModal({ isOpen, setIsOpen }: SubtopicModalProps) {
+export function EditSubtopicModal({ isOpen, setIsOpen }: EditSubtopicModalProps) {
 	const [title, setTitle] = useState("");
 	const [duration, setDuration] = useState("");
 	const [category, setCategory] = useState("");

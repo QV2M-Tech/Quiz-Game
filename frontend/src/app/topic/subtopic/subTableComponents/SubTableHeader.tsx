@@ -4,6 +4,7 @@ import { TableHead, TableRow, TableCell } from "@/components/ui/table";
 import { ArrowUpDown } from "lucide-react";
 import SearchBar from "@/app/topic/tableComponents/SearchBar";
 import { DataItem } from "@/lib/mockData";
+import AddSubTopicButton from "./AddSubTopicButton";
 
 interface TableHeaderProps {
 	requestSort: (key: keyof DataItem) => void;
@@ -21,7 +22,10 @@ export const SubTableHeader: React.FC<TableHeaderProps> = ({
 			<TableCell colSpan={4}>
 				<div className="flex justify-between items-center mb-4">
 					<h2 className="text-lg font-bold">จัดการหัวข้อย่อย</h2>
-					<SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+					<div className="flex items-center gap-4">
+						<SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+						<AddSubTopicButton />
+					</div>
 				</div>
 			</TableCell>
 		</TableRow>
