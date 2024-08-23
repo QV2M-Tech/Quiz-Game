@@ -1,4 +1,3 @@
-// mockData.ts
 export interface DataItem {
 	_id: string;
 	date: string;
@@ -8,6 +7,9 @@ export interface DataItem {
 	topic: string;
 	subtopic: string;
 	score: number;
+	id_Subtopic: string; // Optional field
+	questionCount: number;
+	duration: string;
   }
   
   const topics = [
@@ -31,19 +33,22 @@ export interface DataItem {
   export const generateMockData = (): DataItem[] => {
 	return Array.from({ length: 100 }, (_, i) => {
 	  const category = i % 2 === 0 ? "วิชาการ" : "บันเทิง";
-	  const topic = topics[i]
+	  const topic = topics[i % topics.length]; // Loop through topics array if length exceeds
 	  return {
 		_id: `${i + 1}`,
-		date: `${String(Math.floor(Math.random() * 28) + 1).padStart(
-		  2,
-		  "0"
-		)}/${String(Math.floor(Math.random() * 12) + 1).padStart(2, "0")}/2023`,
+		date: `${String(Math.floor(Math.random() * 28) + 1).padStart(2, "0")}/${String(
+		  Math.floor(Math.random() * 12) + 1
+		).padStart(2, "0")}/2023`,
 		name: `ชื่อ นามสกุล ${i + 1}`,
 		username: `user${i + 1}`,
 		category: category,
 		topic: topic,
 		subtopic: "บทเรียนที่ " + (Math.floor(Math.random() * 10) + 1),
 		score: Math.floor(Math.random() * 100) + 1,
+		id_Subtopic: `${Math.floor(Math.random() * 1000) + 1}`,
+		questionCount: Math.floor(Math.random() * 20) + 1,
+		duration: `${Math.floor(Math.random() * 60) + 1} นาที`,
 	  };
 	});
   };
+  
