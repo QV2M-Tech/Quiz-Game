@@ -1,39 +1,13 @@
-// app/topic/page.tsx
-
-"use client";
+"use client"; // ทำให้ React ใช้งาน client-side rendering
 import React from "react";
-import TopicTable from "@/app/topic/tableComponents/TopicTable";
-import { useDataTable } from "@/lib/useDataTable";
+import TopicManagementPage from "@/app/topic/tableComponents/TopicManagement";
 
-export default function TopicPage() {
-	const {
-		paginatedData,
-		itemsPerPage,
-		currentPage,
-		setCurrentPage,
-		totalPages,
-		searchTerm,
-		setSearchTerm,
-		isLoading,
-		requestSort,
-	} = useDataTable();
-
-	if (isLoading) {
-		return <div>กำลังโหลด...</div>;
-	}
-
+const Page = () => {
 	return (
-		<TopicTable
-			searchTerm={searchTerm}
-			setSearchTerm={setSearchTerm}
-			requestSort={requestSort}
-			paginatedData={paginatedData}
-			currentPage={currentPage}
-			totalPages={totalPages}
-			setCurrentPage={setCurrentPage}
-			itemsPerPage={itemsPerPage}
-			sortedData={[]}
-			topicId={undefined}
-		/>
+		<div>
+			<TopicManagementPage />
+		</div>
 	);
-}
+};
+
+export default Page;
