@@ -7,7 +7,6 @@ import {
 	DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { TopicApi } from "@/lib/TopicApi";
 import { Topic, TopicInput } from "@/types/topic";
 
 interface ModalTopicFormProps {
@@ -27,23 +26,10 @@ const ModalTopicForm: React.FC<ModalTopicFormProps> = ({
 }) => {
 	const [topicName, setTopicName] = useState(initialData?.topicName || "");
 	const [category, setCategory] = useState(initialData?.category || "");
-	const [categories, setCategories] = useState<string[]>([]);
+	const categories = ["วิชาการ", "บันเทิง"];
 
 	useEffect(() => {
-		const fetchCategories = async () => {
-			try {
-				const topics = await TopicApi.getAllTopics();
-				const uniqueCategories = Array.from(
-					new Set(topics.map((topic) => topic.category))
-				);
-				setCategories([...uniqueCategories, "บันเทิง"]);
-			} catch (error) {
-				console.error("Failed to fetch categories:", error);
-			}
-		};
-
 		if (isOpen) {
-			fetchCategories();
 			setTopicName(initialData?.topicName || "");
 			setCategory(initialData?.category || "");
 		}
