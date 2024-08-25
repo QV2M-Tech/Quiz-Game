@@ -86,7 +86,7 @@ const SubtopicModal: React.FC<SubtopicModalProps> = ({ isOpen, setIsOpen }) => {
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="academic">วิชาการ</SelectItem>
-								{/* Add more categories as needed */}
+								<SelectItem value="entertainment">บันเทิง</SelectItem>
 							</SelectContent>
 						</Select>
 					</div>

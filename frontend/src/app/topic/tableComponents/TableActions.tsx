@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { LibraryBigIcon, Edit, Trash } from "lucide-react";
 import {
@@ -9,49 +9,21 @@ import {
 } from "@/components/ui/tooltip";
 import { TableCell } from "@/components/ui/table";
 import { useTopicNavigation } from "@/hooks/useTopicNavigation";
-import { ModalTopicEdit } from "../tableComponents/ModalTopicEdit";
-
-interface EditTopicButtonProps {
-	topicId: string;
-}
-
-const EditTopicButton: React.FC<EditTopicButtonProps> = ({ topicId }) => {
-	const [isModalOpen, setIsModalOpen] = useState(false);
-
-	const handleEditClick = () => {
-		setIsModalOpen(true);
-	};
-
-	return (
-		<>
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTrigger>
-						<Button variant="ghost" size="sm" onClick={handleEditClick}>
-							<Edit className="inline-block" size={16} />
-						</Button>
-					</TooltipTrigger>
-					<TooltipContent>แก้ไขหัวข้อ</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
-
-			<ModalTopicEdit
-				isOpen={isModalOpen}
-				setIsOpen={setIsModalOpen}
-				onSubmit={function (data: { title: string; category: string }): void {
-					throw new Error("Function not implemented.");
-				}}
-			/>
-		</>
-	);
-};
 
 interface TableActionsProps {
 	topicId: string;
+	onEdit: () => void;
+	onDelete: () => void;
+	isDeleting: boolean;
 }
 
-const TableActions: React.FC<TableActionsProps> = ({ topicId }) => {
-	const { navigateToSubtopic, deleteTopic } = useTopicNavigation();
+const TableActions: React.FC<TableActionsProps> = ({
+	topicId,
+	onDelete,
+	onEdit,
+	isDeleting,
+}) => {
+	const { navigateToSubtopic } = useTopicNavigation();
 
 	return (
 		<TableCell className="flex justify-center gap-2">
@@ -70,7 +42,16 @@ const TableActions: React.FC<TableActionsProps> = ({ topicId }) => {
 				</Tooltip>
 			</TooltipProvider>
 
-			<EditTopicButton topicId={topicId} />
+			<TooltipProvider>
+				<Tooltip>
+					<TooltipTrigger>
+						<Button variant="ghost" size="sm" onClick={onEdit}>
+							<Edit className="inline-block" size={16} />
+						</Button>
+					</TooltipTrigger>
+					<TooltipContent>แก้ไขหัวข้อ</TooltipContent>
+				</Tooltip>
+			</TooltipProvider>
 
 			<TooltipProvider>
 				<Tooltip>
@@ -78,8 +59,10 @@ const TableActions: React.FC<TableActionsProps> = ({ topicId }) => {
 						<Button
 							variant="ghost"
 							size="sm"
-							onClick={() => deleteTopic(topicId)}
+							onClick={onDelete}
+							disabled={isDeleting}
 						>
+							{isDeleting ? "กำลังลบ..." : ""}
 							<Trash className="inline-block" size={16} />
 						</Button>
 					</TooltipTrigger>

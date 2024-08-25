@@ -22,7 +22,10 @@ interface EditSubtopicModalProps {
 	setIsOpen: (isOpen: boolean) => void;
 }
 
-export function EditSubtopicModal({ isOpen, setIsOpen }: EditSubtopicModalProps) {
+export function EditSubtopicModal({
+	isOpen,
+	setIsOpen,
+}: EditSubtopicModalProps) {
 	const [title, setTitle] = useState("");
 	const [duration, setDuration] = useState("");
 	const [category, setCategory] = useState("");
@@ -76,7 +79,7 @@ export function EditSubtopicModal({ isOpen, setIsOpen }: EditSubtopicModalProps)
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="academic">วิชาการ</SelectItem>
-								{/* Add more categories as needed */}
+								<SelectItem value="academic">บันเทิง</SelectItem>
 							</SelectContent>
 						</Select>
 					</div>
