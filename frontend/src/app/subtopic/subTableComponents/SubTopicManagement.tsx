@@ -9,8 +9,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowUpDown } from "lucide-react";
-import SubTableAction from "@/app/topic/subtopic/subTableComponents/SubTableActions";
-import { ModalSubTopic } from "@/app/topic/subtopic/subTableComponents/ModalSubTopic";
+import SubTableAction from "@/app/subtopic/subTableComponents/SubTableActions";
+import { ModalSubTopic } from "@/app/subtopic/subTableComponents/ModalSubTopic";
 import { SubtopicApi } from "@/lib/SubTopicApi";
 import { TopicApi } from "@/lib/TopicApi";
 import { Subtopic, SubtopicInput } from "@/types/SubTopic";

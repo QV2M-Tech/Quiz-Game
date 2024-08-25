@@ -30,7 +30,7 @@ const TableActions: React.FC<TableActionsProps> = ({
 	const router = useRouter();
 
 	const navigateToSubtopic = () => {
-		router.push(`/topic/subtopic`);
+		router.push(`/subtopic/`);
 	};
 
 	return (

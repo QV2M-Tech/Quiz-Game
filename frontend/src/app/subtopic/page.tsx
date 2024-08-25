@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import SubtopicManagementPage from "@/app/topic/subtopic/subTableComponents/SubTopicManagement";
+import SubtopicManagementPage from "@/app/subtopic/subTableComponents/SubTopicManagement";
 
 const SubtopicsPage = () => {
 	const params = useParams();
