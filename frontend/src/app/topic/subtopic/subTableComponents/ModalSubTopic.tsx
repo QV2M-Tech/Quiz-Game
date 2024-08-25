@@ -16,24 +16,36 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { SubtopicInput } from "@/types/subtopic";
 
-interface EditSubtopicModalProps {
+interface ModalSubTopicProps {
 	isOpen: boolean;
 	setIsOpen: (isOpen: boolean) => void;
+	mode: "add" | "edit";
+	initialData?: SubtopicInput;
+	onSubmit: (data: SubtopicInput) => void;
 }
 
-export function EditSubtopicModal({
+export function ModalSubTopic({
 	isOpen,
 	setIsOpen,
-}: EditSubtopicModalProps) {
-	const [title, setTitle] = useState("");
-	const [duration, setDuration] = useState("");
-	const [category, setCategory] = useState("");
-	const [difficulty, setDifficulty] = useState("");
+	mode,
+	initialData,
+	onSubmit,
+}: ModalSubTopicProps) {
+	const [subtopicName, setSubtopicName] = useState(
+		initialData?.subtopicName || ""
+	);
+	const [time, setTime] = useState(initialData?.time?.toString() || "");
+	const [category, setCategory] = useState(initialData?.category || "");
 
 	const handleSubmit = () => {
-		// TODO: Implement the logic to save the subtopic
-		console.log({ title, duration, category, difficulty });
+		onSubmit({
+			subtopicName,
+			time: parseInt(time),
+			category,
+			topicId: initialData?.topicId || "",
+		});
 		setIsOpen(false);
 	};
 
@@ -41,32 +53,34 @@ export function EditSubtopicModal({
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle>แก้ไขหัวข้อย่อย</DialogTitle>
+					<DialogTitle>
+						{mode === "add" ? "เพิ่มหัวข้อย่อย" : "แก้ไขหัวข้อย่อย"}
+					</DialogTitle>
 				</DialogHeader>
 				<div className="grid gap-4 py-4">
 					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="title" className="text-right">
+						<Label htmlFor="subtopicName" className="text-right">
 							หัวข้อย่อย
 						</Label>
 						<Input
-							id="title"
+							id="subtopicName"
 							placeholder="หัวข้อย่อย"
 							className="col-span-3"
-							value={title}
-							onChange={(e) => setTitle(e.target.value)}
+							value={subtopicName}
+							onChange={(e) => setSubtopicName(e.target.value)}
 						/>
 					</div>
 					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="duration" className="text-right">
+						<Label htmlFor="time" className="text-right">
 							เวลา (นาที)
 						</Label>
 						<Input
-							id="duration"
+							id="time"
 							type="number"
 							placeholder="เวลา"
 							className="col-span-3"
-							value={duration}
-							onChange={(e) => setDuration(e.target.value)}
+							value={time}
+							onChange={(e) => setTime(e.target.value)}
 						/>
 					</div>
 					<div className="grid grid-cols-4 items-center gap-4">
@@ -79,21 +93,7 @@ export function EditSubtopicModal({
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="academic">วิชาการ</SelectItem>
-								<SelectItem value="academic">บันเทิง</SelectItem>
-							</SelectContent>
-						</Select>
-					</div>
-					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="difficulty" className="text-right">
-							ทักษะ
-						</Label>
-						<Select value={difficulty} onValueChange={setDifficulty}>
-							<SelectTrigger id="difficulty" className="col-span-3">
-								<SelectValue placeholder="พื้นฐาน" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="basic">พื้นฐาน</SelectItem>
-								{/* Add more difficulty levels as needed */}
+								<SelectItem value="entertainment">บันเทิง</SelectItem>
 							</SelectContent>
 						</Select>
 					</div>

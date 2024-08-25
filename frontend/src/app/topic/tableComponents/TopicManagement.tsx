@@ -16,6 +16,7 @@ import CategoryBadge from "@/components/ui/badge/CategoryBadge";
 import TableActions from "@/app/topic/tableComponents/TableActions";
 import ModalTopicForm from "./ModalTopicForm";
 import { useTopicManagement } from "@/hooks/useTopicManagement";
+import Link from "next/link";
 
 const TopicManagementPage: React.FC = () => {
 	const { topics, isLoading, error, createTopic, updateTopic, deleteTopic } =
@@ -112,7 +113,15 @@ const TopicManagementPage: React.FC = () => {
 					<TableBody>
 						{paginatedData.map((topic) => (
 							<TableRow key={topic._id}>
-								<TableCell>{topic.topicName}</TableCell>
+								<TableCell>
+									<Link
+										href={`/topic/subtopic/${
+											topic._id
+										}?name=${encodeURIComponent(topic.topicName)}`}
+									>
+										{topic.topicName}
+									</Link>
+								</TableCell>
 								<TableCell>
 									<CategoryBadge
 										category={topic.category as "วิชาการ" | "บันเทิง"}

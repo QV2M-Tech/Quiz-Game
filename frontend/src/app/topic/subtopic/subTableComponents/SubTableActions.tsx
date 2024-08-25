@@ -9,15 +9,22 @@ import {
 } from "@/components/ui/tooltip";
 import { TableCell } from "@/components/ui/table";
 import { useTopicNavigation } from "@/hooks/useTopicNavigation";
-import { EditSubtopicModal } from "./EditSubTopicModal";
+import { ModalSubTopic } from "../subTableComponents/ModalSubTopic";
+import { SubtopicInput } from "@/types/subtopic";
 
-const SubTopicTableActions = ({ id_Subtopic }: { id_Subtopic: string }) => {
-	const { navigateToQuestion, deleteTopic, updateTopic } = useTopicNavigation();
+interface SubTableActionProps {
+	id: string;
+	onEdit: (data: SubtopicInput) => void;
+	initialData: SubtopicInput;
+}
+
+const SubTableAction: React.FC<SubTableActionProps> = ({
+	id,
+	onEdit,
+	initialData,
+}) => {
+	const { navigateToQuestion } = useTopicNavigation();
 	const [isModalOpen, setIsModalOpen] = useState(false);
-
-	const handleOpenModal = () => {
-		setIsModalOpen(true);
-	};
 
 	return (
 		<TableCell className="flex justify-center gap-2">
@@ -27,7 +34,7 @@ const SubTopicTableActions = ({ id_Subtopic }: { id_Subtopic: string }) => {
 						<Button
 							variant="ghost"
 							size="sm"
-							onClick={() => navigateToQuestion(id_Subtopic)}
+							onClick={() => navigateToQuestion(id)}
 						>
 							<LibraryBigIcon className="inline-block" size={16} />
 						</Button>
@@ -39,7 +46,11 @@ const SubTopicTableActions = ({ id_Subtopic }: { id_Subtopic: string }) => {
 			<TooltipProvider>
 				<Tooltip>
 					<TooltipTrigger>
-						<Button variant="ghost" size="sm" onClick={handleOpenModal}>
+						<Button
+							variant="ghost"
+							size="sm"
+							onClick={() => setIsModalOpen(true)}
+						>
 							<Edit className="inline-block" size={16} />
 						</Button>
 					</TooltipTrigger>
@@ -47,24 +58,15 @@ const SubTopicTableActions = ({ id_Subtopic }: { id_Subtopic: string }) => {
 				</Tooltip>
 			</TooltipProvider>
 
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTrigger>
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={() => deleteTopic(id_Subtopic)}
-						>
-							<Trash className="inline-block" size={16} />
-						</Button>
-					</TooltipTrigger>
-					<TooltipContent>ลบหัวข้อหลัก</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
-
-			<EditSubtopicModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+			<ModalSubTopic
+				isOpen={isModalOpen}
+				setIsOpen={setIsModalOpen}
+				mode="edit"
+				initialData={initialData}
+				onSubmit={onEdit}
+			/>
 		</TableCell>
 	);
 };
 
-export default SubTopicTableActions;
+export default SubTableAction;
