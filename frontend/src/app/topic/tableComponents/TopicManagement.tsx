@@ -113,15 +113,7 @@ const TopicManagementPage: React.FC = () => {
 					<TableBody>
 						{paginatedData.map((topic) => (
 							<TableRow key={topic._id}>
-								<TableCell>
-									<Link
-										href={`/topic/subtopic/${
-											topic._id
-										}?name=${encodeURIComponent(topic.topicName)}`}
-									>
-										{topic.topicName}
-									</Link>
-								</TableCell>
+								<TableCell>{topic.topicName}</TableCell>
 								<TableCell>
 									<CategoryBadge
 										category={topic.category as "วิชาการ" | "บันเทิง"}
@@ -133,6 +125,8 @@ const TopicManagementPage: React.FC = () => {
 										onEdit={() => openModal(topic)}
 										onDelete={() => handleDeleteTopic(topic._id)}
 										isDeleting={isDeleting}
+										topicName={""}
+										category={""}
 									/>
 								</TableCell>
 							</TableRow>

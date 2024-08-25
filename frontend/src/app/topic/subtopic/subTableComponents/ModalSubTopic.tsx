@@ -16,7 +16,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { SubtopicInput } from "@/types/subtopic";
+import { SubtopicInput } from "@/types/SubTopic";
 
 interface ModalSubTopicProps {
 	isOpen: boolean;

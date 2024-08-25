@@ -12,9 +12,11 @@ import { ArrowUpDown } from "lucide-react";
 import SubTableAction from "@/app/topic/subtopic/subTableComponents/SubTableActions";
 import { ModalSubTopic } from "@/app/topic/subtopic/subTableComponents/ModalSubTopic";
 import { SubtopicApi } from "@/lib/SubTopicApi";
-import { Subtopic, SubtopicInput } from "@/types/subtopic";
+import { TopicApi } from "@/lib/TopicApi";
+import { Subtopic, SubtopicInput } from "@/types/SubTopic";
+import { Topic } from "@/types/topic";
 import Pagination from "@/components/ui/Pagination";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 interface SubtopicManagementProps {
 	topicId: string;
@@ -24,6 +26,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 	topicId,
 }) => {
 	const [subtopics, setSubtopics] = useState<Subtopic[]>([]);
+	const [topic, setTopic] = useState<Topic | null>(null);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	const [sortConfig, setSortConfig] = useState<{
@@ -31,22 +34,30 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 		direction: "asc" | "desc";
 	} | null>(null);
 	const [currentPage, setCurrentPage] = useState(1);
+	const [isMounted, setIsMounted] = useState(false);
 	const itemsPerPage = 10;
 	const router = useRouter();
-	const { name } = router.query;
 
 	useEffect(() => {
-		fetchSubtopics();
-	}, [topicId]);
+		setIsMounted(true);
+	}, []);
 
-	const fetchSubtopics = async () => {
+	useEffect(() => {
+		if (isMounted) {
+			fetchTopicAndSubtopics();
+		}
+	}, [topicId, isMounted]);
+
+	const fetchTopicAndSubtopics = async () => {
 		try {
-			const fetchedSubtopics = await SubtopicApi.getAllSubtopicsByTopicId(
-				topicId
-			);
+			const [fetchedTopic, fetchedSubtopics] = await Promise.all([
+				TopicApi.getTopicById(topicId),
+				SubtopicApi.getAllSubtopicsByTopicId(topicId),
+			]);
+			setTopic(fetchedTopic);
 			setSubtopics(fetchedSubtopics);
 		} catch (error) {
-			console.error("Error fetching subtopics:", error);
+			console.error("Error fetching topic and subtopics:", error);
 		}
 	};
 
@@ -93,6 +104,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 				topicId,
 			});
 			setSubtopics([...subtopics, createdSubtopic]);
+			setIsAddModalOpen(false);
 		} catch (error) {
 			console.error("Error adding subtopic:", error);
 		}
@@ -122,14 +134,18 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 		currentPage * itemsPerPage
 	);
 
+	if (!isMounted || !topic) return null;
 	return (
 		<div className="flex flex-col items-center py-10">
 			<div className="w-11/12">
 				<Table>
 					<TableRow>
-						<TableCell colSpan={3}>
+						<TableCell colSpan={4}>
 							<div className="flex justify-between items-center mb-4">
-								<h2 className="text-lg font-bold">จัดการหัวข้อย่อย : {name}</h2>
+								<h2 className="text-lg font-bold">
+									จัดการหัวข้อย่อย: {topic.topicName}
+								</h2>
+								<p>หมวดหมู่: {topic.category}</p>
 								<div className="flex items-center gap-4">
 									<Input
 										placeholder="ค้นหา..."
@@ -143,26 +159,6 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 							</div>
 						</TableCell>
 					</TableRow>
-					<TableRow>
-						<TableCell className="font-medium">หัวข้อย่อย</TableCell>
-						<TableCell>
-							จำนวนโจทย์{" "}
-							<ArrowUpDown
-								className="inline-block ml-2 cursor-pointer"
-								size={16}
-								onClick={() => requestSort("questionCount")}
-							/>
-						</TableCell>
-						<TableCell>
-							เวลา{" "}
-							<ArrowUpDown
-								className="inline-block ml-2 cursor-pointer"
-								size={16}
-								onClick={() => requestSort("time")}
-							/>
-						</TableCell>
-						<TableCell>Action</TableCell>
-					</TableRow>
 					<TableBody>
 						{paginatedData.map((subtopic) => (
 							<TableRow key={subtopic._id}>
@@ -174,6 +170,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 									onEdit={(updatedData) =>
 										handleEdit(subtopic._id, updatedData)
 									}
+									onDelete={() => handleDelete(subtopic._id)}
 									initialData={{
 										subtopicName: subtopic.subtopicName,
 										time: subtopic.time,
@@ -186,7 +183,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 					</TableBody>
 					<TableFooter>
 						<TableRow>
-							<TableCell colSpan={3}>
+							<TableCell colSpan={4}>
 								<Pagination
 									currentPage={currentPage}
 									totalPages={totalPages}
@@ -204,6 +201,12 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 				setIsOpen={setIsAddModalOpen}
 				mode="add"
 				onSubmit={handleAdd}
+				initialData={{
+					subtopicName: "",
+					time: 0,
+					category: topic.category,
+					topicId: topicId,
+				}}
 			/>
 		</div>
 	);

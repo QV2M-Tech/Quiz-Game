@@ -1,10 +1,17 @@
 "use client";
 
-import React from "react";
-import SubtopicManagement from "@/app/topic/subtopic/subTableComponents/SubTopicManagement";
+import { useParams } from "next/navigation";
+import SubtopicManagementPage from "@/app/topic/subtopic/subTableComponents/SubTopicManagement";
 
-const Page = () => {
-	return <SubtopicManagement topicId={""} />;
+const SubtopicsPage = () => {
+	const params = useParams();
+	const topicId = params.topicId as string;
+
+	if (!topicId) {
+		return <div>Error: Topic ID is missing</div>;
+	}
+
+	return <SubtopicManagementPage topicId={topicId} />;
 };
 
-export default Page;
+export default SubtopicsPage;

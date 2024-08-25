@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
-import { Subtopic, SubtopicInput } from '@/types/subtopic'
+import { Subtopic, SubtopicInput } from '@/types/SubTopic'
 interface ApiResponse<T> {
   message: string;
   data: T;

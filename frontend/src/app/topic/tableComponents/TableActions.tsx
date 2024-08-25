@@ -8,10 +8,12 @@ import {
 	TooltipContent,
 } from "@/components/ui/tooltip";
 import { TableCell } from "@/components/ui/table";
-import { useTopicNavigation } from "@/hooks/useTopicNavigation";
+import { useRouter } from "next/navigation";
 
 interface TableActionsProps {
 	topicId: string;
+	topicName: string;
+	category: string;
 	onEdit: () => void;
 	onDelete: () => void;
 	isDeleting: boolean;
@@ -19,22 +21,24 @@ interface TableActionsProps {
 
 const TableActions: React.FC<TableActionsProps> = ({
 	topicId,
+	topicName,
+	category,
 	onDelete,
 	onEdit,
 	isDeleting,
 }) => {
-	const { navigateToSubtopic } = useTopicNavigation();
+	const router = useRouter();
+
+	const navigateToSubtopic = () => {
+		router.push(`/topic/subtopic`);
+	};
 
 	return (
 		<TableCell className="flex justify-center gap-2">
 			<TooltipProvider>
 				<Tooltip>
 					<TooltipTrigger>
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={() => navigateToSubtopic(topicId)}
-						>
+						<Button variant="ghost" size="sm" onClick={navigateToSubtopic}>
 							<LibraryBigIcon className="inline-block" size={16} />
 						</Button>
 					</TooltipTrigger>
