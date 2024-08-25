@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
 	Table,
 	TableHead,
@@ -10,81 +10,45 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import SearchBar from "@/app/topic/tableComponents/SearchBar";
-import { Topic } from "@/types/topic";
+import { Topic, TopicInput } from "@/types/topic";
 import Pagination from "@/components/ui/Pagination";
 import CategoryBadge from "@/components/ui/badge/CategoryBadge";
 import TableActions from "@/app/topic/tableComponents/TableActions";
 import ModalTopicForm from "./ModalTopicForm";
-import { TopicApi } from "@/lib/TopicApi";
+import { useTopicManagement } from "@/hooks/useTopicManagement";
 
-const TopicManagementPage = () => {
-	const [topics, setTopics] = useState<Topic[]>([]);
+const TopicManagementPage: React.FC = () => {
+	const { topics, isLoading, error, createTopic, updateTopic, deleteTopic } =
+		useTopicManagement();
 	const [searchTerm, setSearchTerm] = useState("");
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
-	const [isLoading, setIsLoading] = useState(true);
-	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [isDeleting, setIsDeleting] = useState<string | null>(null);
 	const [currentPage, setCurrentPage] = useState(1);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [isDeleting, setIsDeleting] = useState(false);
 	const itemsPerPage = 10;
 
-	useEffect(() => {
-		fetchTopics();
-	}, []);
-
-	const fetchTopics = async () => {
-		setIsLoading(true);
-		try {
-			const fetchedTopics = await TopicApi.getAllTopics();
-			setTopics(fetchedTopics);
-		} catch (error) {
-			console.error("Failed to fetch topics:", error);
-			// Here you can add user-friendly error handling, e.g., showing an error message
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
-	const handleTopicSubmit = async (data: {
-		title: string;
-		category: string;
-	}) => {
+	const handleTopicSubmit = async (data: TopicInput) => {
 		setIsSubmitting(true);
 		try {
 			if (selectedTopic) {
-				// Edit existing topic
-				await TopicApi.updateTopic(selectedTopic.id, {
-					topicName: data.title,
-					category: data.category,
-				});
+				await updateTopic(selectedTopic._id, data);
 			} else {
-				// Add new topic
-				await TopicApi.createTopic({
-					topicName: data.title,
-					category: data.category,
-				});
+				await createTopic(data);
 			}
 			setIsModalOpen(false);
 			setSelectedTopic(null);
-			await fetchTopics(); // Refresh the topics list
-		} catch (error) {
-			console.error("Failed to submit topic:", error);
-			// Here you can add user-friendly error handling, e.g., showing an error message
 		} finally {
 			setIsSubmitting(false);
 		}
 	};
 
 	const handleDeleteTopic = async (id: string) => {
-		setIsDeleting(id);
+		setIsDeleting(true);
 		try {
-			await TopicApi.deleteTopic(id);
-			await fetchTopics(); // Refresh the topics list
-		} catch (error) {
-			console.error("Failed to delete topic:", error);
-			// Here you can add user-friendly error handling, e.g., showing an error message
+			await deleteTopic(id);
 		} finally {
-			setIsDeleting(null);
+			setIsDeleting(false);
 		}
 	};
 
@@ -105,12 +69,12 @@ const TopicManagementPage = () => {
 		currentPage * itemsPerPage
 	);
 
-	const requestSort = (key: keyof Topic) => {
-		// Add sorting logic here if needed
-	};
-
 	if (isLoading) {
 		return <div>Loading...</div>;
+	}
+
+	if (error) {
+		return <div>Error: {error}</div>;
 	}
 
 	return (
@@ -129,9 +93,8 @@ const TopicManagementPage = () => {
 									<Button
 										className="bg-secondary text-white"
 										onClick={() => openModal()}
-										disabled={isSubmitting}
 									>
-										{isSubmitting ? "กำลังเพิ่ม..." : "เพิ่มหัวข้อ"}
+										เพิ่มหัวข้อ
 									</Button>
 								</div>
 							</div>
@@ -139,10 +102,7 @@ const TopicManagementPage = () => {
 					</TableRow>
 					<TableRow>
 						<TableHead className="w-3/5 text-center">หัวข้อ</TableHead>
-						<TableHead
-							onClick={() => requestSort("category")}
-							className="cursor-pointer w-1/5"
-						>
+						<TableHead className="cursor-pointer w-1/5">
 							<div className="flex items-center justify-center">
 								หมวดหมู่ <ArrowUpDown className="ml-2" size={16} />
 							</div>
@@ -151,7 +111,7 @@ const TopicManagementPage = () => {
 					</TableRow>
 					<TableBody>
 						{paginatedData.map((topic) => (
-							<TableRow key={topic.id}>
+							<TableRow key={topic._id}>
 								<TableCell>{topic.topicName}</TableCell>
 								<TableCell>
 									<CategoryBadge
@@ -160,10 +120,10 @@ const TopicManagementPage = () => {
 								</TableCell>
 								<TableCell>
 									<TableActions
-										topicId={topic.id}
+										topicId={topic._id}
 										onEdit={() => openModal(topic)}
-										onDelete={() => handleDeleteTopic(topic.id)}
-										isDeleting={isDeleting === topic.id}
+										onDelete={() => handleDeleteTopic(topic._id)}
+										isDeleting={isDeleting}
 									/>
 								</TableCell>
 							</TableRow>

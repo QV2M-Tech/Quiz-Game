@@ -1,5 +1,10 @@
 export interface Topic {
-    id: string;
-    topicName: string;
-    category: string;
-  }
+  _id: string;  // MongoDB document ID
+  topicName: string;
+  category: string;
+}
+
+export interface TopicInput {
+  topicName: string;
+  category: string;
+}

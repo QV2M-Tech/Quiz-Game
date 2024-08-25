@@ -8,12 +8,12 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { TopicApi } from "@/lib/TopicApi";
-import { Topic } from "@/types/topic";
+import { Topic, TopicInput } from "@/types/topic";
 
 interface ModalTopicFormProps {
 	isOpen: boolean;
 	setIsOpen: (isOpen: boolean) => void;
-	onSubmit: (data: { title: string; category: string }) => Promise<void>;
+	onSubmit: (data: TopicInput) => Promise<void>;
 	initialData?: Topic;
 	isSubmitting: boolean;
 }
@@ -25,7 +25,7 @@ const ModalTopicForm: React.FC<ModalTopicFormProps> = ({
 	initialData,
 	isSubmitting,
 }) => {
-	const [title, setTitle] = useState(initialData?.topicName || "");
+	const [topicName, setTopicName] = useState(initialData?.topicName || "");
 	const [category, setCategory] = useState(initialData?.category || "");
 	const [categories, setCategories] = useState<string[]>([]);
 
@@ -36,7 +36,7 @@ const ModalTopicForm: React.FC<ModalTopicFormProps> = ({
 				const uniqueCategories = Array.from(
 					new Set(topics.map((topic) => topic.category))
 				);
-				setCategories([...uniqueCategories, "บันเทิง"]); // Adding "บันเทิง" to the categories
+				setCategories([...uniqueCategories, "บันเทิง"]);
 			} catch (error) {
 				console.error("Failed to fetch categories:", error);
 			}
@@ -44,13 +44,13 @@ const ModalTopicForm: React.FC<ModalTopicFormProps> = ({
 
 		if (isOpen) {
 			fetchCategories();
-			setTitle(initialData?.topicName || "");
+			setTopicName(initialData?.topicName || "");
 			setCategory(initialData?.category || "");
 		}
 	}, [isOpen, initialData]);
 
 	const handleSubmit = async () => {
-		await onSubmit({ title, category });
+		await onSubmit({ topicName, category });
 		setIsOpen(false);
 	};
 
@@ -66,8 +66,8 @@ const ModalTopicForm: React.FC<ModalTopicFormProps> = ({
 					</label>
 					<input
 						type="text"
-						value={title}
-						onChange={(e) => setTitle(e.target.value)}
+						value={topicName}
+						onChange={(e) => setTopicName(e.target.value)}
 						placeholder="หัวข้อ"
 						className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 					/>
