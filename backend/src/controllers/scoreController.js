@@ -1,17 +1,24 @@
 import Score from "../models/Score.js";
 import { BadRequestError, NotFoundError } from "../utils/error.js";
 
+export const getTopScore = async (req, res, next) => {
+	try {
+		const TopScore = await Score.find()
+			.sort({ score: -1, timeSpent: 1 })
+			.limit(10);
+
+		res.status(200).json({
+			message: "get top 10 scores success",
+			data: TopScore,
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
 export const getAllScore = async (req, res, next) => {
 	try {
-		const req = { user: { isAdmin: true } }; // mock
-		const { isAdmin } = req.user;
-
-		if (isAdmin) {
-			const allScore = Score.find();
-		} else {
-			// top 10
-			const allScore = Score.find();
-		}
+		const allScore = await Score.find().sort({ createOn: -1 });
 
 		res.status(200).json({
 			message: "get all score success",
@@ -24,7 +31,10 @@ export const getAllScore = async (req, res, next) => {
 
 export const browseScore = async (req, res, next) => {
 	try {
-		next();
+		res.status(200).json({
+			message: "get score success",
+			// data: allScore,
+		});
 	} catch (error) {
 		next(error);
 	}
@@ -46,6 +56,7 @@ export const createScore = async (req, res, next) => {
 
 		res.status(201).json({
 			message: "Create score success",
+			data: newScore,
 		});
 	} catch (error) {
 		next(error);
@@ -55,10 +66,10 @@ export const createScore = async (req, res, next) => {
 export const deleteScore = async (req, res, next) => {
 	try {
 		const { scoreId } = req.params;
-		const score = await getscoreByIdService(scoreId);
-		if (!score) {
-			throw new NotFoundError(`score with id ${scoreId} is not found`);
-		}
+		// const score = await getscoreByIdService(scoreId);
+		// if (!score) {
+		// 	throw new NotFoundError(`score with id ${scoreId} is not found`);
+		// }
 
 		await Score.findByIdAndDelete(scoreId);
 

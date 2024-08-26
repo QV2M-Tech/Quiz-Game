@@ -1,7 +1,8 @@
 import express from "express";
 import {
-	getAllScore,
+	getTopScore,
 	browseScore,
+	getAllScore,
 	createScore,
 	deleteScore,
 } from "../controllers/scoreController.js";
@@ -9,7 +10,13 @@ import {
 const router = express.Router();
 
 // userAuthMiddleware
-router.get("/", browseScore, getAllScore);
+router.get("/top", getTopScore);
+
+// adminAuthMiddleware
+router.get("/", getAllScore);
+
+// adminAuthMiddleware
+router.get("/browse", browseScore);
 
 // userAuthMiddleware
 router.post("/", createScore);
