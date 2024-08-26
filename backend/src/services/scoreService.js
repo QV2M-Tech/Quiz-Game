@@ -26,9 +26,54 @@ export async function getTopScoreService() {
 	]);
 }
 
-export async function getAllScoreService() {
-	// วันที่, ชื่อ, ชื่อผู้ใช้, หมวดหมู่, หัวข้อ, หัวข้อย่อย, คะแนน
-	return Score.find().sort({ createOn: -1 });
+export async function getAllScoreService(sort) {
+	return Score.aggregate([
+		{
+			$lookup: {
+				from: "users",
+				localField: "userId",
+				foreignField: "_id",
+				as: "user",
+			},
+		},
+		{
+			$lookup: {
+				from: "subtopics",
+				localField: "subtopicId",
+				foreignField: "_id",
+				as: "subtopic",
+			},
+		},
+		{
+			$unwind: "$user",
+		},
+		{
+			$unwind: "$subtopic",
+		},
+		{
+			$lookup: {
+				from: "topics",
+				localField: "topicId",
+				foreignField: "_id",
+				as: "topic",
+			},
+		},
+		{
+			$unwind: "$topic",
+		},
+		{
+			$project: {
+				name: "$user.name",
+				username: "$user.username",
+				category: "$topic.category",
+				topic: "$topic.topicName",
+				subtopic: "$subtopic.subtopicName",
+				score: 1,
+				createOn: 1,
+			},
+		},
+		{ $sort: { createOn: -1 } },
+	]);
 }
 
 export async function browseScoreService() {

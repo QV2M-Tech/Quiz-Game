@@ -49,14 +49,14 @@ export const browseScore = async (req, res, next) => {
 
 export const createScore = async (req, res, next) => {
 	try {
-		const { userId, subTopicId, score, timeSpent } = req.body;
-		if (!userId || !subTopicId || !score || !timeSpent) {
+		const { userId, subtopicId, score, timeSpent } = req.body;
+		if (!userId || !subtopicId || !score || !timeSpent) {
 			throw new BadRequestError("All field is require");
 		}
 
-		// find score if eq userId, subTopicId && score > old score >> save newscore
+		// find score if eq userId, subtopicId && score > old score >> save newscore
 
-		const data = { userId, subTopicId, score, timeSpent };
+		const data = { userId, subtopicId, score, timeSpent };
 
 		const newScore = await createScoreService(data);
 
