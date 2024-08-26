@@ -1,5 +1,5 @@
 import Score from "../models/Score.js";
-import { NotFoundError } from "../utils/error.js";
+import { BadRequestError, NotFoundError } from "../utils/error.js";
 
 export const getAllScore = async (req, res, next) => {
 	try {
@@ -32,6 +32,21 @@ export const browseScore = async (req, res, next) => {
 
 export const createScore = async (req, res, next) => {
 	try {
+		const { userId, subTopicId, score, timeSpent } = req.body;
+		if (!userId || !subTopicId || !score || !timeSpent) {
+			throw new BadRequestError("All field is require");
+		}
+
+		// find score if eq userId, subTopicId && score > old score >> save newscore
+
+		const data = { userId, subTopicId, score, timeSpent };
+
+		const newScore = new Score(data);
+		await newScore.save();
+
+		res.status(201).json({
+			message: "Create score success",
+		});
 	} catch (error) {
 		next(error);
 	}
