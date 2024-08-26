@@ -7,6 +7,7 @@ export const getTopScore = async (req, res, next) => {
 			.sort({ score: -1, timeSpent: 1 })
 			.limit(10);
 
+		// อยากได้ชื่อด้วย
 		res.status(200).json({
 			message: "get top 10 scores success",
 			data: TopScore,
@@ -20,6 +21,7 @@ export const getAllScore = async (req, res, next) => {
 	try {
 		const allScore = await Score.find().sort({ createOn: -1 });
 
+		// วันที่, ชื่อ, ชื่อผู้ใช้, หมวดหมู่, หัวข้อ, หัวข้อย่อย, คะแนน
 		res.status(200).json({
 			message: "get all score success",
 			data: allScore,
@@ -31,9 +33,14 @@ export const getAllScore = async (req, res, next) => {
 
 export const browseScore = async (req, res, next) => {
 	try {
+		const { query } = req;
+		console.log(query);
+
+		// เอาชื่อไปหา || ส่ง id มา
+
 		res.status(200).json({
 			message: "get score success",
-			// data: allScore,
+			data: query,
 		});
 	} catch (error) {
 		next(error);
@@ -66,10 +73,10 @@ export const createScore = async (req, res, next) => {
 export const deleteScore = async (req, res, next) => {
 	try {
 		const { scoreId } = req.params;
-		// const score = await getscoreByIdService(scoreId);
-		// if (!score) {
-		// 	throw new NotFoundError(`score with id ${scoreId} is not found`);
-		// }
+		const score = await Score.findById(scoreId);
+		if (!score) {
+			throw new NotFoundError(`score with id ${scoreId} is not found`);
+		}
 
 		await Score.findByIdAndDelete(scoreId);
 
