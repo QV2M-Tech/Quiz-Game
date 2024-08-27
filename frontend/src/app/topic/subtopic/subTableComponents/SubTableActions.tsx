@@ -1,3 +1,5 @@
+// src/app/topic/subtopic/subTableComponents/SubTableActions.tsx
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { LibraryBigIcon, Edit, Trash } from "lucide-react";
@@ -7,35 +9,32 @@ import {
 	TooltipTrigger,
 	TooltipContent,
 } from "@/components/ui/tooltip";
-import { TableCell } from "@/components/ui/table";
-import { useRouter } from "next/navigation";
 import { SubtopicInput } from "@/types/SubTopic";
+import { useRouter } from "next/navigation";
 
 interface SubTableActionProps {
-	id: string;
-	onEdit: (data: SubtopicInput) => void;
+	subtopicId: string;
+	subtopicName: string;
+	onEdit: () => void;
 	onDelete: () => void;
 	initialData: SubtopicInput;
 }
 
 const SubTableAction: React.FC<SubTableActionProps> = ({
-	id,
+	subtopicId,
+	subtopicName,
 	onEdit,
 	onDelete,
 	initialData,
 }) => {
 	const router = useRouter();
 
-	const handleEdit = () => {
-		onEdit(initialData);
-	};
-
 	const navigateToQuestion = () => {
-		router.push(`/question/${id}`);
+		router.push(`/topic/subtopic/question/${subtopicId}`);
 	};
 
 	return (
-		<TableCell className="flex justify-center gap-2">
+		<div className="flex justify-center gap-2">
 			<TooltipProvider>
 				<Tooltip>
 					<TooltipTrigger>
@@ -43,21 +42,19 @@ const SubTableAction: React.FC<SubTableActionProps> = ({
 							<LibraryBigIcon className="inline-block" size={16} />
 						</Button>
 					</TooltipTrigger>
-					<TooltipContent>จัดการคำถาม</TooltipContent>
+					<TooltipContent>จัดการหัวข้อหลัก</TooltipContent>
 				</Tooltip>
 			</TooltipProvider>
-
 			<TooltipProvider>
 				<Tooltip>
 					<TooltipTrigger>
-						<Button variant="ghost" size="sm" onClick={handleEdit}>
+						<Button variant="ghost" size="sm" onClick={onEdit}>
 							<Edit className="inline-block" size={16} />
 						</Button>
 					</TooltipTrigger>
 					<TooltipContent>แก้ไขหัวข้อย่อย</TooltipContent>
 				</Tooltip>
 			</TooltipProvider>
-
 			<TooltipProvider>
 				<Tooltip>
 					<TooltipTrigger>
@@ -68,7 +65,7 @@ const SubTableAction: React.FC<SubTableActionProps> = ({
 					<TooltipContent>ลบหัวข้อย่อย</TooltipContent>
 				</Tooltip>
 			</TooltipProvider>
-		</TableCell>
+		</div>
 	);
 };
 

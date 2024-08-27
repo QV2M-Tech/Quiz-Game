@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+// src/app/topic/subtopic/subTableComponents/ModalSubTopic.tsx
+
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -9,13 +11,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import { SubtopicInput } from "@/types/SubTopic";
 
 interface ModalSubTopicProps {
@@ -36,18 +31,25 @@ export function ModalSubTopic({
 	const [subtopicName, setSubtopicName] = useState(
 		initialData?.subtopicName || ""
 	);
-	const [time, setTime] = useState(initialData?.time?.toString() || "");
+	const [time, setTime] = useState(initialData?.time.toString() || "");
 	const [category, setCategory] = useState(initialData?.category || "");
 
 	const handleSubmit = () => {
 		onSubmit({
+			_id: initialData?._id || "",
 			subtopicName,
-			time: parseInt(time),
+			time: parseInt(time, 10),
 			category,
 			topicId: initialData?.topicId || "",
 		});
 		setIsOpen(false);
 	};
+
+	useEffect(() => {
+		setSubtopicName(initialData?.subtopicName || "");
+		setTime(initialData?.time.toString() || "");
+		setCategory(initialData?.category || "");
+	}, [initialData]);
 
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -82,20 +84,6 @@ export function ModalSubTopic({
 							value={time}
 							onChange={(e) => setTime(e.target.value)}
 						/>
-					</div>
-					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="category" className="text-right">
-							หมวดหมู่
-						</Label>
-						<Select value={category} onValueChange={setCategory}>
-							<SelectTrigger id="category" className="col-span-3">
-								<SelectValue placeholder="วิชาการ" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="academic">วิชาการ</SelectItem>
-								<SelectItem value="entertainment">บันเทิง</SelectItem>
-							</SelectContent>
-						</Select>
 					</div>
 				</div>
 				<DialogFooter>
