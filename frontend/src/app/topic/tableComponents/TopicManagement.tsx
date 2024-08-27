@@ -16,7 +16,6 @@ import CategoryBadge from "@/components/ui/badge/CategoryBadge";
 import TableActions from "@/app/topic/tableComponents/TableActions";
 import ModalTopicForm from "./ModalTopicForm";
 import { useTopicManagement } from "@/hooks/useTopicManagement";
-import Link from "next/link";
 
 const TopicManagementPage: React.FC = () => {
 	const { topics, isLoading, error, createTopic, updateTopic, deleteTopic } =

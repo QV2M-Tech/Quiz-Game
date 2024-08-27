@@ -1,6 +1,9 @@
+// src/app/topic/subtopic/subTableComponents/SubTopicManagement.tsx
+
 import React, { useState, useEffect } from "react";
 import {
 	Table,
+	TableHead,
 	TableBody,
 	TableCell,
 	TableRow,
@@ -9,14 +12,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowUpDown } from "lucide-react";
-import SubTableAction from "@/app/subtopic/subTableComponents/SubTableActions";
-import { ModalSubTopic } from "@/app/subtopic/subTableComponents/ModalSubTopic";
+import SubTableAction from "@/app/topic/subtopic/subTableComponents/SubTableActions";
+import { ModalSubTopic } from "@/app/topic/subtopic/subTableComponents/ModalSubTopic";
 import { SubtopicApi } from "@/lib/SubTopicApi";
 import { TopicApi } from "@/lib/TopicApi";
 import { Subtopic, SubtopicInput } from "@/types/SubTopic";
 import { Topic } from "@/types/topic";
 import Pagination from "@/components/ui/Pagination";
-import { useRouter } from "next/navigation";
 
 interface SubtopicManagementProps {
 	topicId: string;
@@ -36,7 +38,8 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 	const [currentPage, setCurrentPage] = useState(1);
 	const [isMounted, setIsMounted] = useState(false);
 	const itemsPerPage = 10;
-	const router = useRouter();
+	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+	const [editingSubtopic, setEditingSubtopic] = useState<Subtopic | null>(null);
 
 	useEffect(() => {
 		setIsMounted(true);
@@ -97,44 +100,44 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 		setSearchTerm(e.target.value);
 	};
 
-	const handleAdd = async (newSubtopic: SubtopicInput) => {
+	const handleAddSubtopic = async (subtopicInput: SubtopicInput) => {
 		try {
-			const createdSubtopic = await SubtopicApi.createSubtopic({
-				...newSubtopic,
-				topicId,
-			});
-			setSubtopics([...subtopics, createdSubtopic]);
-			setIsAddModalOpen(false);
+			await SubtopicApi.createSubtopic(subtopicInput);
+			await fetchTopicAndSubtopics();
 		} catch (error) {
 			console.error("Error adding subtopic:", error);
 		}
 	};
 
-	const handleEdit = async (id: string, updatedSubtopic: SubtopicInput) => {
+	const handleEditSubtopic = async (subtopicInput: SubtopicInput) => {
 		try {
-			const updated = await SubtopicApi.updateSubtopic(id, updatedSubtopic);
-			setSubtopics(subtopics.map((st) => (st._id === id ? updated : st)));
+			await SubtopicApi.updateSubtopic(subtopicInput._id, subtopicInput);
+			await fetchTopicAndSubtopics();
 		} catch (error) {
-			console.error("Error updating subtopic:", error);
+			console.error("Error editing subtopic:", error);
 		}
 	};
 
-	const handleDelete = async (id: string) => {
+	const handleDeleteSubtopic = async (subtopicId: string) => {
 		try {
-			await SubtopicApi.deleteSubtopic(id);
-			setSubtopics(subtopics.filter((st) => st._id !== id));
+			await SubtopicApi.deleteSubtopic(subtopicId);
+			await fetchTopicAndSubtopics();
 		} catch (error) {
 			console.error("Error deleting subtopic:", error);
 		}
 	};
 
-	const totalPages = Math.ceil(filteredSubtopics.length / itemsPerPage);
-	const paginatedData = filteredSubtopics.slice(
+	const currentSubtopics = filteredSubtopics.slice(
 		(currentPage - 1) * itemsPerPage,
 		currentPage * itemsPerPage
 	);
 
-	if (!isMounted || !topic) return null;
+	const totalPages = Math.ceil(filteredSubtopics.length / itemsPerPage);
+
+	const handlePageChange = (page: number) => {
+		setCurrentPage(page);
+	};
+
 	return (
 		<div className="flex flex-col items-center py-10">
 			<div className="w-11/12">
@@ -143,71 +146,90 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 						<TableCell colSpan={4}>
 							<div className="flex justify-between items-center mb-4">
 								<h2 className="text-lg font-bold">
-									จัดการหัวข้อย่อย: {topic.topicName}
+									การจัดการหัวข้อย่อย: {topic?.topicName}
 								</h2>
-								<p>หมวดหมู่: {topic.category}</p>
 								<div className="flex items-center gap-4">
-									<Input
-										placeholder="ค้นหา..."
-										value={searchTerm}
-										onChange={handleSearch}
-									/>
 									<Button onClick={() => setIsAddModalOpen(true)}>
 										เพิ่มหัวข้อย่อย
 									</Button>
+									<Input
+										type="text"
+										placeholder="ค้นหาหัวข้อย่อย"
+										value={searchTerm}
+										onChange={handleSearch}
+									/>
 								</div>
 							</div>
 						</TableCell>
 					</TableRow>
+					<TableRow>
+						<TableHead className="w-3/5">
+							<div className="flex items-center justify-center">
+								ชื่อหัวข้อย่อย
+							</div>
+						</TableHead>
+						<TableHead className="w-1/5">
+							<div
+								className="flex items-center justify-center"
+								onClick={() => requestSort("time")}
+							>
+								เวลา (นาที) <ArrowUpDown className="ml-2 h-4 w-4" />
+							</div>
+						</TableHead>
+						<TableHead className="w-1/5 text-center">active</TableHead>
+					</TableRow>
 					<TableBody>
-						{paginatedData.map((subtopic) => (
+						{currentSubtopics.map((subtopic) => (
 							<TableRow key={subtopic._id}>
 								<TableCell>{subtopic.subtopicName}</TableCell>
-								<TableCell>{subtopic.questionCount}</TableCell>
 								<TableCell>{subtopic.time}</TableCell>
-								<SubTableAction
-									id={subtopic._id}
-									onEdit={(updatedData) =>
-										handleEdit(subtopic._id, updatedData)
-									}
-									onDelete={() => handleDelete(subtopic._id)}
-									initialData={{
-										subtopicName: subtopic.subtopicName,
-										time: subtopic.time,
-										category: subtopic.category,
-										topicId: subtopic.topicId,
-									}}
-								/>
+								<TableCell>
+									<SubTableAction
+										subtopicId={subtopic._id}
+										onEdit={() => {
+											setEditingSubtopic(subtopic);
+											setIsEditModalOpen(true);
+										}}
+										onDelete={() => handleDeleteSubtopic(subtopic._id)}
+										initialData={subtopic}
+										subtopicName={""}
+									/>
+								</TableCell>
 							</TableRow>
 						))}
 					</TableBody>
-					<TableFooter>
-						<TableRow>
-							<TableCell colSpan={4}>
-								<Pagination
-									currentPage={currentPage}
-									totalPages={totalPages}
-									onPageChange={setCurrentPage}
-									itemsPerPage={itemsPerPage}
-									totalItems={filteredSubtopics.length}
-								/>
-							</TableCell>
-						</TableRow>
-					</TableFooter>
+					{filteredSubtopics.length > 0 && (
+						<TableFooter>
+							<TableRow>
+								<TableCell colSpan={3}>
+									<Pagination
+										currentPage={currentPage}
+										totalPages={totalPages}
+										onPageChange={handlePageChange}
+										itemsPerPage={itemsPerPage}
+										totalItems={filteredSubtopics.length}
+									/>
+								</TableCell>
+							</TableRow>
+						</TableFooter>
+					)}
 				</Table>
+				<ModalSubTopic
+					isOpen={isAddModalOpen}
+					setIsOpen={setIsAddModalOpen}
+					mode="add"
+					onSubmit={handleAddSubtopic}
+				/>
+				{editingSubtopic && (
+					<ModalSubTopic
+						isOpen={isEditModalOpen}
+						setIsOpen={setIsEditModalOpen}
+						mode="edit"
+						initialData={editingSubtopic}
+						onSubmit={handleEditSubtopic}
+					/>
+				)}
 			</div>
-			<ModalSubTopic
-				isOpen={isAddModalOpen}
-				setIsOpen={setIsAddModalOpen}
-				mode="add"
-				onSubmit={handleAdd}
-				initialData={{
-					subtopicName: "",
-					time: 0,
-					category: topic.category,
-					topicId: topicId,
-				}}
-			/>
 		</div>
 	);
 };
