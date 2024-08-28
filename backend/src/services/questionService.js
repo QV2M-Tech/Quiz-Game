@@ -5,7 +5,9 @@ export const findQuestionById = async (id) => {
 };
 
 export const findAllQuestionsBySubtopicId = async (subtopicId) => {
-	return await Question.find({ subtopicId }).populate("subtopicId");
+	return await Question.find({ subtopicId })
+		.populate("subtopicId", "name") // เพิ่ม populate เพื่อดึงชื่อ subtopic
+		.lean(); // ใช้ lean() เพื่อเพิ่มประสิทธิภาพ
 };
 
 export const createNewQuestion = async ({
