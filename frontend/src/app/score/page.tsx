@@ -10,36 +10,43 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+
 import { Checkbox } from "@/components/ui/checkbox";
 import Pagination from "@/components/ui/Pagination";
-import { DataItem, generateMockData } from "@/lib/mockData";
 import CategoryBadge from "@/components/ui/badge/CategoryBadge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
-
-// interface DataTableProps {
-// 	itemsPerPage: number;
-// }
-
-// const DataTable: React.FC<DataTableProps> = ({ itemsPerPage }) => {
+import { getAllScore } from "@/lib/scoreApi";
+import { AllScore } from "@/types/score";
+import { thDateTime } from "@/lib/format";
 
 export default function ScorePage() {
-	const [data, setData] = useState<DataItem[]>([]);
-	const [itemsPerPage, setItemsPerPage] = useState(10);
+	const [data, setData] = useState<AllScore[]>([]);
 	const [currentPage, setCurrentPage] = useState(1);
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(false);
+	const itemsPerPage: number = 10;
+
 	const [searchTerm, setSearchTerm] = useState("");
 	const [sortConfig, setSortConfig] = useState<{
-		key: keyof DataItem;
+		key: keyof AllScore;
 		direction: "asc" | "desc";
 	} | null>(null);
 
 	useEffect(() => {
-		const mockData = generateMockData();
-		setData(mockData);
-		setIsLoading(false);
+		getScore();
 	}, []);
+
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [currentPage]);
+
+	async function getScore() {
+		setIsLoading(true);
+		const scoreData = await getAllScore();
+		setData(scoreData ?? []);
+		setIsLoading(false);
+	}
 
 	const filteredData = data.filter((item) =>
 		Object.values(item).some((value) =>
@@ -69,7 +76,7 @@ export default function ScorePage() {
 		currentPage * itemsPerPage
 	);
 
-	const requestSort = (key: keyof DataItem) => {
+	const requestSort = (key: keyof AllScore) => {
 		let direction: "asc" | "desc" = "asc";
 		if (
 			sortConfig &&
@@ -101,71 +108,71 @@ export default function ScorePage() {
 											value={searchTerm}
 											onChange={(e) => setSearchTerm(e.target.value)}
 										/>
-										<Button
+										{/* <Button
 											variant="outline"
 											className="hover:bg-secondary/20 border-secondary"
 										>
 											เลือกวันที่
 										</Button>
-										<Button variant="secondary">ตัวกรอง</Button>
+										<Button variant="secondary">ตัวกรอง</Button> */}
 									</div>
 								</div>
 							</TableCell>
 						</TableRow>
 						<TableRow>
-							<TableHead className="text-center">
+							{/* <TableHead className="text-center">
 								<Checkbox />
-							</TableHead>
+							</TableHead> */}
 							<TableHead
-								onClick={() => requestSort("date")}
-								className="cursor-pointer text-center"
+								onClick={() => requestSort("createOn")}
+								className="cursor-pointer text-center w-2/12"
 							>
 								วันที่เล่น{" "}
 								<ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
 							<TableHead
 								onClick={() => requestSort("name")}
-								className="cursor-pointer text-center"
+								className="cursor-pointer text-center w-2/12"
 							>
 								ชื่อผู้ใช้{" "}
 								<ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
 							<TableHead
 								onClick={() => requestSort("category")}
-								className="cursor-pointer text-center"
+								className="cursor-pointer text-center w-2/12"
 							>
 								หมวดหมู่ <ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
 							<TableHead
 								onClick={() => requestSort("topic")}
-								className="cursor-pointer text-center"
+								className="cursor-pointer text-center w-2/12"
 							>
 								หัวข้อ <ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
 							<TableHead
 								onClick={() => requestSort("subtopic")}
-								className="cursor-pointer text-center"
+								className="cursor-pointer text-center w-2/12"
 							>
 								หัวข้อย่อย{" "}
 								<ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
 							<TableHead
 								onClick={() => requestSort("score")}
-								className="cursor-pointer text-center"
+								className="cursor-pointer text-center w-1/12"
 							>
 								คะแนน <ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
-							<TableHead className="text-center">ตัวเลือก</TableHead>
+							<TableHead className="text-center w-2/12">ตัวเลือก</TableHead>
 						</TableRow>
 					</TableHeader>
 
 					<TableBody>
-						{data.map((item) => (
+						{paginatedData.map((item) => (
 							<TableRow key={item._id}>
-								<TableCell>
+								{/* <TableCell>
 									<Checkbox />
-								</TableCell>
-								<TableCell>{item.date}</TableCell>
+								</TableCell> */}
+								<TableCell>{thDateTime(item.createOn)}</TableCell>
 								<TableCell className="text-left">
 									<div className="font-medium">{item.name}</div>
 									<div className="text-sm text-gray-500">{item.username}</div>
@@ -180,6 +187,7 @@ export default function ScorePage() {
 							</TableRow>
 						))}
 					</TableBody>
+
 					<TableFooter>
 						<TableRow>
 							<TableCell colSpan={8}>
@@ -198,5 +206,3 @@ export default function ScorePage() {
 		</div>
 	);
 }
-
-// export default DataTable;
