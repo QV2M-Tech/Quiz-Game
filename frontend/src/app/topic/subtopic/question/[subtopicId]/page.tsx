@@ -1,4 +1,6 @@
 "use client";
+
+import React from "react";
 import QuestionManagement from "../QuestionTableComponents/QuestionManagement";
 
 interface PageProps {
@@ -11,7 +13,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
 	const { subtopicId } = params;
 	return (
 		<div>
-			<QuestionManagement subtopicId={subtopicId} topicId={""} />
+			<QuestionManagement subtopicId={subtopicId} topicId="" topicName="" />
 		</div>
 	);
 };

@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import SearchBar from "@/app/topic/tableComponents/SearchBar";
-import { Topic, TopicInput } from "@/types/topic";
+import { Topic, TopicInput } from "@/types/Topic";
 import Pagination from "@/components/ui/Pagination";
 import CategoryBadge from "@/components/ui/badge/CategoryBadge";
 import TableActions from "@/app/topic/tableComponents/TableActions";
