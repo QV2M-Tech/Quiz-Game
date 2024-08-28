@@ -1,0 +1,181 @@
+import React, { useState, useEffect } from "react";
+import { evaluate } from "mathjs";
+
+interface Body {
+	level: string; // Define the type of the level prop
+}
+// สุ่มตัวเลข 4 ตัว
+const Body: React.FC<Body> = ({ level }) => {
+	const generateRandomNumbers = () => {
+		const numbers = [];
+		for (let i = 0; i < 4; i++) {
+			numbers.push(Math.floor(Math.random() * 9) + 1);
+		}
+		return numbers;
+	};
+
+	// สุ่มตัวดำเนินการ
+	const getRandomOperator = () => {
+		const operators = ["+", "-", "*", "/"];
+		return operators[Math.floor(Math.random() * operators.length)];
+	};
+
+	// ตรวจสอบว่าการหารเป็นจำนวนเต็ม
+	const isIntegerDivision = (a: number, b: number) => {
+		return a % b === 0;
+	};
+
+	// สร้างสมการที่สุ่มและคำนวณคำตอบเป้าหมาย
+	const generateExpression = (numbers: number[]) => {
+		let expressions = [
+			`${numbers[0]} ${getRandomOperator()} ${
+				numbers[1]
+			} ${getRandomOperator()} ${numbers[2]} ${getRandomOperator()} ${
+				numbers[3]
+			}`,
+			`(${numbers[0]} ${getRandomOperator()} ${
+				numbers[1]
+			}) ${getRandomOperator()} (${numbers[2]} ${getRandomOperator()} ${
+				numbers[3]
+			})`,
+			`(${numbers[0]} ${getRandomOperator()} ${
+				numbers[1]
+			} ${getRandomOperator()} ${numbers[2]}) ${getRandomOperator()} ${
+				numbers[3]
+			}`,
+			`${numbers[0]} ${getRandomOperator()} (${
+				numbers[1]
+			} ${getRandomOperator()} ${numbers[2]} ${getRandomOperator()} ${
+				numbers[3]
+			})`,
+		];
+
+		for (let expr of expressions) {
+			try {
+				let result = evaluate(expr);
+
+				// ตรวจสอบการหารที่เป็นจำนวนเต็ม
+				if (expr.includes("/")) {
+					let parts = expr.split(" ");
+					for (let i = 0; i < parts.length; i++) {
+						if (parts[i] === "/") {
+							let a = evaluate(parts.slice(0, i).join(" "));
+							let b = parseInt(parts[i + 1], 10);
+							if (!isIntegerDivision(a, b)) {
+								return null; // ถ้าไม่เป็นจำนวนเต็ม ให้คืนค่า null
+							}
+						}
+					}
+				}
+
+				return { expression: expr, result: result };
+			} catch (e) {
+				continue;
+			}
+		}
+
+		return null;
+	};
+
+	// ตรวจสอบว่าผู้ใช้ใช้ตัวเลขทั้ง 4 ตัวและใช้เพียงครั้งเดียว
+	const isValidExpression = (userInput: string, numbers: number[]) => {
+		const numberCount = new Map<number, number>();
+
+		// นับจำนวนครั้งที่แต่ละตัวเลขปรากฏ
+		numbers.forEach((num) => {
+			numberCount.set(num, (numberCount.get(num) || 0) + 1);
+		});
+
+		const inputNumbers = userInput.match(/\d+/g); // ดึงเฉพาะตัวเลขจาก input
+		if (!inputNumbers) return false;
+
+		for (let num of inputNumbers) {
+			const number = parseInt(num, 10);
+			if (!numberCount.has(number) || numberCount.get(number) === 0) {
+				return false; // ถ้าพบตัวเลขที่ไม่ใช่หรือตัวเลขนั้นหมด
+			}
+			numberCount.set(number, (numberCount.get(number) as number) - 1);
+		}
+
+		// ตรวจสอบว่าทุกตัวเลขถูกใช้หมด
+		return Array.from(numberCount.values()).every((count) => count === 0);
+	};
+
+	const [numbers, setNumbers] = useState<number[]>([]);
+	const [target, setTarget] = useState<number>(0);
+	const [input, setInput] = useState<string>("");
+	const [message, setMessage] = useState<string>("");
+
+	const resetGame = () => {
+		const generatedNumbers = generateRandomNumbers();
+		setNumbers(generatedNumbers);
+		const generatedExpression = generateExpression(generatedNumbers);
+		if (generatedExpression) {
+			setTarget(generatedExpression.result);
+		} else {
+			resetGame();
+		}
+		setInput("");
+		setMessage("");
+	};
+
+	useEffect(() => {
+		resetGame();
+	}, []);
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setInput(e.target.value);
+	};
+
+	const checkAnswer = () => {
+		if (!isValidExpression(input, numbers)) {
+			setMessage("Invalid input! Please use all four numbers once.");
+			return;
+		}
+
+		try {
+			const userResult = evaluate(input);
+			if (userResult === target) {
+				setMessage("Correct!");
+			} else {
+				setMessage("Try again!");
+			}
+		} catch {
+			setMessage("Invalid input!");
+		}
+	};
+
+	return (
+		<div className="flex flex-col items-center w-8/12 bg-orange-500">
+			<div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md">
+				<h1 className="text-2xl font-bold text-center mb-4">Game 24</h1>
+				<div className="mb-4">
+					<p>Numbers: {numbers.join(", ")}</p>
+					<p>Target: {target}</p>
+				</div>
+				<input
+					type="text"
+					value={input}
+					onChange={handleChange}
+					className="w-full p-2 border border-gray-300 rounded-md"
+					placeholder="Enter your equation"
+				/>
+				<button
+					onClick={checkAnswer}
+					className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-md"
+				>
+					Submit
+				</button>
+				{message && <p className="mt-4 text-center">{message}</p>}
+				<button
+					onClick={resetGame}
+					className="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded-md"
+				>
+					Reset Game
+				</button>
+			</div>
+		</div>
+	);
+};
+
+export default Body;
