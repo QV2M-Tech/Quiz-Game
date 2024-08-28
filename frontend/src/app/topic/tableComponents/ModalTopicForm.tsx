@@ -7,7 +7,7 @@ import {
 	DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Topic, TopicInput } from "@/types/topic";
+import { Topic, TopicInput } from "@/types/Topic";
 
 interface ModalTopicFormProps {
 	isOpen: boolean;

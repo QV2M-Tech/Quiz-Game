@@ -16,6 +16,7 @@ const questionSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Subtopic",
 		required: true,
+		index: true,
 	},
 	questionName: {
 		type: String,
@@ -25,17 +26,22 @@ const questionSchema = new mongoose.Schema({
 		type: String,
 	},
 	option: {
-		type: [optionSchema], // เปลี่ยนเป็นอาร์เรย์ของ optionSchema
+		type: [optionSchema],
 		required: true,
+		validate: [arrayLimit, "{PATH} must have exactly 4 options"],
 	},
 	hint: {
 		type: String,
-		required: true,
 	},
+
 	createOn: {
 		type: Date,
 		default: new Date().getTime(),
 	},
 });
+
+function arrayLimit(val) {
+	return val.length === 4;
+}
 
 export default mongoose.model("Question", questionSchema);

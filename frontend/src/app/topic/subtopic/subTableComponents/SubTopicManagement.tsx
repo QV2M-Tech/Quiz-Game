@@ -17,7 +17,7 @@ import { ModalSubTopic } from "@/app/topic/subtopic/subTableComponents/ModalSubT
 import { SubtopicApi } from "@/lib/SubTopicApi";
 import { TopicApi } from "@/lib/TopicApi";
 import { Subtopic, SubtopicInput } from "@/types/SubTopic";
-import { Topic } from "@/types/topic";
+import { Topic } from "@/types/Topic";
 import Pagination from "@/components/ui/Pagination";
 
 interface SubtopicManagementProps {

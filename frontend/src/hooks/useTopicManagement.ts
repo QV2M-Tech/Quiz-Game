@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Topic, TopicInput } from '@/types/topic';
+import { Topic, TopicInput } from '@/types/Topic';
 import { TopicApi } from '@/lib/TopicApi';
 
 export const useTopicManagement = () => {

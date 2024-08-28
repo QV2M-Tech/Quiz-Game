@@ -10,23 +10,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-
-export interface FormData {
-	questionName: string;
-	option1: string;
-	option2: string;
-	option3: string;
-	option4: string;
-	correctAnswer: string;
-	hint: string;
-}
+import { QuestionInput } from "@/types/Question";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface QuestionModalProps {
 	isOpen: boolean;
+	setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 	mode: "add" | "edit";
+	onSubmit: (data: QuestionInput) => void;
 	onClose: () => void;
-	onSubmit: (data: FormData) => void;
-	initialData?: FormData | null;
+	initialData?: QuestionInput | null;
+	subtopicId: string;
 }
 
 const QuestionModal: React.FC<QuestionModalProps> = ({
@@ -34,16 +28,19 @@ const QuestionModal: React.FC<QuestionModalProps> = ({
 	mode,
 	onClose,
 	onSubmit,
+	subtopicId,
 	initialData = null,
 }) => {
-	const [formData, setFormData] = useState<FormData>({
+	const [formData, setFormData] = useState<QuestionInput>({
 		questionName: "",
-		option1: "",
-		option2: "",
-		option3: "",
-		option4: "",
-		correctAnswer: "",
+		option: [
+			{ text: "", isCorrect: false },
+			{ text: "", isCorrect: false },
+			{ text: "", isCorrect: false },
+			{ text: "", isCorrect: false },
+		],
 		hint: "",
+		subtopicId: subtopicId,
 	});
 
 	useEffect(() => {
@@ -52,15 +49,17 @@ const QuestionModal: React.FC<QuestionModalProps> = ({
 		} else {
 			setFormData({
 				questionName: "",
-				option1: "",
-				option2: "",
-				option3: "",
-				option4: "",
-				correctAnswer: "",
+				option: [
+					{ text: "", isCorrect: false },
+					{ text: "", isCorrect: false },
+					{ text: "", isCorrect: false },
+					{ text: "", isCorrect: false },
+				],
 				hint: "",
+				subtopicId: subtopicId,
 			});
 		}
-	}, [initialData, isOpen]);
+	}, [initialData, isOpen, subtopicId]);
 
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -69,7 +68,27 @@ const QuestionModal: React.FC<QuestionModalProps> = ({
 		setFormData((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleSubmit = () => {
+	const handleOptionChange = (index: number, value: string) => {
+		setFormData((prev) => ({
+			...prev,
+			option: prev.option.map((opt, i) =>
+				i === index ? { ...opt, text: value } : opt
+			),
+		}));
+	};
+
+	const handleCorrectChange = (index: number) => {
+		setFormData((prev) => ({
+			...prev,
+			option: prev.option.map((opt, i) => ({
+				...opt,
+				isCorrect: i === index,
+			})),
+		}));
+	};
+
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
 		onSubmit(formData);
 	};
 
@@ -81,100 +100,58 @@ const QuestionModal: React.FC<QuestionModalProps> = ({
 						{mode === "edit" ? "แก้ไขโจทย์" : "เพิ่มโจทย์"}
 					</DialogTitle>
 				</DialogHeader>
-				<div className="grid gap-4 py-4">
-					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="questionName" className="text-right">
-							โจทย์
-						</Label>
-						<Textarea
-							id="questionName"
-							name="questionName"
-							className="col-span-3"
-							value={formData.questionName}
-							onChange={handleChange}
-						/>
+				<form onSubmit={handleSubmit}>
+					<div className="grid gap-4 py-4">
+						<div className="grid grid-cols-4 items-center gap-4">
+							<Label htmlFor="questionName" className="text-right">
+								โจทย์
+							</Label>
+							<Textarea
+								id="questionName"
+								name="questionName"
+								className="col-span-3"
+								value={formData.questionName}
+								onChange={handleChange}
+							/>
+						</div>
+						{formData.option.map((opt, index) => (
+							<div key={index} className="grid grid-cols-4 items-center gap-4">
+								<Label htmlFor={`option${index + 1}`} className="text-right">
+									ตัวเลือกที่ {index + 1}
+								</Label>
+								<Input
+									id={`option${index + 1}`}
+									name={`option${index + 1}`}
+									className="col-span-2"
+									value={opt.text}
+									onChange={(e) => handleOptionChange(index, e.target.value)}
+								/>
+								<Checkbox
+									checked={opt.isCorrect}
+									onCheckedChange={() => handleCorrectChange(index)}
+								/>
+							</div>
+						))}
+						<div className="grid grid-cols-4 items-center gap-4">
+							<Label htmlFor="hint" className="text-right">
+								คำใบ้
+							</Label>
+							<Input
+								id="hint"
+								name="hint"
+								className="col-span-3"
+								value={formData.hint}
+								onChange={handleChange}
+							/>
+						</div>
 					</div>
-					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="option1" className="text-right">
-							ตัวเลือกที่ 1
-						</Label>
-						<Input
-							id="option1"
-							name="option1"
-							className="col-span-3"
-							value={formData.option1}
-							onChange={handleChange}
-						/>
-					</div>
-					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="option2" className="text-right">
-							ตัวเลือกที่ 2
-						</Label>
-						<Input
-							id="option2"
-							name="option2"
-							className="col-span-3"
-							value={formData.option2}
-							onChange={handleChange}
-						/>
-					</div>
-					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="option3" className="text-right">
-							ตัวเลือกที่ 3
-						</Label>
-						<Input
-							id="option3"
-							name="option3"
-							className="col-span-3"
-							value={formData.option3}
-							onChange={handleChange}
-						/>
-					</div>
-					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="option4" className="text-right">
-							ตัวเลือกที่ 4
-						</Label>
-						<Input
-							id="option4"
-							name="option4"
-							className="col-span-3"
-							value={formData.option4}
-							onChange={handleChange}
-						/>
-					</div>
-					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="correctAnswer" className="text-right">
-							ข้อที่ถูก
-						</Label>
-						<Input
-							id="correctAnswer"
-							name="correctAnswer"
-							className="col-span-3"
-							value={formData.correctAnswer}
-							onChange={handleChange}
-						/>
-					</div>
-					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="hint" className="text-right">
-							คำใบ้
-						</Label>
-						<Input
-							id="hint"
-							name="hint"
-							className="col-span-3"
-							value={formData.hint}
-							onChange={handleChange}
-						/>
-					</div>
-				</div>
-				<DialogFooter>
-					<Button variant="outline" onClick={onClose}>
-						ยกเลิก
-					</Button>
-					<Button type="submit" onClick={handleSubmit}>
-						ยืนยัน
-					</Button>
-				</DialogFooter>
+					<DialogFooter>
+						<Button variant="outline" onClick={onClose}>
+							ยกเลิก
+						</Button>
+						<Button type="submit">ยืนยัน</Button>
+					</DialogFooter>
+				</form>
 			</DialogContent>
 		</Dialog>
 	);
