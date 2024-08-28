@@ -53,7 +53,7 @@ export async function getAllScoreService(sort) {
 		{
 			$lookup: {
 				from: "topics",
-				localField: "topicId",
+				localField: "subtopic.topicId",
 				foreignField: "_id",
 				as: "topic",
 			},
