@@ -184,6 +184,12 @@ export default function ScorePage() {
 									<Loading />
 								</TableCell>
 							</TableRow>
+						) : sortedData.length === 0 ? (
+							<TableRow>
+								<TableCell colSpan={8}>
+									<h2>ไม่พบข้อมูลคะแนน</h2>
+								</TableCell>
+							</TableRow>
 						) : (
 							paginatedData.map((item) => (
 								<TableRow key={item._id}>

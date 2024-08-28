@@ -114,7 +114,7 @@ const Pagination: React.FC<PaginationProps> = ({
 					variant="outline"
 					size="icon"
 					onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
-					disabled={currentPage === 1}
+					disabled={totalItems === 0 || currentPage === 1}
 				>
 					<ChevronLeft className="h-4 w-4" />
 				</Button>
@@ -123,7 +123,7 @@ const Pagination: React.FC<PaginationProps> = ({
 					variant="outline"
 					size="icon"
 					onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
-					disabled={currentPage === totalPages}
+					disabled={totalItems === 0 || currentPage === totalPages}
 				>
 					<ChevronRight className="h-4 w-4" />
 				</Button>
