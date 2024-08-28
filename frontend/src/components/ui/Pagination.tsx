@@ -103,7 +103,7 @@ const Pagination: React.FC<PaginationProps> = ({
 	};
 
 	return (
-		<div className="flex items-center justify-between bg-white">
+		<div className="flex items-center justify-between">
 			<div className="text-sm text-gray-700">
 				แสดง {(currentPage - 1) * itemsPerPage + 1} ถึง{" "}
 				{Math.min(currentPage * itemsPerPage, totalItems)} จาก {totalItems}{" "}
