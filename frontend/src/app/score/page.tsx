@@ -10,32 +10,42 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-
-import { Checkbox } from "@/components/ui/checkbox";
-import Pagination from "@/components/ui/Pagination";
-import CategoryBadge from "@/components/ui/badge/CategoryBadge";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
-import { getAllScore } from "@/lib/scoreApi";
+import CategoryBadge from "@/components/ui/badge/CategoryBadge";
+import Pagination from "@/components/ui/Pagination";
+
+import { ArrowUpDown, Trash } from "lucide-react";
+
 import { AllScore } from "@/types/score";
+import { deleteScore, getAllScore } from "@/lib/scoreApi";
 import { thDateTime } from "@/lib/format";
+import Loading from "@/components/ui/Loading";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 
 export default function ScorePage() {
 	const [data, setData] = useState<AllScore[]>([]);
-	const [currentPage, setCurrentPage] = useState(1);
-	const [isLoading, setIsLoading] = useState(false);
+	const [currentPage, setCurrentPage] = useState<number>(1);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const itemsPerPage: number = 10;
 
-	const [searchTerm, setSearchTerm] = useState("");
+	const [action, setAction] = useState<boolean>(false);
+
+	const [searchTerm, setSearchTerm] = useState<string>("");
 	const [sortConfig, setSortConfig] = useState<{
 		key: keyof AllScore;
 		direction: "asc" | "desc";
 	} | null>(null);
 
 	useEffect(() => {
+		window.scrollTo(0, 0);
 		getScore();
-	}, []);
+	}, [action]);
 
 	useEffect(() => {
 		window.scrollTo(0, 0);
@@ -88,14 +98,15 @@ export default function ScorePage() {
 		setSortConfig({ key, direction });
 	};
 
-	if (isLoading) {
-		return <div>กำลังโหลด...</div>;
+	async function handleDelete(scoreId: string) {
+		const message = await deleteScore(scoreId);
+		setAction(!action);
 	}
 
 	return (
 		<div className="flex flex-col items-center py-10">
-			<div className="w-11/12 ">
-				<Table>
+			<div className="w-11/12">
+				<Table className="min-h-[calc(100vh-80px)]">
 					<TableHeader>
 						<TableRow>
 							<TableCell colSpan={8}>
@@ -167,25 +178,50 @@ export default function ScorePage() {
 					</TableHeader>
 
 					<TableBody>
-						{paginatedData.map((item) => (
-							<TableRow key={item._id}>
-								{/* <TableCell>
+						{isLoading ? (
+							<TableRow>
+								<TableCell colSpan={8}>
+									<Loading />
+								</TableCell>
+							</TableRow>
+						) : (
+							paginatedData.map((item) => (
+								<TableRow key={item._id}>
+									{/* <TableCell>
 									<Checkbox />
 								</TableCell> */}
-								<TableCell>{thDateTime(item.createOn)}</TableCell>
-								<TableCell className="text-left">
-									<div className="font-medium">{item.name}</div>
-									<div className="text-sm text-gray-500">{item.username}</div>
-								</TableCell>
-								<TableCell>
-									<CategoryBadge category={item.category} />
-								</TableCell>
-								<TableCell>{item.topic}</TableCell>
-								<TableCell>{item.subtopic}</TableCell>
-								<TableCell className="text-center">{item.score}</TableCell>
-								<TableCell className="text-center">ลบ</TableCell>
-							</TableRow>
-						))}
+									<TableCell>{thDateTime(item.createOn)}</TableCell>
+									<TableCell className="text-left">
+										<div className="font-medium">{item.name}</div>
+										<div className="text-sm text-gray-500">{item.username}</div>
+									</TableCell>
+									<TableCell>
+										<CategoryBadge category={item.category} />
+									</TableCell>
+									<TableCell>{item.topic}</TableCell>
+									<TableCell>{item.subtopic}</TableCell>
+									<TableCell className="text-center">{item.score}</TableCell>
+									<TableCell className="text-center">
+										<TooltipProvider>
+											<Tooltip>
+												<TooltipTrigger>
+													<Button
+														variant="ghost"
+														size="sm"
+														onClick={() => handleDelete(item._id)}
+														// disabled={isDeleting}
+													>
+														{/* {isDeleting ? "กำลังลบ..." : ""} */}
+														<Trash className="inline-block" size={16} />
+													</Button>
+												</TooltipTrigger>
+												<TooltipContent>ลบหัวข้อหลัก</TooltipContent>
+											</Tooltip>
+										</TooltipProvider>
+									</TableCell>
+								</TableRow>
+							))
+						)}
 					</TableBody>
 
 					<TableFooter>
