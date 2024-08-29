@@ -14,10 +14,6 @@ const scoreSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	timeSpent: {
-		type: Number, // milliseconds
-		required: true,
-	},
 	createOn: {
 		type: Date,
 		default: new Date().getTime(),

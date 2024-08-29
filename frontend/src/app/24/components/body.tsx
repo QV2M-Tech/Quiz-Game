@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { evaluate } from "mathjs";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 interface Body {
 	level: string; // Define the type of the level prop
@@ -140,8 +143,8 @@ const Body: React.FC<Body> = ({ level }) => {
 	const [input, setInput] = useState<string>("");
 	const [message, setMessage] = useState<string>("");
 	const [score, setScore] = useState<number>(0);
-	const [timeLeft, setTimeLeft] = useState<number>(60); // ตัวจับเวลานับถอยหลัง (60 วินาที)
-	const [start, setStart] = useState<boolean>(false); // ตั้งค่าเริ่มต้นเป็น false เพื่อไม่ให้ตัวจับเวลาทำงานทันที
+	const [timeLeft, setTimeLeft] = useState<number>(60);
+	const [start, setStart] = useState<boolean>(false);
 
 	useEffect(() => {
 		let interval: NodeJS.Timeout | null = null;
@@ -160,9 +163,39 @@ const Body: React.FC<Body> = ({ level }) => {
 	}, [start]);
 
 	useEffect(() => {
+		// Set initial timeLeft based on the level
+		switch (level) {
+			case "easy":
+				setTimeLeft(60);
+				break;
+			case "medium":
+				setTimeLeft(300);
+				break;
+			case "hard":
+				setTimeLeft(600);
+				break;
+			default:
+				setTimeLeft(60);
+				break;
+		}
+	}, [level]);
+
+	useEffect(() => {
 		if (timeLeft === 0 && start) {
-			setMessage("หมดเวลา! กรุณาลองใหม่อีกครั้ง");
-			setStart(false); // หยุดการเล่นเมื่อหมดเวลา
+			toast.error("หมดเวลา! กรุณาลองใหม่อีกครั้ง");
+			setStart(false);
+			axios
+				.post("http://localhost:6969/api/scores24/createAndUpdate", {
+					userId: "66cc8e00555492e5d50617e9",
+					score: score,
+					level: level,
+				})
+				.then((response) => {
+					console.log("Score updated", response.data);
+				})
+				.catch((error) => {
+					console.error("Error:", error);
+				});
 		}
 	}, [timeLeft, start]);
 
@@ -179,7 +212,7 @@ const Body: React.FC<Body> = ({ level }) => {
 		setMessage("");
 		setTimeLeft(60);
 		setScore(0);
-		setStart(true); // เริ่มเกมใหม่และเริ่มนับเวลาหลังจากกดปุ่ม "New Game"
+		setStart(true);
 	};
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -188,15 +221,25 @@ const Body: React.FC<Body> = ({ level }) => {
 
 	const checkAnswer = () => {
 		if (!isValidExpression(input, numbers)) {
-			setMessage("Invalid input! Please use all numbers once.");
+			setMessage("แหกตาดู คำอธิบาย ดิ๊ไอ้ฟายย");
 			return;
 		}
 
 		try {
 			const userResult = evaluate(input);
 			if (userResult === target) {
-				setMessage("Correct!");
-				setScore(score + 1);
+				const messages = [
+					"งั้นๆอ่ะ",
+					"เด็กๆ",
+					"เหมือนเก่ง",
+					"ไม่เท่าไหร่",
+					"ยืดเลยอ่ะดิ",
+					"ของแทร่",
+				];
+				const randomMessage =
+					messages[Math.floor(Math.random() * messages.length)];
+				setMessage(randomMessage);
+				setScore(score + 5);
 				const generatedNumbers = generateRandomNumbers(level);
 				setNumbers(generatedNumbers);
 				const generatedExpression = generateExpression(generatedNumbers, level);
@@ -204,18 +247,30 @@ const Body: React.FC<Body> = ({ level }) => {
 					setTarget(generatedExpression.result);
 				}
 				setInput("");
-				setMessage("");
 			} else {
-				setMessage("Try again!");
-				const generatedNumbers = generateRandomNumbers(level);
-				setNumbers(generatedNumbers);
-				const generatedExpression = generateExpression(generatedNumbers, level);
-				if (generatedExpression) {
-					setTarget(generatedExpression.result);
-				}
-				setInput("");
-				setMessage("");
-				setTimeLeft(timeLeft - 5);
+				const messages = [
+					"ควายเอ๋ย",
+					"โง่แท้",
+					"กินหญ้ามั้ยลูก",
+					"ไปเล่นมาริโอ้เถอะ",
+					"กินปลาเยอะๆ",
+				];
+				const randomMessage =
+					messages[Math.floor(Math.random() * messages.length)];
+				setMessage(randomMessage);
+				setTimeout(() => {
+					const generatedNumbers = generateRandomNumbers(level);
+					setNumbers(generatedNumbers);
+					const generatedExpression = generateExpression(
+						generatedNumbers,
+						level
+					);
+					if (generatedExpression) {
+						setTarget(generatedExpression.result);
+					}
+					setInput("");
+					setMessage("");
+				}, 5000);
 			}
 		} catch {
 			setMessage("Invalid input!");
@@ -249,16 +304,17 @@ const Body: React.FC<Body> = ({ level }) => {
 					onClick={checkAnswer}
 					className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-md"
 				>
-					Submit
+					ตอบ
 				</button>
 				{message && <p className="mt-4 text-center">{message}</p>}
 				<button
 					onClick={resetGame}
 					className="mt-4 w-full bg-green-500 text-white py-2 px-4 rounded-md"
 				>
-					New Game
+					เริ่มเกมใหม่
 				</button>
 			</div>
+			<ToastContainer />
 		</div>
 	);
 };

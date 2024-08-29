@@ -7,10 +7,10 @@ const router = express.Router();
 // ฟังก์ชันในการสร้างคะแนนใหม่
 const createAndUpdate = async (req, res) => {
 	try {
-		const { userId, score, level, timeSpent } = req.body;
+		const { userId, score, level } = req.body;
 
 		// ตรวจสอบข้อมูลที่รับมา
-		if (!userId || !score || !level || !timeSpent) {
+		if (!userId || !score || !level) {
 			return res.status(400).json({ message: "All fields are required" });
 		}
 
@@ -21,7 +21,6 @@ const createAndUpdate = async (req, res) => {
 			// ถ้าคะแนนใหม่สูงกว่าคะแนนเดิม อัพเดทคะแนน
 			if (parseInt(score) > parseInt(existingScore.score)) {
 				existingScore.score = score;
-				existingScore.timeSpent = timeSpent;
 				await existingScore.save();
 				return res
 					.status(200)
@@ -37,7 +36,6 @@ const createAndUpdate = async (req, res) => {
 				userId,
 				score,
 				level,
-				timeSpent,
 			});
 			await newScore.save();
 			return res
