@@ -139,6 +139,32 @@ const Body: React.FC<Body> = ({ level }) => {
 	const [target, setTarget] = useState<number>(0);
 	const [input, setInput] = useState<string>("");
 	const [message, setMessage] = useState<string>("");
+	const [score, setScore] = useState<number>(0);
+	const [timeLeft, setTimeLeft] = useState<number>(60); // ตัวจับเวลานับถอยหลัง (60 วินาที)
+	const [start, setStart] = useState<boolean>(false); // ตั้งค่าเริ่มต้นเป็น false เพื่อไม่ให้ตัวจับเวลาทำงานทันที
+
+	useEffect(() => {
+		let interval: NodeJS.Timeout | null = null;
+
+		if (start) {
+			interval = setInterval(() => {
+				setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+			}, 1000);
+		}
+
+		return () => {
+			if (interval) {
+				clearInterval(interval);
+			}
+		};
+	}, [start]);
+
+	useEffect(() => {
+		if (timeLeft === 0 && start) {
+			setMessage("หมดเวลา! กรุณาลองใหม่อีกครั้ง");
+			setStart(false); // หยุดการเล่นเมื่อหมดเวลา
+		}
+	}, [timeLeft, start]);
 
 	const resetGame = () => {
 		const generatedNumbers = generateRandomNumbers(level);
@@ -151,11 +177,10 @@ const Body: React.FC<Body> = ({ level }) => {
 		}
 		setInput("");
 		setMessage("");
+		setTimeLeft(60);
+		setScore(0);
+		setStart(true); // เริ่มเกมใหม่และเริ่มนับเวลาหลังจากกดปุ่ม "New Game"
 	};
-
-	useEffect(() => {
-		resetGame();
-	}, [level]);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setInput(e.target.value);
@@ -171,8 +196,26 @@ const Body: React.FC<Body> = ({ level }) => {
 			const userResult = evaluate(input);
 			if (userResult === target) {
 				setMessage("Correct!");
+				setScore(score + 1);
+				const generatedNumbers = generateRandomNumbers(level);
+				setNumbers(generatedNumbers);
+				const generatedExpression = generateExpression(generatedNumbers, level);
+				if (generatedExpression) {
+					setTarget(generatedExpression.result);
+				}
+				setInput("");
+				setMessage("");
 			} else {
 				setMessage("Try again!");
+				const generatedNumbers = generateRandomNumbers(level);
+				setNumbers(generatedNumbers);
+				const generatedExpression = generateExpression(generatedNumbers, level);
+				if (generatedExpression) {
+					setTarget(generatedExpression.result);
+				}
+				setInput("");
+				setMessage("");
+				setTimeLeft(timeLeft - 5);
 			}
 		} catch {
 			setMessage("Invalid input!");
@@ -185,10 +228,10 @@ const Body: React.FC<Body> = ({ level }) => {
 				<h1 className="text-2xl font-bold text-center mb-4">Game 24</h1>
 				<div className="flex h-20 bg-gray-300">
 					<div className="m-5 bg-yellow-400 justify-center items-center p-2 w-full">
-						คะแนน : 0 คะแนน
+						คะแนน : {score} คะแนน
 					</div>
 					<div className="m-5 bg-yellow-400 justify-center items-center p-2 w-full">
-						เวลา : 60 วิ
+						เวลา : {timeLeft} วิ
 					</div>
 				</div>
 				<div className="mb-4">
@@ -211,9 +254,9 @@ const Body: React.FC<Body> = ({ level }) => {
 				{message && <p className="mt-4 text-center">{message}</p>}
 				<button
 					onClick={resetGame}
-					className="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded-md"
+					className="mt-4 w-full bg-green-500 text-white py-2 px-4 rounded-md"
 				>
-					Reset Game
+					New Game
 				</button>
 			</div>
 		</div>
