@@ -10,6 +10,7 @@ import scoreRoute from "./routes/scoreRoute.js";
 import topicRoute from "./routes/topicRoute.js";
 import subtopicRoute from "./routes/subtopicRoute.js";
 import questionRoute from "./routes/questionRoute.js";
+import score24Route from "./routes/score24Route.js";
 
 const app = express();
 
@@ -31,5 +32,6 @@ app.use("/api/scores", scoreRoute);
 app.use("/api/topics", topicRoute);
 app.use("/api/subtopics", subtopicRoute);
 app.use("/api/questions", questionRoute);
+app.use("/api/scores24", score24Route);
 
 export default app;
