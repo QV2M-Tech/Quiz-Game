@@ -12,7 +12,6 @@ const scoreSchema = new mongoose.Schema({
 	},
 	level: {
 		type: String,
-		enum: [easy, medium, hard],
 		required: true,
 	},
 	timeSpent: {

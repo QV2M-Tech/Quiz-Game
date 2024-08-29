@@ -7,9 +7,9 @@ interface DescriptionProps {
 const Description: React.FC<DescriptionProps> = ({ level }) => {
 	return (
 		<div className="flex w-4/12 bg-pink-500">
-			{level == "easy" && <div>easy</div>}
-			{level == "medium" && <div>medium</div>}
-			{level == "hard" && <div>hard</div>}
+			{level == "easy" && <div>คำอธิบายในโหมด easy</div>}
+			{level == "medium" && <div>คำอธิบายในโหมด medium</div>}
+			{level == "hard" && <div>คำอธิบายในโหมด hard</div>}
 		</div>
 	);
 };
