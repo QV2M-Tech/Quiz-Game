@@ -49,8 +49,8 @@ function Page() {
 					<h3>หัวข้อย่อย: Puzzle </h3>
 				</div>
 				<div className="flex w-1/3 bg-red-500 items-center justify-between p-5">
-					<h3>เวลา: 60วิ</h3>
-					<h3>คะแนน: 0</h3>
+					<h3>รูป</h3>
+					<h3>ชื่อ</h3>
 				</div>
 			</header>
 			<div className="flex h-[500px] bg-yellow-400">

@@ -181,8 +181,16 @@ const Body: React.FC<Body> = ({ level }) => {
 
 	return (
 		<div className="flex flex-col items-center w-8/12 bg-orange-500">
-			<div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md">
+			<div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md w-full">
 				<h1 className="text-2xl font-bold text-center mb-4">Game 24</h1>
+				<div className="flex h-20 bg-gray-300">
+					<div className="m-5 bg-yellow-400 justify-center items-center p-2 w-full">
+						คะแนน : 0 คะแนน
+					</div>
+					<div className="m-5 bg-yellow-400 justify-center items-center p-2 w-full">
+						เวลา : 60 วิ
+					</div>
+				</div>
 				<div className="mb-4">
 					<p>Numbers: {numbers.join(", ")}</p>
 					<p>Target: {target}</p>
