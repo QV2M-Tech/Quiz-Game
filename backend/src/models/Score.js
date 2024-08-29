@@ -6,7 +6,7 @@ const scoreSchema = new mongoose.Schema({
 		ref: "User",
 		required: true,
 	},
-	subTopicId: {
+	subtopicId: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Subtopic",
 		required: true,
