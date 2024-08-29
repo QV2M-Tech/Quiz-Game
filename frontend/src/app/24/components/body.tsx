@@ -139,7 +139,7 @@ const isValidExpression = (userInput: string, numbers: number[]) => {
 
 const Body: React.FC<Body> = ({ level }) => {
 	const [numbers, setNumbers] = useState<number[]>([]);
-	const [target, setTarget] = useState<number>(0);
+	const [target, setTarget] = useState<number>();
 	const [input, setInput] = useState<string>("");
 	const [message, setMessage] = useState<string>("");
 	const [score, setScore] = useState<number>(0);
@@ -206,11 +206,25 @@ const Body: React.FC<Body> = ({ level }) => {
 		if (generatedExpression) {
 			setTarget(generatedExpression.result);
 		} else {
-			resetGame();
+			resetGame(); // ป้องกันลูปไม่สิ้นสุดในกรณีที่ไม่สามารถสร้างสมการได้
 		}
 		setInput("");
 		setMessage("");
-		setTimeLeft(60);
+		// ตั้งค่าเวลาให้ตรงตามระดับ
+		switch (level) {
+			case "easy":
+				setTimeLeft(60);
+				break;
+			case "medium":
+				setTimeLeft(300);
+				break;
+			case "hard":
+				setTimeLeft(600);
+				break;
+			default:
+				setTimeLeft(60);
+				break;
+		}
 		setScore(0);
 		setStart(true);
 	};
@@ -277,10 +291,16 @@ const Body: React.FC<Body> = ({ level }) => {
 		}
 	};
 
+	const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter") {
+			checkAnswer();
+		}
+	};
+
 	return (
 		<div className="flex flex-col items-center w-8/12 bg-orange-500">
 			<div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md w-full">
-				<h1 className="text-2xl font-bold text-center mb-4">Game 24</h1>
+				<h1 className="text-2xl font-bold text-center mb-4">เกม 24</h1>
 				<div className="flex h-20 bg-gray-300">
 					<div className="m-5 bg-yellow-400 justify-center items-center p-2 w-full">
 						คะแนน : {score} คะแนน
@@ -290,15 +310,16 @@ const Body: React.FC<Body> = ({ level }) => {
 					</div>
 				</div>
 				<div className="mb-4">
-					<p>Numbers: {numbers.join(", ")}</p>
-					<p>Target: {target}</p>
+					<p>ชุดตัวเลข: {numbers.join(", ")}</p>
+					<p>คำตอบ: {target}</p>
 				</div>
 				<input
 					type="text"
 					value={input}
 					onChange={handleChange}
+					onKeyPress={handleKeyPress}
 					className="w-full p-2 border border-gray-300 rounded-md"
-					placeholder="Enter your equation"
+					placeholder="พิมวิธีคิดตรงนี้"
 				/>
 				<button
 					onClick={checkAnswer}
