@@ -11,6 +11,7 @@ import {
 	Logout,
 } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
+import UserProfile from "./userprofile";
 
 interface LinkItem {
 	name: string;
@@ -71,6 +72,7 @@ const NavRail: React.FC = () => {
 					</React.Fragment>
 				))}
 			</div>
+			<UserProfile />
 			<div className="flex justify-center items-center">
 				<Link
 					href="/"

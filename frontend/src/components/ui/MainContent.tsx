@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Tabs, Tab, Card } from "@mui/material";
 import Button from "@mui/joy/Button";
+import Link from "next/link";
 
 type TabValue = 0 | 1;
 
@@ -17,6 +18,17 @@ const SUBJECTS: string[] = [
 	"ภูมิศาสตร์",
 	"ศิลปะ",
 	"ดนตรี",
+];
+
+const SUBJECTS2: string[] = [
+	"ปัญหาเชาว์1",
+	"ปัญหาเชาว์2",
+	"ปัญหาเชาว์3",
+	"ปัญหาเชาว์4",
+	"ปัญหาเชาว์5",
+	"ปัญหาเชาว์6",
+	"ปัญหาเชาว์7",
+	"ปัญหาเชาว์8",
 ];
 
 const SubjectItem: React.FC<{ subject: string }> = ({ subject }) => (
@@ -46,6 +58,22 @@ const SubjectItem: React.FC<{ subject: string }> = ({ subject }) => (
 const SubjectList: React.FC = () => (
 	<ul className="w-full pr-4 max-h-[400px] overflow-y-auto custom-scrollbar">
 		{SUBJECTS.map((subject, index) => (
+			<SubjectItem key={index} subject={subject} />
+		))}
+	</ul>
+);
+
+const SubjectList2: React.FC = () => (
+	<ul className="w-full pr-4 max-h-[400px] overflow-y-auto custom-scrollbar">
+		<div className="flex justify-center items-center pb-5">
+			<Link
+				href="/24"
+				className="flex justify-center items-center w-4/5  rounded-md bg-blue-200 text-[#082f49] font-bold px-5 py-2 text-center transition-colors duration-300 ease-in-out hover:bg-blue-300 gap-2"
+			>
+				เกม 24
+			</Link>
+		</div>
+		{SUBJECTS2.map((subject, index) => (
 			<SubjectItem key={index} subject={subject} />
 		))}
 	</ul>
@@ -113,7 +141,7 @@ const MainContent: React.FC = () => {
 						<SubjectList />
 					</TabPanel>
 					<TabPanel value={tabValue} index={1}>
-						<p>Entertainment here!</p>
+						<SubjectList2 />
 					</TabPanel>
 				</div>
 			</Card>
