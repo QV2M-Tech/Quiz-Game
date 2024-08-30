@@ -1,13 +1,15 @@
 "use client";
-import React, { useState } from "react";
 
+import React, { useState } from "react";
 import Description from "./components/description";
 import Body from "./components/body";
 import Score from "./components/score";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/context/userContext";
 
 function Page() {
 	const [level, setLevel] = useState<string>("easy");
+	const { User } = useUser(); // Use the custom hook
 
 	function easy() {
 		return setLevel("easy");
@@ -50,7 +52,7 @@ function Page() {
 				</div>
 				<div className="flex w-1/3 bg-red-500 items-center justify-between p-5">
 					<h3>รูป</h3>
-					<h3>ชื่อ</h3>
+					<h3>ชื่อ {User?.name}</h3> {/* Safe access using optional chaining */}
 				</div>
 			</header>
 			<div className="flex h-[500px] bg-yellow-400">

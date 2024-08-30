@@ -3,6 +3,7 @@ import { evaluate } from "mathjs";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { useUser } from "@/context/userContext";
 
 interface Body {
 	level: string; // Define the type of the level prop
@@ -145,6 +146,7 @@ const Body: React.FC<Body> = ({ level }) => {
 	const [score, setScore] = useState<number>(0);
 	const [timeLeft, setTimeLeft] = useState<number>(60);
 	const [start, setStart] = useState<boolean>(false);
+	const { User } = useUser();
 
 	useEffect(() => {
 		let interval: NodeJS.Timeout | null = null;
@@ -163,7 +165,7 @@ const Body: React.FC<Body> = ({ level }) => {
 	}, [start]);
 
 	useEffect(() => {
-		// Set initial timeLeft based on the level
+		// Set initial timeLeft and reset game state based on the level
 		switch (level) {
 			case "easy":
 				setTimeLeft(60);
@@ -178,6 +180,11 @@ const Body: React.FC<Body> = ({ level }) => {
 				setTimeLeft(60);
 				break;
 		}
+
+		// Reset the game state
+		setNumbers([]);
+		setTarget(undefined);
+		setStart(false); // เพิ่มบรรทัดนี้เพื่อหยุดเวลาเมื่อเปลี่ยนโหมด
 	}, [level]);
 
 	useEffect(() => {
@@ -186,7 +193,7 @@ const Body: React.FC<Body> = ({ level }) => {
 			setStart(false);
 			axios
 				.post("http://localhost:6969/api/scores24/createAndUpdate", {
-					userId: "66cc8e00555492e5d50617e9",
+					userId: User?._id,
 					score: score,
 					level: level,
 				})
