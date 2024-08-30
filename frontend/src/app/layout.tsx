@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NavRail from "@/components/ui/NavRail";
+import { UserProvider } from "@/context/userContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,10 +19,12 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={inter.className}>
-				<div className="flex">
-					<NavRail />
-					<main className="ml-20 w-full h-full">{children}</main>
-				</div>
+				<UserProvider>
+					<div className="flex">
+						<NavRail />
+						<main className="ml-20 w-full h-full">{children}</main>
+					</div>
+				</UserProvider>
 			</body>
 		</html>
 	);

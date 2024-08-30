@@ -20,7 +20,12 @@ export const registerUser = async ({ profile, name, username, password }) => {
 
 	await newUser.save();
 
-	const token = sign({ id: newUser._id, username: newUser.username });
+	const token = sign({
+		id: newUser._id,
+		username: newUser.username,
+		name: newUser.name,
+		profile: newUser.profile,
+	});
 
 	return { token, user: newUser };
 };
@@ -38,7 +43,12 @@ export const loginUser = async ({ username, password }) => {
 		throw new Error("Invalid credentials");
 	}
 
-	const token = sign({ id: user._id, username: user.username });
+	const token = sign({
+		id: user._id,
+		username: user.username,
+		name: user.name,
+		profile: user.profile,
+	});
 
 	return { token, user };
 };
@@ -69,4 +79,12 @@ export const removeUser = async (id) => {
 export const fetchAllUsers = async () => {
 	const users = await User.find({});
 	return users;
+};
+
+export const fetchUserById = async (id) => {
+	const user = await User.findById(id);
+	if (!user) {
+		throw new Error("User not found");
+	}
+	return user;
 };

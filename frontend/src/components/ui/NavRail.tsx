@@ -49,6 +49,10 @@ const NavRail: React.FC = () => {
 		return null;
 	}
 
+	const handleLogout = () => {
+		localStorage.removeItem("token"); // Clear the token from localStorage
+	};
+
 	return (
 		<div className="flex flex-col justify-between fixed gap-4 h-screen w-20 px-3 py-4 bg-white shadow-md">
 			<div className="flex flex-col items-center gap-4">
@@ -68,7 +72,11 @@ const NavRail: React.FC = () => {
 				))}
 			</div>
 			<div className="flex justify-center items-center">
-				<Link href="/" className="flex flex-col items-center gap-2">
+				<Link
+					href="/"
+					className="flex flex-col items-center gap-2"
+					onClick={handleLogout}
+				>
 					<IconButton>
 						<Logout />
 					</IconButton>
