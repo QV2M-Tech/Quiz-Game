@@ -12,7 +12,7 @@ import { jwtDecode } from "jwt-decode"; // Import without destructuring
 
 // Define User type
 interface User {
-	_id: string;
+	id: string;
 	username: string;
 	name: string;
 	profile: string;
@@ -41,6 +41,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 				if (token) {
 					// Use jwtDecode<User> to specify the expected type
 					const decodedToken = jwtDecode<User>(token);
+					console.log("", { decodedToken });
 					setUser(decodedToken);
 				}
 			} catch (error) {

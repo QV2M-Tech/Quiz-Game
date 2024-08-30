@@ -1,46 +1,48 @@
 import React, { useState, useEffect } from "react";
-import { evaluate } from "mathjs";
+import { evaluate, string } from "mathjs";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useUser } from "@/context/userContext";
 
-interface Body {
-	level: string; // Define the type of the level prop
+interface BodyProps {
+	level: any;
+	IsEnd: boolean;
+	setIsEnd: (value: boolean) => void;
 }
 
-// สุ่มตัวเลข
-const generateRandomNumbers = (level: string) => {
+// ฟังก์ชันสร้างตัวเลขสุ่ม
+const generateRandomNumbers = (level: "easy" | "medium" | "hard"): number[] => {
 	const count = level === "hard" ? 5 : 4;
-	const numbers = [];
-	for (let i = 0; i < count; i++) {
-		numbers.push(Math.floor(Math.random() * 10) + 1);
-	}
-	return numbers;
+	return Array.from(
+		{ length: count },
+		() => Math.floor(Math.random() * 10) + 1
+	);
 };
 
-// สุ่มตัวดำเนินการ
-const getRandomOperator = (level: string) => {
+// ฟังก์ชันสุ่มตัวดำเนินการ
+const getRandomOperator = (level: "easy" | "medium" | "hard"): string => {
 	const operators =
 		level === "hard"
 			? ["+", "-", "*", "/", "^", "!"]
-			: ["+", "-", "*", "/", "^"];
+			: level === "medium"
+			? ["+", "-", "*", "/", "^"]
+			: ["+", "-", "*", "/"];
 	return operators[Math.floor(Math.random() * operators.length)];
 };
 
-// ตรวจสอบว่าการหารเป็นจำนวนเต็ม
-const isIntegerDivision = (a: number, b: number) => {
-	return a % b === 0;
-};
+// ฟังก์ชันตรวจสอบการหารเป็นจำนวนเต็ม
+const isIntegerDivision = (a: number, b: number): boolean => a % b === 0;
 
-// ตรวจสอบว่าผลลัพธ์เป็นจำนวนเต็ม
-const isInteger = (value: number) => {
-	return Number.isInteger(value);
-};
+// ฟังก์ชันตรวจสอบว่าค่าผลลัพธ์เป็นจำนวนเต็ม
+const isInteger = (value: number): boolean => Number.isInteger(value);
 
-// สร้างสมการที่สุ่มและคำนวณคำตอบเป้าหมาย
-const generateExpression = (numbers: number[], level: string) => {
-	let expressions = [];
+// ฟังก์ชันสร้างสมการและคำนวณคำตอบเป้าหมาย
+const generateExpression = (
+	numbers: number[],
+	level: "easy" | "medium" | "hard"
+) => {
+	const expressions: string[] = [];
 	const operators =
 		level === "hard"
 			? ["+", "-", "*", "/", "^", "!"]
@@ -74,17 +76,17 @@ const generateExpression = (numbers: number[], level: string) => {
 		);
 	}
 
-	for (let expr of expressions) {
+	for (const expr of expressions) {
 		try {
-			let result = evaluate(expr);
+			const result = evaluate(expr);
 
 			// ตรวจสอบการหารที่เป็นจำนวนเต็ม
 			if (expr.includes("/")) {
-				let parts = expr.split(" ");
+				const parts = expr.split(" ");
 				for (let i = 0; i < parts.length; i++) {
 					if (parts[i] === "/") {
-						let a = evaluate(parts.slice(0, i).join(" "));
-						let b = parseInt(parts[i + 1], 10);
+						const a = evaluate(parts.slice(0, i).join(" "));
+						const b = parseInt(parts[i + 1], 10);
 						if (!isIntegerDivision(a, b)) {
 							return null; // ถ้าไม่เป็นจำนวนเต็ม ให้คืนค่า null
 						}
@@ -95,15 +97,15 @@ const generateExpression = (numbers: number[], level: string) => {
 			// ตรวจสอบผลลัพธ์
 			if (isInteger(result)) {
 				if (level === "easy" && result === 24) {
-					return { expression: expr, result: result };
+					return { expression: expr, result };
 				} else if (level === "medium" && result >= 100 && result <= 1000) {
-					return { expression: expr, result: result };
+					return { expression: expr, result };
 				} else if (
 					level === "hard" &&
 					((result >= -1000 && result <= -100) ||
 						(result >= 100 && result <= 1000))
 				) {
-					return { expression: expr, result: result };
+					return { expression: expr, result };
 				}
 			}
 		} catch (e) {
@@ -114,31 +116,57 @@ const generateExpression = (numbers: number[], level: string) => {
 	return null;
 };
 
-// ตรวจสอบว่าผู้ใช้ใช้ตัวเลขทั้ง 4 ตัวและใช้เพียงครั้งเดียว
-const isValidExpression = (userInput: string, numbers: number[]) => {
+// ฟังก์ชันตรวจสอบความถูกต้องของสมการ
+const isValidExpression = (
+	userInput: string,
+	numbers: number[],
+	level: "easy" | "medium" | "hard"
+): boolean => {
 	const numberCount = new Map<number, number>();
 
-	// นับจำนวนครั้งที่แต่ละตัวเลขปรากฏ
+	// Set of allowed operators based on level
+	const allowedOperators: Record<"easy" | "medium" | "hard", Set<string>> = {
+		easy: new Set(["+", "-", "*", "/"]),
+		medium: new Set(["+", "-", "*", "/", "^"]),
+		hard: new Set(["+", "-", "*", "/", "^", "!"]),
+	};
+
+	// Count occurrences of each number
 	numbers.forEach((num) => {
 		numberCount.set(num, (numberCount.get(num) || 0) + 1);
 	});
 
-	const inputNumbers = userInput.match(/\d+/g); // ดึงเฉพาะตัวเลขจาก input
+	const inputNumbers = userInput.match(/\d+/g); // Extract numbers from input
 	if (!inputNumbers) return false;
 
-	for (let num of inputNumbers) {
+	// Check if all numbers are used correctly
+	for (const num of inputNumbers) {
 		const number = parseInt(num, 10);
 		if (!numberCount.has(number) || numberCount.get(number) === 0) {
-			return false; // ถ้าพบตัวเลขที่ไม่ใช่หรือตัวเลขนั้นหมด
+			return false; // Number is either not allowed or has been used up
 		}
 		numberCount.set(number, (numberCount.get(number) as number) - 1);
 	}
 
-	// ตรวจสอบว่าทุกตัวเลขถูกใช้หมด
-	return Array.from(numberCount.values()).every((count) => count === 0);
+	// Verify if all numbers have been used exactly once
+	if (!Array.from(numberCount.values()).every((count) => count === 0)) {
+		return false;
+	}
+
+	// Check for valid operators
+	const inputOperators = userInput.match(/[+\-*/^!]/g); // Extract operators from input
+	if (inputOperators) {
+		for (const op of inputOperators) {
+			if (!allowedOperators[level].has(op)) {
+				return false; // Operator not allowed for the current level
+			}
+		}
+	}
+
+	return true; // If all checks are passed, the expression is valid
 };
 
-const Body: React.FC<Body> = ({ level }) => {
+const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 	const [numbers, setNumbers] = useState<number[]>([]);
 	const [target, setTarget] = useState<number>();
 	const [input, setInput] = useState<string>("");
@@ -147,6 +175,7 @@ const Body: React.FC<Body> = ({ level }) => {
 	const [timeLeft, setTimeLeft] = useState<number>(60);
 	const [start, setStart] = useState<boolean>(false);
 	const { User } = useUser();
+	const [solution, setSolution] = useState<string>("");
 
 	useEffect(() => {
 		let interval: NodeJS.Timeout | null = null;
@@ -184,37 +213,27 @@ const Body: React.FC<Body> = ({ level }) => {
 		// Reset the game state
 		setNumbers([]);
 		setTarget(undefined);
+		setInput("");
+		setMessage("");
+		setScore(0);
 		setStart(false); // เพิ่มบรรทัดนี้เพื่อหยุดเวลาเมื่อเปลี่ยนโหมด
-	}, [level]);
+		setIsEnd(false);
+	}, [level, IsEnd]);
 
-	useEffect(() => {
-		if (timeLeft === 0 && start) {
-			toast.error("หมดเวลา! กรุณาลองใหม่อีกครั้ง");
-			setStart(false);
-			axios
-				.post("http://localhost:6969/api/scores24/createAndUpdate", {
-					userId: User?._id,
-					score: score,
-					level: level,
-				})
-				.then((response) => {
-					console.log("Score updated", response.data);
-				})
-				.catch((error) => {
-					console.error("Error:", error);
-				});
-		}
-	}, [timeLeft, start]);
-
-	const resetGame = () => {
+	const newEaxample = () => {
 		const generatedNumbers = generateRandomNumbers(level);
 		setNumbers(generatedNumbers);
 		const generatedExpression = generateExpression(generatedNumbers, level);
 		if (generatedExpression) {
 			setTarget(generatedExpression.result);
+			setSolution(generatedExpression.expression);
 		} else {
-			resetGame(); // ป้องกันลูปไม่สิ้นสุดในกรณีที่ไม่สามารถสร้างสมการได้
+			newEaxample(); // ป้องกันลูปไม่สิ้นสุดในกรณีที่ไม่สามารถสร้างสมการได้
 		}
+	};
+
+	const resetGame = () => {
+		newEaxample();
 		setInput("");
 		setMessage("");
 		// ตั้งค่าเวลาให้ตรงตามระดับ
@@ -236,19 +255,42 @@ const Body: React.FC<Body> = ({ level }) => {
 		setStart(true);
 	};
 
+	useEffect(() => {
+		if (timeLeft === 0 && start) {
+			toast.error("หมดเวลา! กรุณาลองใหม่อีกครั้ง");
+			setStart(false);
+			console.log(User?.id + "-----" + score + "------" + level);
+			axios
+				.post("http://localhost:6969/api/scores24/createAndUpdate", {
+					userId: User?.id,
+					score: score,
+					level: level,
+				})
+				.then((response) => {
+					console.log("Score updated", response.data);
+					setIsEnd(true); // เพิ่มบรรทัดนี้เพื่อรีเฟรชหน้าจอ
+				})
+				.catch((error) => {
+					console.error("Error:", error);
+					setIsEnd(true);
+				});
+		}
+	}, [timeLeft, start]);
+
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setInput(e.target.value);
 	};
 
 	const checkAnswer = () => {
-		if (!isValidExpression(input, numbers)) {
-			setMessage("แหกตาดู คำอธิบาย ดิ๊ไอ้ฟายย");
+		if (!isValidExpression(input, numbers, level)) {
+			setMessage("แหกตาดู คำอธิบาย ดิ๊");
 			return;
 		}
 
 		try {
 			const userResult = evaluate(input);
 			if (userResult === target) {
+				// สุ่มข้อความแสดงผล
 				const messages = [
 					"งั้นๆอ่ะ",
 					"เด็กๆ",
@@ -260,15 +302,17 @@ const Body: React.FC<Body> = ({ level }) => {
 				const randomMessage =
 					messages[Math.floor(Math.random() * messages.length)];
 				setMessage(randomMessage);
+
+				// เพิ่มคะแนน
 				setScore(score + 5);
-				const generatedNumbers = generateRandomNumbers(level);
-				setNumbers(generatedNumbers);
-				const generatedExpression = generateExpression(generatedNumbers, level);
-				if (generatedExpression) {
-					setTarget(generatedExpression.result);
-				}
+
+				// สร้างชุดตัวเลขและสมการใหม่
+				newEaxample();
+
+				// รีเซ็ตค่าต่างๆ
 				setInput("");
 			} else {
+				// สุ่มข้อความแสดงผล
 				const messages = [
 					"ควายเอ๋ย",
 					"โง่แท้",
@@ -278,22 +322,33 @@ const Body: React.FC<Body> = ({ level }) => {
 				];
 				const randomMessage =
 					messages[Math.floor(Math.random() * messages.length)];
-				setMessage(randomMessage);
+				setMessage(randomMessage + " เฉลย " + solution);
+
+				// กำหนดเวลาในการรอขึ้นอยู่กับระดับความยาก
+				let delay;
+				switch (level) {
+					case "easy":
+						delay = 5000; // 5 วินาที
+						break;
+					case "medium":
+						delay = 10000; // 10 วินาที
+						break;
+					case "hard":
+						delay = 15000; // 15 วินาที
+						break;
+					default:
+						delay = 5000; // ค่าเริ่มต้น
+				}
+
+				// รอเวลาที่กำหนดแล้วสร้างชุดตัวเลขและสมการใหม่
 				setTimeout(() => {
-					const generatedNumbers = generateRandomNumbers(level);
-					setNumbers(generatedNumbers);
-					const generatedExpression = generateExpression(
-						generatedNumbers,
-						level
-					);
-					if (generatedExpression) {
-						setTarget(generatedExpression.result);
-					}
+					newEaxample();
 					setInput("");
 					setMessage("");
-				}, 5000);
+				}, delay);
 			}
-		} catch {
+		} catch (error) {
+			console.error("Error in checkAnswer:", error);
 			setMessage("Invalid input!");
 		}
 	};

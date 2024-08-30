@@ -3,6 +3,7 @@ import axios from "axios";
 
 interface Props {
 	level: string;
+	IsEnd: any;
 }
 
 interface Score {
@@ -10,7 +11,7 @@ interface Score {
 	score: string;
 }
 
-const Score: React.FC<Props> = ({ level }) => {
+const Score: React.FC<Props> = ({ level, IsEnd }) => {
 	const [scores, setScores] = useState<Score[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string>("");
@@ -34,7 +35,7 @@ const Score: React.FC<Props> = ({ level }) => {
 		};
 
 		fetchScores();
-	}, [level]);
+	}, [level, IsEnd]);
 
 	return (
 		<div className="flex w-4/12 bg-green-500">

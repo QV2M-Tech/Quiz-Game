@@ -10,6 +10,7 @@ import { useUser } from "@/context/userContext";
 function Page() {
 	const [level, setLevel] = useState<string>("easy");
 	const { User } = useUser(); // Use the custom hook
+	const [IsEnd, setIsEnd] = useState<boolean>(false);
 
 	function easy() {
 		return setLevel("easy");
@@ -51,14 +52,14 @@ function Page() {
 					<h3>หัวข้อย่อย: Puzzle </h3>
 				</div>
 				<div className="flex w-1/3 bg-red-500 items-center justify-between p-5">
-					<h3>รูป</h3>
+					<h3>รูป{User?.username}</h3>
 					<h3>ชื่อ {User?.name}</h3> {/* Safe access using optional chaining */}
 				</div>
 			</header>
 			<div className="flex h-[500px] bg-yellow-400">
 				<Description level={level} />
-				<Body level={level} />
-				<Score level={level} />
+				<Body level={level} IsEnd={IsEnd} setIsEnd={setIsEnd} />
+				<Score level={level} IsEnd={IsEnd} />
 			</div>
 		</section>
 	);
