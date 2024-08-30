@@ -10,36 +10,53 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Checkbox } from "@/components/ui/checkbox";
-import Pagination from "@/components/ui/Pagination";
-import { DataItem, generateMockData } from "@/lib/mockData";
-import CategoryBadge from "@/components/ui/badge/CategoryBadge";
 import { Input } from "@/components/ui/input";
+import CategoryBadge from "@/components/ui/badge/CategoryBadge";
+import Pagination from "@/components/ui/Pagination";
+
+import { ArrowUpDown, Trash } from "lucide-react";
+
+import { AllScore } from "@/types/score";
+import { deleteScore, getAllScore } from "@/lib/scoreApi";
+import { thDateTime } from "@/lib/format";
+import Loading from "@/components/ui/Loading";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
-
-// interface DataTableProps {
-// 	itemsPerPage: number;
-// }
-
-// const DataTable: React.FC<DataTableProps> = ({ itemsPerPage }) => {
 
 export default function ScorePage() {
-	const [data, setData] = useState<DataItem[]>([]);
-	const [itemsPerPage, setItemsPerPage] = useState(10);
-	const [currentPage, setCurrentPage] = useState(1);
-	const [isLoading, setIsLoading] = useState(true);
-	const [searchTerm, setSearchTerm] = useState("");
+	const [data, setData] = useState<AllScore[]>([]);
+	const [currentPage, setCurrentPage] = useState<number>(1);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const itemsPerPage: number = 10;
+
+	const [action, setAction] = useState<boolean>(false);
+
+	const [searchTerm, setSearchTerm] = useState<string>("");
 	const [sortConfig, setSortConfig] = useState<{
-		key: keyof DataItem;
+		key: keyof AllScore;
 		direction: "asc" | "desc";
 	} | null>(null);
 
 	useEffect(() => {
-		const mockData = generateMockData();
-		setData(mockData);
+		window.scrollTo(0, 0);
+		getScore();
+	}, [action]);
+
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [currentPage]);
+
+	async function getScore() {
+		setIsLoading(true);
+		const scoreData = await getAllScore();
+		setData(scoreData ?? []);
 		setIsLoading(false);
-	}, []);
+	}
 
 	const filteredData = data.filter((item) =>
 		Object.values(item).some((value) =>
@@ -69,7 +86,7 @@ export default function ScorePage() {
 		currentPage * itemsPerPage
 	);
 
-	const requestSort = (key: keyof DataItem) => {
+	const requestSort = (key: keyof AllScore) => {
 		let direction: "asc" | "desc" = "asc";
 		if (
 			sortConfig &&
@@ -81,14 +98,15 @@ export default function ScorePage() {
 		setSortConfig({ key, direction });
 	};
 
-	if (isLoading) {
-		return <div>กำลังโหลด...</div>;
+	async function handleDelete(scoreId: string) {
+		const message = await deleteScore(scoreId);
+		setAction(!action);
 	}
 
 	return (
 		<div className="flex flex-col items-center py-10">
-			<div className="w-11/12 ">
-				<Table>
+			<div className="w-11/12">
+				<Table className="min-h-[calc(100vh-80px)]">
 					<TableHeader>
 						<TableRow>
 							<TableCell colSpan={8}>
@@ -101,85 +119,117 @@ export default function ScorePage() {
 											value={searchTerm}
 											onChange={(e) => setSearchTerm(e.target.value)}
 										/>
-										<Button
+										{/* <Button
 											variant="outline"
 											className="hover:bg-secondary/20 border-secondary"
 										>
 											เลือกวันที่
 										</Button>
-										<Button variant="secondary">ตัวกรอง</Button>
+										<Button variant="secondary">ตัวกรอง</Button> */}
 									</div>
 								</div>
 							</TableCell>
 						</TableRow>
 						<TableRow>
-							<TableHead className="text-center">
+							{/* <TableHead className="text-center">
 								<Checkbox />
-							</TableHead>
+							</TableHead> */}
 							<TableHead
-								onClick={() => requestSort("date")}
-								className="cursor-pointer text-center"
+								onClick={() => requestSort("createOn")}
+								className="cursor-pointer text-center w-2/12"
 							>
 								วันที่เล่น{" "}
 								<ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
 							<TableHead
 								onClick={() => requestSort("name")}
-								className="cursor-pointer text-center"
+								className="cursor-pointer text-center w-2/12"
 							>
 								ชื่อผู้ใช้{" "}
 								<ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
 							<TableHead
 								onClick={() => requestSort("category")}
-								className="cursor-pointer text-center"
+								className="cursor-pointer text-center w-2/12"
 							>
 								หมวดหมู่ <ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
 							<TableHead
 								onClick={() => requestSort("topic")}
-								className="cursor-pointer text-center"
+								className="cursor-pointer text-center w-2/12"
 							>
 								หัวข้อ <ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
 							<TableHead
 								onClick={() => requestSort("subtopic")}
-								className="cursor-pointer text-center"
+								className="cursor-pointer text-center w-2/12"
 							>
 								หัวข้อย่อย{" "}
 								<ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
 							<TableHead
 								onClick={() => requestSort("score")}
-								className="cursor-pointer text-center"
+								className="cursor-pointer text-center w-1/12"
 							>
 								คะแนน <ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
-							<TableHead className="text-center">ตัวเลือก</TableHead>
+							<TableHead className="text-center w-2/12">ตัวเลือก</TableHead>
 						</TableRow>
 					</TableHeader>
 
 					<TableBody>
-						{data.map((item) => (
-							<TableRow key={item._id}>
-								<TableCell>
-									<Checkbox />
+						{isLoading ? (
+							<TableRow>
+								<TableCell colSpan={8}>
+									<Loading />
 								</TableCell>
-								<TableCell>{item.date}</TableCell>
-								<TableCell className="text-left">
-									<div className="font-medium">{item.name}</div>
-									<div className="text-sm text-gray-500">{item.username}</div>
-								</TableCell>
-								<TableCell>
-									<CategoryBadge category={item.category} />
-								</TableCell>
-								<TableCell>{item.topic}</TableCell>
-								<TableCell>{item.subtopic}</TableCell>
-								<TableCell className="text-center">{item.score}</TableCell>
-								<TableCell className="text-center">ลบ</TableCell>
 							</TableRow>
-						))}
+						) : sortedData.length === 0 ? (
+							<TableRow>
+								<TableCell colSpan={8}>
+									<h2>ไม่พบข้อมูลคะแนน</h2>
+								</TableCell>
+							</TableRow>
+						) : (
+							paginatedData.map((item) => (
+								<TableRow key={item._id}>
+									{/* <TableCell>
+									<Checkbox />
+								</TableCell> */}
+									<TableCell>{thDateTime(item.createOn)}</TableCell>
+									<TableCell className="text-left">
+										<div className="font-medium">{item.name}</div>
+										<div className="text-sm text-gray-500">{item.username}</div>
+									</TableCell>
+									<TableCell>
+										<CategoryBadge category={item.category} />
+									</TableCell>
+									<TableCell>{item.topic}</TableCell>
+									<TableCell>{item.subtopic}</TableCell>
+									<TableCell className="text-center">{item.score}</TableCell>
+									<TableCell className="text-center">
+										<TooltipProvider>
+											<Tooltip>
+												<TooltipTrigger>
+													<Button
+														variant="ghost"
+														size="sm"
+														onClick={() => handleDelete(item._id)}
+														// disabled={isDeleting}
+													>
+														{/* {isDeleting ? "กำลังลบ..." : ""} */}
+														<Trash className="inline-block" size={16} />
+													</Button>
+												</TooltipTrigger>
+												<TooltipContent>ลบหัวข้อหลัก</TooltipContent>
+											</Tooltip>
+										</TooltipProvider>
+									</TableCell>
+								</TableRow>
+							))
+						)}
 					</TableBody>
+
 					<TableFooter>
 						<TableRow>
 							<TableCell colSpan={8}>
@@ -198,5 +248,3 @@ export default function ScorePage() {
 		</div>
 	);
 }
-
-// export default DataTable;

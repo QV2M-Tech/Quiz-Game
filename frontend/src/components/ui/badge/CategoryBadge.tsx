@@ -3,14 +3,14 @@
 import React from "react";
 
 interface CategoryBadgeProps {
-	category: "วิชาการ" | "บันเทิง";
+	category: string;
 }
 
 const CategoryBadge: React.FC<CategoryBadgeProps> = ({ category }) => (
 	<span
 		className={`px-2 py-1 rounded-full text-xs font-semibold ${
 			category === "วิชาการ"
-				? "bg-blue-100 text-blue-800"
+				? "bg-sky-100 text-sky-900"
 				: "bg-green-100 text-green-800"
 		}`}
 	>
