@@ -101,8 +101,14 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 	};
 
 	const handleAddSubtopic = async (subtopicInput: SubtopicInput) => {
+		console.log("Adding subtopic:", subtopicInput);
 		try {
-			await SubtopicApi.createSubtopic(subtopicInput);
+			const result = await SubtopicApi.createSubtopic({
+				...subtopicInput,
+				topicId: topicId, // Ensure topicId is always set
+				_id: "", // Set to empty string for new subtopics
+			});
+			console.log("Subtopic added:", result);
 			await fetchTopicAndSubtopics();
 		} catch (error) {
 			console.error("Error adding subtopic:", error);
@@ -219,6 +225,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 					setIsOpen={setIsAddModalOpen}
 					mode="add"
 					onSubmit={handleAddSubtopic}
+					initialData={{ topicId: topicId }} // Add this line
 				/>
 				{editingSubtopic && (
 					<ModalSubTopic

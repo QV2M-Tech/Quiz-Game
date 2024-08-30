@@ -17,10 +17,9 @@ interface ModalSubTopicProps {
 	isOpen: boolean;
 	setIsOpen: (isOpen: boolean) => void;
 	mode: "add" | "edit";
-	initialData?: SubtopicInput;
+	initialData?: Partial<SubtopicInput>; // Change this line
 	onSubmit: (data: SubtopicInput) => void;
 }
-
 export function ModalSubTopic({
 	isOpen,
 	setIsOpen,
@@ -31,7 +30,7 @@ export function ModalSubTopic({
 	const [subtopicName, setSubtopicName] = useState(
 		initialData?.subtopicName || ""
 	);
-	const [time, setTime] = useState(initialData?.time.toString() || "");
+	const [time, setTime] = useState(initialData?.time?.toString() || "");
 	const [category, setCategory] = useState(initialData?.category || "");
 
 	const handleSubmit = () => {
@@ -39,7 +38,7 @@ export function ModalSubTopic({
 			_id: initialData?._id || "",
 			subtopicName,
 			time: parseInt(time, 10),
-			category,
+			category: category || "",
 			topicId: initialData?.topicId || "",
 		});
 		setIsOpen(false);
@@ -47,7 +46,7 @@ export function ModalSubTopic({
 
 	useEffect(() => {
 		setSubtopicName(initialData?.subtopicName || "");
-		setTime(initialData?.time.toString() || "");
+		setTime(initialData?.time?.toString() || "");
 		setCategory(initialData?.category || "");
 	}, [initialData]);
 

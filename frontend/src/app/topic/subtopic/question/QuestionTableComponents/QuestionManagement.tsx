@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { ArrowUpDown } from "lucide-react";
 import QuestionAction from "./QuestionAction";
 import QuestionModal from "../QuestionTableComponents/QuestionModal";
-import { QuestionApi } from "@/lib/QuestionAPI";
+import { QuestionApi } from "@/lib/questionAPI";
 import { SubtopicApi } from "@/lib/SubTopicApi";
 import { Question, QuestionInput } from "@/types/Question";
 import { Subtopic } from "@/types/SubTopic";
@@ -115,15 +115,16 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 	};
 
 	const questionToFormData = (question: Question): QuestionFormData => {
+		const options = question.option || [];
 		return {
 			_id: question._id,
 			questionName: question.questionName,
-			option1: question.option?.[0]?.text || "", // Ensure `option` is defined
-			option2: question.option?.[1]?.text || "", // Ensure `option` is defined
-			option3: question.option?.[2]?.text || "", // Ensure `option` is defined
-			option4: question.option?.[3]?.text || "", // Ensure `option` is defined
-			correctAnswer: question.option
-				? question.option.findIndex((opt) => opt.isCorrect).toString()
+			option1: options[0]?.text || "", // Ensure `option` is defined
+			option2: options[1]?.text || "", // Ensure `option` is defined
+			option3: options[2]?.text || "", // Ensure `option` is defined
+			option4: options[3]?.text || "", // Ensure `option` is defined
+			correctAnswer: options.length
+				? options.findIndex((opt) => opt.isCorrect).toString()
 				: "", // Ensure `option` is defined
 			hint: question.hint,
 		};
