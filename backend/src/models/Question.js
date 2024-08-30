@@ -36,7 +36,7 @@ const questionSchema = new mongoose.Schema({
 
 	createOn: {
 		type: Date,
-		default: new Date().getTime(),
+		default: new Date(),
 	},
 });
 
