@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowUpDown } from "lucide-react";
 import QuestionAction from "./QuestionAction";
 import QuestionModal from "../QuestionTableComponents/QuestionModal";
 import { QuestionApi } from "@/lib/questionAPI";
@@ -44,10 +43,6 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 	const [subtopic, setSubtopic] = useState<Subtopic | null>(null);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-	const [sortConfig, setSortConfig] = useState<{
-		key: keyof Question;
-		direction: "asc" | "desc";
-	} | null>(null);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [isMounted, setIsMounted] = useState(false);
 	const itemsPerPage = 10;
@@ -78,35 +73,7 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 		}
 	};
 
-	const requestSort = (key: keyof Question) => {
-		let direction: "asc" | "desc" = "asc";
-		if (
-			sortConfig &&
-			sortConfig.key === key &&
-			sortConfig.direction === "asc"
-		) {
-			direction = "desc";
-		}
-		setSortConfig({ key, direction });
-	};
-
-	const sortedQuestions = React.useMemo(() => {
-		let sortableQuestions = [...questions];
-		if (sortConfig !== null) {
-			sortableQuestions.sort((a, b) => {
-				if (a[sortConfig.key] < b[sortConfig.key]) {
-					return sortConfig.direction === "asc" ? -1 : 1;
-				}
-				if (a[sortConfig.key] > b[sortConfig.key]) {
-					return sortConfig.direction === "asc" ? 1 : -1;
-				}
-				return 0;
-			});
-		}
-		return sortableQuestions;
-	}, [questions, sortConfig]);
-
-	const filteredQuestions = sortedQuestions.filter((question) =>
+	const filteredQuestions = questions.filter((question) =>
 		question.questionName.toLowerCase().includes(searchTerm.toLowerCase())
 	);
 
@@ -119,13 +86,13 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 		return {
 			_id: question._id,
 			questionName: question.questionName,
-			option1: options[0]?.text || "", // Ensure `option` is defined
-			option2: options[1]?.text || "", // Ensure `option` is defined
-			option3: options[2]?.text || "", // Ensure `option` is defined
-			option4: options[3]?.text || "", // Ensure `option` is defined
+			option1: options[0]?.text || "",
+			option2: options[1]?.text || "",
+			option3: options[2]?.text || "",
+			option4: options[3]?.text || "",
 			correctAnswer: options.length
 				? options.findIndex((opt) => opt.isCorrect).toString()
-				: "", // Ensure `option` is defined
+				: "",
 			hint: question.hint,
 		};
 	};
@@ -176,7 +143,7 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 			<div className="w-11/12">
 				<Table>
 					<TableRow>
-						<TableCell colSpan={4}>
+						<TableCell colSpan={3}>
 							<div className="flex justify-between items-center mb-4">
 								<h2 className="text-lg font-bold">
 									การจัดการโจทย์: {topicName} - {subtopic?.subtopicName}
@@ -200,11 +167,8 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 							<div className="flex items-center justify-center">ชื่อโจทย์</div>
 						</TableHead>
 						<TableHead className="w-1/5">
-							<div
-								className="flex items-center justify-center cursor-pointer"
-								onClick={() => requestSort("updatedAt")}
-							>
-								วันที่แก้ไขล่าสุด <ArrowUpDown className="ml-2 h-4 w-4" />
+							<div className="flex items-center justify-center">
+								วันที่แก้ไขล่าสุด
 							</div>
 						</TableHead>
 						<TableHead className="w-1/5 text-center">การดำเนินการ</TableHead>
