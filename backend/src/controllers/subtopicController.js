@@ -39,12 +39,37 @@ export const getAllSubtopicsByTopicId = async (req, res) => {
 export const createSubtopic = async (req, res) => {
 	try {
 		const { topicId, subtopicName, time } = req.body;
+		console.log("Received data:", { topicId, subtopicName, time });
+
+		// Validate required fields
+		if (!topicId || !subtopicName || time === undefined) {
+			return res.status(400).json({
+				message: "Missing required fields",
+				error: "topicId, subtopicName, and time are required",
+			});
+		}
+
+		// Validate data types
+		if (
+			typeof subtopicName !== "string" ||
+			typeof time !== "number" ||
+			isNaN(time)
+		) {
+			return res.status(400).json({
+				message: "Invalid data types",
+				error: "subtopicName should be a string, time should be a number",
+			});
+		}
+
+		// Create the subtopic
 		const subtopic = await createNewSubtopic({ topicId, subtopicName, time });
-		res.status(200).json({
+
+		res.status(201).json({
 			message: "Subtopic created successfully",
 			data: subtopic,
 		});
 	} catch (error) {
+		console.error("Error creating subtopic:", error);
 		res.status(500).json({
 			message: "Failed to create subtopic",
 			error: error.message,
