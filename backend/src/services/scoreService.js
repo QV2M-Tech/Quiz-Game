@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import Score from "../models/Score.js";
 
 export async function getTopScoreService() {
@@ -74,12 +73,6 @@ export async function getAllScoreService(sort) {
 		},
 		{ $sort: { createOn: -1 } },
 	]);
-}
-
-export async function browseScoreService() {
-	// เอาชื่อไปหา || ส่ง id มา
-	return Score.find().sort({ createOn: -1 });
-	// return
 }
 
 export async function getScoreByIdService(scoreId) {

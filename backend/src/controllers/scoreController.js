@@ -33,20 +33,6 @@ export const getAllScore = async (req, res, next) => {
 	}
 };
 
-export const browseScore = async (req, res, next) => {
-	try {
-		const { query } = req;
-		console.log(query);
-
-		res.status(200).json({
-			message: "get score success",
-			data: query,
-		});
-	} catch (error) {
-		next(error);
-	}
-};
-
 export const createScore = async (req, res, next) => {
 	try {
 		const { userId, subtopicId, score, timeSpent } = req.body;
