@@ -1,11 +1,33 @@
 import Subtopic from "../models/Subtopic.js";
 
 export const findSubtopicById = async (id) => {
-	return await Subtopic.findById(id).populate("topicId");
+	const subtopic = await Subtopic.findById(id).populate("topicId");
+	if (subtopic && subtopic.topicId) {
+		const { category, topicName } = subtopic.topicId;
+		return {
+			...subtopic.toObject(),
+			topicId: subtopic.topicId._id,
+			category,
+			topicName,
+		};
+	}
+	return subtopic;
 };
 
 export const findAllSubtopicsByTopicId = async (topicId) => {
-	return await Subtopic.find({ topicId }).populate("topicId");
+	const subtopics = await Subtopic.find({ topicId }).populate("topicId");
+	return subtopics.map((subtopic) => {
+		if (subtopic.topicId) {
+			const { category, topicName } = subtopic.topicId;
+			return {
+				...subtopic.toObject(),
+				topicId: subtopic.topicId._id,
+				category,
+				topicName,
+			};
+		}
+		return subtopic;
+	});
 };
 
 export const createNewSubtopic = async ({ topicId, subtopicName, time }) => {
