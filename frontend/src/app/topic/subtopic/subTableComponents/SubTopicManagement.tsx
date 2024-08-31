@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, CircleArrowLeft } from "lucide-react";
 import SubTableAction from "@/app/topic/subtopic/subTableComponents/SubTableActions";
 import { ModalSubTopic } from "@/app/topic/subtopic/subTableComponents/ModalSubTopic";
 import { SubtopicApi } from "@/lib/SubTopicApi";
@@ -19,6 +19,7 @@ import { TopicApi } from "@/lib/TopicApi";
 import { Subtopic, SubtopicInput } from "@/types/SubTopic";
 import { Topic } from "@/types/Topic";
 import Pagination from "@/components/ui/Pagination";
+import { useRouter } from "next/navigation";
 
 interface SubtopicManagementProps {
 	topicId: string;
@@ -27,6 +28,7 @@ interface SubtopicManagementProps {
 const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 	topicId,
 }) => {
+	const router = useRouter();
 	const [subtopics, setSubtopics] = useState<Subtopic[]>([]);
 	const [topic, setTopic] = useState<Topic | null>(null);
 	const [searchTerm, setSearchTerm] = useState("");
@@ -101,8 +103,14 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 	};
 
 	const handleAddSubtopic = async (subtopicInput: SubtopicInput) => {
+		console.log("Adding subtopic:", subtopicInput);
 		try {
-			await SubtopicApi.createSubtopic(subtopicInput);
+			const result = await SubtopicApi.createSubtopic({
+				...subtopicInput,
+				topicId: topicId, // Ensure topicId is always set
+				_id: "", // Set to empty string for new subtopics
+			});
+			console.log("Subtopic added:", result);
 			await fetchTopicAndSubtopics();
 		} catch (error) {
 			console.error("Error adding subtopic:", error);
@@ -145,6 +153,9 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 					<TableRow>
 						<TableCell colSpan={4}>
 							<div className="flex justify-between items-center mb-4">
+								<Button variant="ghost" size="sm" onClick={() => router.back()}>
+									<CircleArrowLeft className="inline-block" size={32} />
+								</Button>
 								<h2 className="text-lg font-bold">
 									การจัดการหัวข้อย่อย: {topic?.topicName}
 								</h2>
@@ -219,6 +230,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 					setIsOpen={setIsAddModalOpen}
 					mode="add"
 					onSubmit={handleAddSubtopic}
+					initialData={{ topicId: topicId }} // Add this line
 				/>
 				{editingSubtopic && (
 					<ModalSubTopic

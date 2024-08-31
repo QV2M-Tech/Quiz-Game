@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -18,31 +18,44 @@ interface LinkItem {
 	icon: React.ReactNode;
 }
 
-const links: LinkItem[] = [
-	{
-		name: "เลือกหมวดหมู่",
-		path: "/selectgame",
-		icon: <MenuBookRounded />,
-	},
-	{
-		name: "สรุปคะแนนรวม",
-		path: "/score",
-		icon: <StarsRounded />,
-	},
-	{
-		name: "จัดการผู้ใช้",
-		path: "/user",
-		icon: <ManageAccountsRounded />,
-	},
-	{
-		name: "จัดการหัวข้อ",
-		path: "/topic",
-		icon: <TopicRounded />,
-	},
-];
-
 const NavRail: React.FC = () => {
 	const pathname = usePathname();
+
+	const links: LinkItem[] = useMemo(
+		() => [
+			{
+				name: "เลือกหมวดหมู่",
+				path: "/selectgame",
+				icon: <MenuBookRounded />,
+			},
+			{
+				name: "สรุปคะแนนรวม",
+				path: "/score",
+				icon: <StarsRounded />,
+			},
+			{
+				name: "จัดการผู้ใช้",
+				path: "/user",
+				icon: <ManageAccountsRounded />,
+			},
+			{
+				name: "จัดการหัวข้อ",
+				path: "/topic",
+				icon: <TopicRounded />,
+			},
+		],
+		[]
+	);
+
+	const isActive = useCallback(
+		(currentPath: string, linkPath: string): boolean => {
+			return (
+				currentPath === linkPath ||
+				(linkPath === "/topic" && currentPath.startsWith("/topic"))
+			);
+		},
+		[]
+	);
 
 	// Hide NavRail on /login and /register routes
 	if (pathname === "/" || pathname === "/register") {
@@ -60,8 +73,9 @@ const NavRail: React.FC = () => {
 					<React.Fragment key={link.name}>
 						<Link href={link.path} className="flex flex-col items-center gap-2">
 							<IconButton
-								// color={pathname === link.path ? "primary" : "default"}
-								className={`${pathname === link.path ? "bg-accent" : ""}`}
+								className={`${
+									isActive(pathname, link.path) ? "bg-accent" : ""
+								}`}
 							>
 								{link.icon}
 							</IconButton>

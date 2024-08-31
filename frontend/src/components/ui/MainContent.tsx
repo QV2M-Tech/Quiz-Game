@@ -1,34 +1,25 @@
-"use client";
-
 import React, { useState } from "react";
 import { Tabs, Tab, Card } from "@mui/material";
 import Button from "@mui/joy/Button";
+import { Topic } from "@/types/Topic";
+import SubsubjectModal from "@/app/selectgame/SubsubjectModal";
+import { TopicApi } from "@/lib/TopicApi";
 
 type TabValue = 0 | 1;
 
-const SUBJECTS: string[] = [
-	"ฟิสิกส์",
-	"เคมี",
-	"ชีวะ",
-	"คณิตศาสตร์",
-	"ภาษาไทย",
-	"สังคม",
-	"ประวัติศาสตร์",
-	"ภูมิศาสตร์",
-	"ศิลปะ",
-	"ดนตรี",
-];
-
-const SubjectItem: React.FC<{ subject: string }> = ({ subject }) => (
+const SubjectItem: React.FC<{ topic: Topic; onClick: () => void }> = ({
+	topic,
+	onClick,
+}) => (
 	<li className="flex justify-center mb-5">
 		<Button
 			color="neutral"
-			onClick={() => {}}
+			onClick={onClick}
 			size="lg"
 			variant="soft"
 			fullWidth
 			sx={{
-				maxWidth: "80%", // Adjust max width for smaller screens
+				maxWidth: "80%",
 				backgroundColor: "#bae6fd",
 				color: "#082f49",
 				justifyContent: "center",
@@ -38,15 +29,22 @@ const SubjectItem: React.FC<{ subject: string }> = ({ subject }) => (
 				},
 			}}
 		>
-			{subject}
+			{topic.topicName}
 		</Button>
 	</li>
 );
 
-const SubjectList: React.FC = () => (
+const SubjectList: React.FC<{
+	topics: Topic[];
+	onTopicClick: (topic: Topic) => void;
+}> = ({ topics, onTopicClick }) => (
 	<ul className="w-full pr-4 max-h-[400px] overflow-y-auto custom-scrollbar">
-		{SUBJECTS.map((subject, index) => (
-			<SubjectItem key={index} subject={subject} />
+		{topics.map((topic) => (
+			<SubjectItem
+				key={topic._id}
+				topic={topic}
+				onClick={() => onTopicClick(topic)}
+			/>
 		))}
 	</ul>
 );
@@ -67,9 +65,30 @@ const TabPanel: React.FC<{
 
 const MainContent: React.FC = () => {
 	const [tabValue, setTabValue] = useState<TabValue>(0);
+	const [topics, setTopics] = useState<Topic[]>([]);
+	const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	React.useEffect(() => {
+		const fetchTopics = async () => {
+			try {
+				const fetchedTopics = await TopicApi.getAllTopics();
+				setTopics(fetchedTopics);
+			} catch (error) {
+				console.error("Error fetching topics:", error);
+			}
+		};
+
+		fetchTopics();
+	}, []);
 
 	const handleChange = (_event: React.SyntheticEvent, newValue: TabValue) => {
 		setTabValue(newValue);
+	};
+
+	const handleTopicClick = (topic: Topic) => {
+		setSelectedTopic(topic);
+		setIsModalOpen(true);
 	};
 
 	return (
@@ -110,13 +129,20 @@ const MainContent: React.FC = () => {
 				</div>
 				<div className="mt-4 bg-[#F8FBFF] p-4 rounded-lg">
 					<TabPanel value={tabValue} index={0}>
-						<SubjectList />
+						<SubjectList topics={topics} onTopicClick={handleTopicClick} />
 					</TabPanel>
 					<TabPanel value={tabValue} index={1}>
 						<p>Entertainment here!</p>
 					</TabPanel>
 				</div>
 			</Card>
+			{selectedTopic && (
+				<SubsubjectModal
+					isOpen={isModalOpen}
+					onClose={() => setIsModalOpen(false)}
+					topic={selectedTopic}
+				/>
+			)}
 		</div>
 	);
 };
