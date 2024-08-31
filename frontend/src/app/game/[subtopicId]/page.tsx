@@ -15,6 +15,7 @@ import { Subtopic } from "@/types/SubTopic";
 import { ScoreInput } from "@/types/score";
 import { Question } from "@/types/Question";
 import { QuestionApi } from "@/lib/questionAPI";
+import { useUser } from "@/context/userContext";
 
 interface Props {
 	params: {
@@ -25,7 +26,7 @@ interface Props {
 export default function GamePage({ params }: Props) {
 	const router = useRouter();
 	const { subtopicId } = params;
-	// const {user} = useUser()
+	const { User } = useUser();
 
 	const [reload, setReload] = useState<boolean>(false);
 
@@ -41,11 +42,12 @@ export default function GamePage({ params }: Props) {
 		time: 30000,
 		category: "",
 		topicId: "",
+		topicName: "",
 	});
 	const [questionList, setQuestionList] = useState<Question[]>([]);
 	const [score, setScore] = useState<number>(0);
 	const [scoreData, setScoreData] = useState<ScoreInput>({
-		userId: "`${user._id}`",
+		userId: `${User?._id}`,
 		subtopicId: `${subtopicId}`,
 		score: 0,
 		timeSpent: 0,
@@ -129,7 +131,6 @@ export default function GamePage({ params }: Props) {
 						subtopic={subtopic}
 						score={score}
 						setScore={setScore}
-						setScoreData={setScoreData}
 						questionList={questionList}
 						setQuestionList={setQuestionList}
 						setShowExit={setShowExit}
