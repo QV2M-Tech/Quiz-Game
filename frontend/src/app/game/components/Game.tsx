@@ -3,35 +3,53 @@ import numberCrunching from "../utils/numberCrunching";
 
 import { Subtopic } from "@/types/SubTopic";
 import { Question } from "@/types/Question";
+import { Topic } from "@mui/icons-material";
 
 export default function Game({
 	time,
+	setTime,
 	subtopic,
 	score,
 	setScore,
+	setScoreData,
+	questionList,
+	setQuestionList,
 	handleRestart,
 	setShowExit,
 	reload,
 	setReload,
 }: {
 	time: number;
+	setTime: Function;
 	subtopic: Subtopic;
 	score: number;
 	setScore: Function;
+	setScoreData: Function;
+	questionList: Question[];
+	setQuestionList: Function;
 	handleRestart: Function;
 	setShowExit: Function;
 	reload: boolean;
 	setReload: Function;
 }) {
-	const [question, setQuestion] = useState<Question>();
+	const [questionNum, setQuestionNum] = useState<Question>();
 
 	useEffect(() => {
-		setQuestion(numberCrunching());
+		setQuestionNum(numberCrunching());
+
+		setQuestionList((prevList: Question[]) => {
+			const newList = [...prevList];
+			newList.shift();
+			return newList;
+		});
 	}, [reload]);
 
 	function handleScore(isCorrect: boolean) {
 		if (isCorrect) {
 			setScore(score + 1);
+		}
+		if (!isCorrect && subtopic._id === "66d151ea62f384268532c45c") {
+			setTime(0);
 		}
 		setReload(!reload);
 	}
@@ -46,27 +64,47 @@ export default function Game({
 				</div>
 				<h2>หัวข้อย่อย {subtopic?.subtopicName}</h2>
 			</div>
+
 			<div className="flex flex-col items-center gap-4">
 				{/* <div className="w-2/3 h-40 bg-neutral-200"></div> */}
-				<h2>{question?.questionName}</h2>
+				<h2>
+					{subtopic._id === "66d151ea62f384268532c45c"
+						? questionNum?.questionName
+						: questionList[0]?.questionName}
+				</h2>
 			</div>
 
 			<div className="flex flex-col items-center gap-4">
 				<div className="grid grid-cols-2 grid-rows-2 gap-2 w-1/2">
-					{question?.option.map((item, index) => {
-						return (
-							<button
-								key={index}
-								disabled={time === 0}
-								onClick={() => {
-									handleScore(item.isCorrect);
-								}}
-								className="tw-btn bg-accent border border-secondary shadow-md hover:bg-accent-hover"
-							>
-								{item.text}
-							</button>
-						);
-					})}
+					{subtopic._id === "66d151ea62f384268532c45c"
+						? questionNum?.option.map((item, index) => {
+								return (
+									<button
+										key={index}
+										disabled={time === 0}
+										onClick={() => {
+											handleScore(item.isCorrect);
+										}}
+										className="tw-btn bg-accent border border-secondary shadow-md hover:bg-accent-hover"
+									>
+										{item.text}
+									</button>
+								);
+						  })
+						: questionList[0]?.option.map((item, index) => {
+								return (
+									<button
+										key={index}
+										disabled={time === 0}
+										onClick={() => {
+											handleScore(item.isCorrect);
+										}}
+										className="tw-btn bg-accent border border-secondary shadow-md hover:bg-accent-hover"
+									>
+										{item.text}
+									</button>
+								);
+						  })}
 				</div>
 				<div className="flex gap-2">
 					<button

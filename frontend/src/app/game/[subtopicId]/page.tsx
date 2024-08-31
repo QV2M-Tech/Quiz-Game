@@ -9,8 +9,12 @@ import ModalTimeout from "../components/ModalTimeout";
 import ModalExit from "../components/ModalExit";
 
 import { SubtopicApi } from "@/lib/SubTopicApi";
+import { createScore } from "@/lib/scoreApi";
 
 import { Subtopic } from "@/types/SubTopic";
+import { ScoreInput } from "@/types/score";
+import { Question } from "@/types/Question";
+import { QuestionApi } from "@/lib/questionAPI";
 
 interface Props {
 	params: {
@@ -21,6 +25,7 @@ interface Props {
 export default function GamePage({ params }: Props) {
 	const router = useRouter();
 	const { subtopicId } = params;
+	// const {user} = useUser()
 
 	const [reload, setReload] = useState<boolean>(false);
 
@@ -37,10 +42,19 @@ export default function GamePage({ params }: Props) {
 		category: "",
 		topicId: "",
 	});
-
+	const [questionList, setQuestionList] = useState<Question[]>([]);
 	const [score, setScore] = useState<number>(0);
+	const [scoreData, setScoreData] = useState<ScoreInput>({
+		userId: "`${user._id}`",
+		subtopicId: `${subtopicId}`,
+		score: 0,
+		timeSpent: 0,
+	});
 
 	useEffect(() => {
+		getSubtopic(subtopicId);
+		getQuestion(subtopicId);
+
 		const timeoutId = setTimeout(() => {
 			setStart(true);
 		}, 1000);
@@ -49,7 +63,12 @@ export default function GamePage({ params }: Props) {
 	}, []);
 
 	useEffect(() => {
+		setScoreData((prevData) => {
+			return { ...prevData, score: score, timeSpent: subtopic.time - time };
+		});
+
 		if (time === 0) setShowTimeout(true);
+		if (time === 0 || questionList.length === 0) saveScore(scoreData);
 		if (!start || time <= 0) return;
 		if (showExit === true) return;
 
@@ -60,21 +79,29 @@ export default function GamePage({ params }: Props) {
 		return () => clearInterval(intervalId);
 	}, [start, time, showExit]);
 
-	useEffect(() => {
-		getSubtopic();
-	}, []);
-
-	async function getSubtopic() {
+	async function getSubtopic(id: string) {
 		try {
-			const getSubtopic = await SubtopicApi.getSubtopicById(subtopicId);
+			const getSubtopic = await SubtopicApi.getSubtopicById(id);
 
 			setSubtopic(getSubtopic);
 			setTime(getSubtopic.time);
-
-			console.log(getSubtopic);
 		} catch (error) {
 			console.error("Failed to get Subtopic:", error);
 		}
+	}
+
+	async function getQuestion(id: string) {
+		try {
+			const getQuestion = await QuestionApi.getQuestionsBySubtopicId(id);
+
+			setQuestionList(getQuestion);
+		} catch (error) {
+			console.error("Failed to get Question:", error);
+		}
+	}
+
+	async function saveScore(data: ScoreInput) {
+		await createScore(data);
 	}
 
 	function handleRestart(): void {
@@ -86,7 +113,7 @@ export default function GamePage({ params }: Props) {
 	}
 
 	function handleExit(): void {
-		router.push("/");
+		router.push("/select-game");
 	}
 
 	return (
@@ -98,9 +125,13 @@ export default function GamePage({ params }: Props) {
 				<div className="flex gap-8 justify-center items-center h-11/12">
 					<Game
 						time={time}
+						setTime={setTime}
 						subtopic={subtopic}
 						score={score}
 						setScore={setScore}
+						setScoreData={setScoreData}
+						questionList={questionList}
+						setQuestionList={setQuestionList}
 						setShowExit={setShowExit}
 						handleRestart={handleRestart}
 						reload={reload}
