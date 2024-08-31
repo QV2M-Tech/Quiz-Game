@@ -9,10 +9,12 @@ import ModalDialog from "@mui/joy/ModalDialog";
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 
 export default function ModalTimeout({
+	score,
 	showTimeout,
 	handleRestart,
 	handleExit,
 }: {
+	score: number;
 	showTimeout: boolean;
 	handleRestart: Function;
 	handleExit: Function;
@@ -30,7 +32,7 @@ export default function ModalTimeout({
 						หมดเวลาแล้ว
 					</DialogTitle>
 					<Divider />
-					<DialogContent>คะแนนของคุณคือ...</DialogContent>
+					<DialogContent>คะแนนของคุณคือ {score} คะแนน</DialogContent>
 					<DialogActions>
 						<Button variant="solid" color="danger" onClick={() => handleExit()}>
 							ออกจากเกม
