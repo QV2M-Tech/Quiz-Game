@@ -4,6 +4,7 @@ export interface Subtopic {
 	time: number;
 	category: string;
 	topicId: string;
+	topicName: string;
 }
 
 export interface SubtopicInput {

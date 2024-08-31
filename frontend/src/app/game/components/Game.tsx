@@ -3,7 +3,6 @@ import numberCrunching from "../utils/numberCrunching";
 
 import { Subtopic } from "@/types/SubTopic";
 import { Question } from "@/types/Question";
-import { Topic } from "@mui/icons-material";
 
 export default function Game({
 	time,
@@ -11,7 +10,6 @@ export default function Game({
 	subtopic,
 	score,
 	setScore,
-	setScoreData,
 	questionList,
 	setQuestionList,
 	handleRestart,
@@ -24,7 +22,6 @@ export default function Game({
 	subtopic: Subtopic;
 	score: number;
 	setScore: Function;
-	setScoreData: Function;
 	questionList: Question[];
 	setQuestionList: Function;
 	handleRestart: Function;
@@ -60,7 +57,7 @@ export default function Game({
 				<h1>เกมส์ตอบคำถาม</h1>
 				<div className="flex justify-around w-full">
 					<h2>หมวดหมู่ {subtopic?.category}</h2>
-					<h2>หัวข้อ {subtopic?.subtopicName}</h2>
+					<h2>หัวข้อ {subtopic?.topicName}</h2>
 				</div>
 				<h2>หัวข้อย่อย {subtopic?.subtopicName}</h2>
 			</div>
