@@ -115,7 +115,7 @@ export default function GamePage({ params }: Props) {
 	}
 
 	function handleExit(): void {
-		router.push("/select-game");
+		router.push("/selectgame");
 	}
 
 	return (
