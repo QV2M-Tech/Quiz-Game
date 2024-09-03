@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import MainContent from "@/components/ui/MainContent";
+import MainContent from "@/app/selectgame/components/MainContent";
 
 const SelectGame: React.FC = () => {
 	return (
-		<div className="h-screen min-w-full flex justify-center items-center">
+		<div className="h-screen flex justify-center py-10">
 			<MainContent />
 		</div>
 	);

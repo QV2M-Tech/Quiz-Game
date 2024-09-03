@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Tabs, Tab, Card } from "@mui/material";
 import Button from "@mui/joy/Button";
 import { Topic } from "@/types/Topic";
-import SubsubjectModal from "@/app/selectgame/SubsubjectModal";
 import { TopicApi } from "@/lib/TopicApi";
+import SubtopicModal from "@/app/selectgame/components/SubtopicModal";
 
 type TabValue = 0 | 1;
 
@@ -131,7 +131,7 @@ const MainContent: React.FC = () => {
 						/>
 					</Tabs>
 				</div>
-				<div className="mt-4 bg-[#F8FBFF] p-4 rounded-lg">
+				<div className="mt-4 bg-[#F8FBFF] p-4 rounded-lg overflow-y-scroll scroll-">
 					<TabPanel value={tabValue} index={0}>
 						{/* กรอง category ที่เป็น "วิชาการ" */}
 						<SubjectList
@@ -149,7 +149,7 @@ const MainContent: React.FC = () => {
 				</div>
 			</Card>
 			{selectedTopic && (
-				<SubsubjectModal
+				<SubtopicModal
 					isOpen={isModalOpen}
 					onClose={() => setIsModalOpen(false)}
 					topic={selectedTopic}
