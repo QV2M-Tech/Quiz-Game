@@ -65,6 +65,13 @@ const LoginUserPage = () => {
 		router.push("/selectgame");
 	};
 
+	const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
+		if (event.key === "Enter") {
+			event.preventDefault(); // ป้องกันการทำงานแบบ default ของ form
+			handleSubmit(isLogin);
+		}
+	};
+
 	return (
 		<div
 			className="bg-sky-100 h-full"
@@ -118,6 +125,7 @@ const LoginUserPage = () => {
 						<form
 							className="form form-login "
 							onSubmit={(e) => e.preventDefault()}
+							onKeyDown={handleKeyDown}
 						>
 							<fieldset>
 								<div className="input-block">
@@ -169,6 +177,7 @@ const LoginUserPage = () => {
 						<form
 							className="form form-signup"
 							onSubmit={(e) => e.preventDefault()}
+							onKeyDown={handleKeyDown}
 						>
 							<fieldset>
 								<UploadProfileImage

@@ -1,4 +1,4 @@
-"use client";
+"use client"; // ต้องใส่บรรทัดนี้เพื่อระบุว่าไฟล์นี้เป็น Client Component
 
 import React, {
 	createContext,
@@ -8,9 +8,10 @@ import React, {
 	ReactNode,
 	FC,
 } from "react";
-import { jwtDecode } from "jwt-decode"; // Import without destructuring
+import { usePathname } from "next/navigation"; // นำเข้า usePathname จาก next/navigation
+import { jwtDecode } from "jwt-decode"; // นำเข้า jwtDecode
 
-// Define User type
+// กำหนดประเภทข้อมูล User
 interface User {
 	id: string;
 	username: string;
@@ -18,13 +19,13 @@ interface User {
 	profile: string;
 }
 
-// Define context type
+// กำหนดประเภทข้อมูลของบริบท User
 interface UserContextType {
 	User: User | null;
 	setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
-// Create Context with undefined as the initial value
+// สร้าง Context โดยมีค่าเริ่มต้นเป็น undefined
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 interface UserProviderProps {
@@ -34,14 +35,15 @@ interface UserProviderProps {
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 	const [User, setUser] = useState<User | null>(null);
 
+	const pathname = usePathname(); // ใช้ usePathname เพื่อรับค่าของเส้นทางปัจจุบัน
+
 	useEffect(() => {
 		const fetchUserData = async () => {
 			try {
 				const token = localStorage.getItem("token");
 				if (token) {
-					// Use jwtDecode<User> to specify the expected type
 					const decodedToken = jwtDecode<User>(token);
-					console.log("", { decodedToken });
+					console.log("Decoded Token:", decodedToken);
 					setUser(decodedToken);
 				}
 			} catch (error) {
@@ -49,7 +51,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 			}
 		};
 		fetchUserData();
-	}, []);
+	}, [pathname]); // ใส่ pathname ใน dependency array เพื่อให้ useEffect ทำงานเมื่อเส้นทางเปลี่ยน
 
 	return (
 		<UserContext.Provider value={{ User, setUser }}>
@@ -58,7 +60,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 	);
 };
 
-// Create a hook for using UserContext
+// สร้าง Hook สำหรับใช้บริบท UserContext
 export const useUser = (): UserContextType => {
 	const context = useContext(UserContext);
 	if (!context) {
