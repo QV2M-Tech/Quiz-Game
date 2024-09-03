@@ -138,7 +138,7 @@ export default function GamePage({ params }: Props) {
 						reload={reload}
 						setReload={setReload}
 					/>
-					<Leaderboard />
+					<Leaderboard subtopic={subtopic} />
 				</div>
 				<ModalTimeout
 					score={score}
