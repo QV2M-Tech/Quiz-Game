@@ -10,15 +10,15 @@ import {
 	Table2Head,
 	Table2Header,
 	Table2Row,
-} from "@/components/ui/userPage/table2"; // Update the import to use table2.tsx
-import { Checkbox } from "@/components/ui/userPage/checkbox2";
+} from "@/components/ui/userPage/table2";
 import Pagination from "@/components/ui/Pagination";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { FaTrash, FaEdit } from "react-icons/fa";
+import { Edit, Trash } from "lucide-react";
+import ModalUserEdit from "./components/ModalUserEdit";
+import { Button } from "@/components/ui/button";
 
-// Define the User interface
 interface User {
 	_id: string;
 	name: string;
@@ -36,8 +36,10 @@ export default function ScorePage() {
 		key: keyof User;
 		direction: "asc" | "desc";
 	} | null>(null);
+	const [modalOpen, setModalOpen] = useState(false);
+	const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	// Fetch all users from the API
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -54,27 +56,28 @@ export default function ScorePage() {
 		fetchData();
 	}, []);
 
-	const handleEdit = async (userId: string, newName: string | null) => {
-		if (!newName) return;
+	const handleEdit = async (newName: string) => {
+		if (!currentUserId) return;
+		setIsSubmitting(true);
 		try {
-			await axios.patch(`http://localhost:6969/api/users/${userId}`, {
+			await axios.patch(`http://localhost:6969/api/users/${currentUserId}`, {
 				name: newName,
 			});
-			// Update the state after editing
 			setData((prevData) =>
 				prevData.map((item) =>
-					item._id === userId ? { ...item, name: newName } : item
+					item._id === currentUserId ? { ...item, name: newName } : item
 				)
 			);
 		} catch (error) {
 			console.error("Error updating user:", error);
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
 	const handleDelete = async (userId: string) => {
 		try {
 			await axios.delete(`http://localhost:6969/api/users/${userId}`);
-			// Remove the user from the state after deletion
 			setData((prevData) => prevData.filter((item) => item._id !== userId));
 		} catch (error) {
 			console.error("Error deleting user:", error);
@@ -121,13 +124,18 @@ export default function ScorePage() {
 		setSortConfig({ key, direction });
 	};
 
+	const openEditModal = (userId: string, name: string) => {
+		setCurrentUserId(userId);
+		setModalOpen(true);
+	};
+
 	if (isLoading) {
 		return <div>กำลังโหลด...</div>;
 	}
 
 	return (
 		<div className="flex flex-col items-center py-10">
-			<div className="w-11/12 ">
+			<div className="w-11/12">
 				<Table2>
 					<Table2Header>
 						<Table2Row>
@@ -141,21 +149,11 @@ export default function ScorePage() {
 											value={searchTerm}
 											onChange={(e) => setSearchTerm(e.target.value)}
 										/>
-										<Button
-											variant="outline"
-											className="hover:bg-secondary/20 border-secondary"
-										>
-											เลือกวันที่
-										</Button>
-										<Button variant="secondary">ตัวกรอง</Button>
 									</div>
 								</div>
 							</Table2Cell>
 						</Table2Row>
 						<Table2Row>
-							<Table2Head className="text-center">
-								<Checkbox />
-							</Table2Head>
 							<Table2Head
 								onClick={() => requestSort("createOn")}
 								className="cursor-pointer text-center"
@@ -183,38 +181,24 @@ export default function ScorePage() {
 					<Table2Body>
 						{paginatedData.map((item) => (
 							<Table2Row key={item._id}>
-								<Table2Cell className="text-center">
-									<Checkbox />
-								</Table2Cell>
-								<Table2Cell className="text-center">
-									{new Date(item.createOn).toLocaleDateString()}
-								</Table2Cell>
-								<Table2Cell className="text-center">
-									<div className="font-medium">{item.name}</div>
-								</Table2Cell>
+								<Table2Cell className="text-center">{item.createOn}</Table2Cell>
+								<Table2Cell className="text-center">{item.name}</Table2Cell>
 								<Table2Cell className="text-center">{item.username}</Table2Cell>
-								<Table2Cell className="text-center">
-									<button
-										className="mr-4 text-blue-600"
-										onClick={() =>
-											handleEdit(
-												item._id,
-												prompt("กรุณาใส่ชื่อใหม่", item.name)
-											)
-										}
+								<Table2Cell className="text-center flex justify-center gap-2">
+									<Button
+										onClick={() => openEditModal(item._id, item.name)}
+										className=" "
 									>
-										<FaEdit size={16} />
-									</button>
-									<button
-										className="text-red-600"
-										onClick={() => handleDelete(item._id)}
-									>
-										<FaTrash size={16} />
-									</button>
+										<Edit size={16} />
+									</Button>
+									<Button onClick={() => handleDelete(item._id)} className=" ">
+										<Trash size={16} />
+									</Button>
 								</Table2Cell>
 							</Table2Row>
 						))}
 					</Table2Body>
+
 					<Table2Footer>
 						<Table2Row>
 							<Table2Cell colSpan={8}>
@@ -230,6 +214,18 @@ export default function ScorePage() {
 					</Table2Footer>
 				</Table2>
 			</div>
+
+			<ModalUserEdit
+				isOpen={modalOpen}
+				setIsOpen={setModalOpen}
+				onSubmit={handleEdit}
+				initialName={
+					currentUserId
+						? data.find((user) => user._id === currentUserId)?.name
+						: ""
+				}
+				isSubmitting={isSubmitting}
+			/>
 		</div>
 	);
 }
