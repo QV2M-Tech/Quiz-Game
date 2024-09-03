@@ -9,7 +9,7 @@ import {
 const router = express.Router();
 
 // userAuthMiddleware
-router.get("/top", getTopScore);
+router.get("/top/:subtopicId", getTopScore);
 
 // adminAuthMiddleware
 router.get("/", getAllScore);

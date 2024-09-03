@@ -1,7 +1,13 @@
+import mongoose from "mongoose";
 import Score from "../models/Score.js";
 
-export async function getTopScoreService() {
+export async function getTopScoreService(subtopicId) {
 	return Score.aggregate([
+		{
+			$match: {
+				subtopicId: new mongoose.Types.ObjectId(`${subtopicId}`),
+			},
+		},
 		{
 			$lookup: {
 				from: "users",

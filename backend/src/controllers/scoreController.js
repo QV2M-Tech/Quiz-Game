@@ -9,7 +9,8 @@ import { BadRequestError, NotFoundError } from "../utils/error.js";
 
 export const getTopScore = async (req, res, next) => {
 	try {
-		const TopScore = await getTopScoreService();
+		const { subtopicId } = req.params;
+		const TopScore = await getTopScoreService(subtopicId);
 
 		res.status(200).json({
 			message: "get top 10 scores success",
