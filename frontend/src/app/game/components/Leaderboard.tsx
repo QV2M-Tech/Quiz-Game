@@ -1,22 +1,18 @@
+import { useEffect, useState } from "react";
+import { getTopScore } from "@/lib/scoreApi";
+import { TopScore } from "@/types/score";
+
 export default function Leaderboard() {
-	let rank = 1;
+	const [leaderboard, setLeaderboard] = useState<TopScore[]>([]);
 
-	function createData(name: string, score: number) {
-		return { rank: rank++, name, score };
+	useEffect(() => {
+		getLeaderboard();
+	}, []);
+
+	async function getLeaderboard() {
+		const scoreData = await getTopScore();
+		setLeaderboard(scoreData ?? []);
 	}
-
-	const rows = [
-		createData("Frozen yoghurt", 100),
-		createData("Frozen yoghurt", 100),
-		createData("Frozen yoghurt", 100),
-		createData("Frozen yoghurt", 100),
-		createData("Frozen yoghurt", 100),
-		createData("Frozen yoghurt", 100),
-		createData("Frozen yoghurt", 100),
-		createData("Frozen yoghurt", 100),
-		createData("Frozen yoghurt", 100),
-		createData("Frozen yoghurt", 100),
-	];
 
 	return (
 		<div className="flex flex-col gap-6 w-2/6 tw-box">
@@ -30,11 +26,11 @@ export default function Leaderboard() {
 					</tr>
 				</thead>
 				<tbody className="divide-y divide-sky-200">
-					{rows.map((row, index) => (
+					{leaderboard.map((item, index) => (
 						<tr key={index} className="h-10 hover:bg-primary">
-							<td>{row.rank}</td>
-							<td>{row.name}</td>
-							<td>{row.score}</td>
+							<td>{index + 1}</td>
+							<td>{item.name}</td>
+							<td>{item.score}</td>
 						</tr>
 					))}
 				</tbody>
