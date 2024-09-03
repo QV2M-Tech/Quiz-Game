@@ -1,9 +1,10 @@
+"use client";
 import React, { useState } from "react";
 import { Tabs, Tab, Card } from "@mui/material";
 import Button from "@mui/joy/Button";
 import { Topic } from "@/types/Topic";
+import SubsubjectModal from "@/app/selectgame/components/SubtopicModal";
 import { TopicApi } from "@/lib/TopicApi";
-import SubtopicModal from "@/app/selectgame/components/SubtopicModal";
 import { useRouter } from "next/navigation";
 
 type TabValue = 0 | 1;
@@ -177,7 +178,7 @@ const MainContent: React.FC = () => {
 				</div>
 			</Card>
 			{selectedTopic && (
-				<SubtopicModal
+				<SubsubjectModal
 					isOpen={isModalOpen}
 					onClose={() => setIsModalOpen(false)}
 					topic={selectedTopic}
