@@ -1,9 +1,11 @@
+"use client";
 import React, { useState } from "react";
 import { Tabs, Tab, Card } from "@mui/material";
 import Button from "@mui/joy/Button";
 import { Topic } from "@/types/Topic";
 import SubsubjectModal from "@/app/selectgame/SubsubjectModal";
 import { TopicApi } from "@/lib/TopicApi";
+import { useRouter } from "next/navigation";
 
 type TabValue = 0 | 1;
 
@@ -57,7 +59,7 @@ const TabPanel: React.FC<{
 	<div
 		hidden={value !== index}
 		role="tabpanel"
-		className="flex justify-center items-start h-full w-full"
+		className="flex justify-center items-start h-full w-full flex-col"
 	>
 		{value === index && children}
 	</div>
@@ -68,6 +70,10 @@ const MainContent: React.FC = () => {
 	const [topics, setTopics] = useState<Topic[]>([]);
 	const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	const router = useRouter();
+
+	const game24 = () => router.push(`/24`);
 
 	React.useEffect(() => {
 		const fetchTopics = async () => {
@@ -141,6 +147,29 @@ const MainContent: React.FC = () => {
 					</TabPanel>
 					<TabPanel value={tabValue} index={1}>
 						{/* กรอง category ที่เป็น "บันเทิง" */}
+						<div className="flex justify-center w-full items-center pr-4">
+							<li className="flex justify-center mb-5 w-full">
+								<Button
+									color="neutral"
+									size="lg"
+									variant="soft"
+									fullWidth
+									onClick={game24}
+									sx={{
+										maxWidth: "80%",
+										backgroundColor: "#bae6fd",
+										color: "#082f49",
+										justifyContent: "center",
+										padding: "10px 20px",
+										"&:hover": {
+											backgroundColor: "#7dd3fc",
+										},
+									}}
+								>
+									เกม24
+								</Button>
+							</li>
+						</div>
 						<SubjectList
 							topics={filterTopicsByCategory("บันเทิง")}
 							onTopicClick={handleTopicClick}
