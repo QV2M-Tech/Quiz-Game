@@ -14,7 +14,6 @@ import {
 import Pagination from "@/components/ui/Pagination";
 import { Input } from "@/components/ui/input";
 import { ArrowUpDown } from "lucide-react";
-import { FaTrash, FaEdit } from "react-icons/fa";
 import { Edit, Trash } from "lucide-react";
 import ModalUserEdit from "./components/ModalUserEdit";
 import { Button } from "@/components/ui/button";
@@ -181,17 +180,22 @@ export default function ScorePage() {
 					<Table2Body>
 						{paginatedData.map((item) => (
 							<Table2Row key={item._id}>
-								<Table2Cell className="text-center">{item.createOn}</Table2Cell>
+								<Table2Cell className="text-center">
+									{new Date(item.createOn).toLocaleDateString()}
+								</Table2Cell>
 								<Table2Cell className="text-center">{item.name}</Table2Cell>
 								<Table2Cell className="text-center">{item.username}</Table2Cell>
 								<Table2Cell className="text-center flex justify-center gap-2">
 									<Button
 										onClick={() => openEditModal(item._id, item.name)}
-										className=" "
+										className="bg-white "
 									>
 										<Edit size={16} />
 									</Button>
-									<Button onClick={() => handleDelete(item._id)} className=" ">
+									<Button
+										onClick={() => handleDelete(item._id)}
+										className=" bg-white "
+									>
 										<Trash size={16} />
 									</Button>
 								</Table2Cell>
