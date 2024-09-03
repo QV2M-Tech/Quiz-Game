@@ -91,6 +91,10 @@ const MainContent: React.FC = () => {
 		setIsModalOpen(true);
 	};
 
+	const filterTopicsByCategory = (category: string) => {
+		return topics.filter((topic) => topic.category === category);
+	};
+
 	return (
 		<div className="min-h-[80%] p-6 w-full max-w-6xl mx-auto overflow-hidden">
 			<Card
@@ -129,10 +133,18 @@ const MainContent: React.FC = () => {
 				</div>
 				<div className="mt-4 bg-[#F8FBFF] p-4 rounded-lg">
 					<TabPanel value={tabValue} index={0}>
-						<SubjectList topics={topics} onTopicClick={handleTopicClick} />
+						{/* กรอง category ที่เป็น "วิชาการ" */}
+						<SubjectList
+							topics={filterTopicsByCategory("วิชาการ")}
+							onTopicClick={handleTopicClick}
+						/>
 					</TabPanel>
 					<TabPanel value={tabValue} index={1}>
-						<p>Entertainment here!</p>
+						{/* กรอง category ที่เป็น "บันเทิง" */}
+						<SubjectList
+							topics={filterTopicsByCategory("บันเทิง")}
+							onTopicClick={handleTopicClick}
+						/>
 					</TabPanel>
 				</div>
 			</Card>

@@ -11,7 +11,7 @@ const createAndUpdate = async (req, res) => {
 
 		// ตรวจสอบข้อมูลที่รับมา
 		if (!userId || !score || !level) {
-			return res.status(400).json({ message: "All fields are required" });
+			return res.status(401).json({ message: "All fields are required" });
 		}
 
 		// ค้นหาคะแนนเดิมที่มีอยู่สำหรับ userId และ level ที่กำหนด
@@ -27,7 +27,7 @@ const createAndUpdate = async (req, res) => {
 					.json({ message: "Score updated successfully", data: existingScore });
 			} else {
 				return res
-					.status(400)
+					.status(402)
 					.json({ message: "New score is not higher than the existing score" });
 			}
 		} else {
