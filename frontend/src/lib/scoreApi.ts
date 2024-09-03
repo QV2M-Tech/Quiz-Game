@@ -1,9 +1,11 @@
 import axiosInstance from "./axiosInstance";
 import { AllScore, ScoreInput, TopScore } from "@/types/score";
 
-export async function getTopScore(): Promise<TopScore[] | undefined> {
+export async function getTopScore(
+	subtopicId: string
+): Promise<TopScore[] | undefined> {
 	try {
-		const response = await axiosInstance.get("/scores/top");
+		const response = await axiosInstance.get(`/scores/top/${subtopicId}`);
 
 		return response.data.data;
 	} catch (error) {

@@ -47,7 +47,7 @@ export default function GamePage({ params }: Props) {
 	const [questionList, setQuestionList] = useState<Question[]>([]);
 	const [score, setScore] = useState<number>(0);
 	const [scoreData, setScoreData] = useState<ScoreInput>({
-		userId: `${User?._id}`,
+		userId: `${User?.id}`,
 		subtopicId: `${subtopicId}`,
 		score: 0,
 		timeSpent: 0,
@@ -138,7 +138,7 @@ export default function GamePage({ params }: Props) {
 						reload={reload}
 						setReload={setReload}
 					/>
-					<Leaderboard />
+					<Leaderboard subtopic={subtopic} />
 				</div>
 				<ModalTimeout
 					score={score}

@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { getTopScore } from "@/lib/scoreApi";
 import { TopScore } from "@/types/score";
+import { Subtopic } from "@/types/SubTopic";
 
-export default function Leaderboard() {
+export default function Leaderboard({ subtopic }: { subtopic: Subtopic }) {
 	const [leaderboard, setLeaderboard] = useState<TopScore[]>([]);
 
 	useEffect(() => {
-		getLeaderboard();
-	}, []);
+		getLeaderboard(subtopic._id);
+	}, [subtopic._id]);
 
-	async function getLeaderboard() {
-		const scoreData = await getTopScore();
+	async function getLeaderboard(subtopicId: string) {
+		const scoreData = await getTopScore(subtopicId);
 		setLeaderboard(scoreData ?? []);
 	}
 
