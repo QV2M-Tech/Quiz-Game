@@ -1,5 +1,5 @@
 // ตัวอย่างการใช้งาน
-import { TopicApi } from '../lib/TopicApi';
+import { TopicApi } from '../lib/topicApi';
 
 // ดึงข้อมูล topic ทั้งหมด
 const fetchAllTopics = async () => {
