@@ -1,4 +1,4 @@
-// lib/useDataTable.ts
+/* // lib/useDataTable.ts
 import { useState, useEffect, useMemo } from "react";
 import { DataItem, generateMockData } from "@/lib/mockData";
 
@@ -73,3 +73,4 @@ export function useDataTable() {
     requestSort,
   };
 }
+ */

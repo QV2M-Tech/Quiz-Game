@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Topic, TopicInput } from '@/types/Topic';
-import { TopicApi } from '@/lib/TopicApi';
+import { TopicApi } from '@/lib/topicApi';
 
 export const useTopicManagement = () => {
   const [topics, setTopics] = useState<Topic[]>([]);
