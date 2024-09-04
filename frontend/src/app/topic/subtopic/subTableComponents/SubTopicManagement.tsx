@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowUpDown, CircleArrowLeft } from "lucide-react";
+import { ArrowUpDown, ChevronLeft, CircleArrowLeft } from "lucide-react";
 import SubTableAction from "@/app/topic/subtopic/subTableComponents/SubTableActions";
 import { ModalSubTopic } from "@/app/topic/subtopic/subTableComponents/ModalSubTopic";
 import { SubtopicApi } from "@/lib/SubTopicApi";
@@ -152,23 +152,40 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 				<Table>
 					<TableRow>
 						<TableCell colSpan={4}>
-							<div className="flex justify-between items-center mb-4">
-								<Button variant="ghost" size="sm" onClick={() => router.back()}>
-									<CircleArrowLeft className="inline-block" size={32} />
-								</Button>
-								<h2 className="text-lg font-bold">
-									การจัดการหัวข้อย่อย: {topic?.topicName}
-								</h2>
-								<div className="flex items-center gap-4">
-									<Button onClick={() => setIsAddModalOpen(true)}>
-										เพิ่มหัวข้อย่อย
+							<div className="flex items-center justify-between mb-4 w-full">
+								{/* Left side content */}
+								<div className="flex items-center">
+									<Button
+										variant="ghost"
+										size="sm"
+										onClick={() => router.back()}
+									>
+										<ChevronLeft
+											strokeWidth={3}
+											absoluteStrokeWidth
+											className="inline-block"
+											size={32}
+										/>
 									</Button>
+									<h1 className=" font-bold ml-2">
+										การจัดการหัวข้อย่อย: {topic?.topicName}
+									</h1>
+								</div>
+
+								{/* Right side content */}
+								<div className="flex items-center gap-4">
 									<Input
 										type="text"
 										placeholder="ค้นหาหัวข้อย่อย"
 										value={searchTerm}
 										onChange={handleSearch}
 									/>
+									<Button
+										className="bg-secondary hover:bg-secondary-hover text-white "
+										onClick={() => setIsAddModalOpen(true)}
+									>
+										เพิ่มหัวข้อย่อย
+									</Button>
 								</div>
 							</div>
 						</TableCell>
@@ -187,7 +204,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 								เวลา (นาที) <ArrowUpDown className="ml-2 h-4 w-4" />
 							</div>
 						</TableHead>
-						<TableHead className="w-1/5 text-center">active</TableHead>
+						<TableHead className="w-1/5 text-center">ตัวเลือก</TableHead>
 					</TableRow>
 					<TableBody>
 						{currentSubtopics.map((subtopic) => (
@@ -204,6 +221,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 										onDelete={() => handleDeleteSubtopic(subtopic._id)}
 										initialData={subtopic}
 										subtopicName={""}
+										isDeleting={false}
 									/>
 								</TableCell>
 							</TableRow>

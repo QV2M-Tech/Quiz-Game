@@ -17,6 +17,7 @@ interface SubTableActionProps {
 	subtopicName: string;
 	onEdit: () => void;
 	onDelete: () => void;
+	isDeleting: boolean;
 	initialData: SubtopicInput;
 }
 
@@ -26,6 +27,7 @@ const SubTableAction: React.FC<SubTableActionProps> = ({
 	onEdit,
 	onDelete,
 	initialData,
+	isDeleting,
 }) => {
 	const router = useRouter();
 
@@ -58,7 +60,13 @@ const SubTableAction: React.FC<SubTableActionProps> = ({
 			<TooltipProvider>
 				<Tooltip>
 					<TooltipTrigger>
-						<Button variant="ghost" size="sm" onClick={onDelete}>
+						<Button
+							variant="ghost"
+							size="sm"
+							onClick={onDelete}
+							disabled={isDeleting}
+						>
+							{isDeleting ? "กำลังลบ..." : ""}
 							<Trash className="inline-block" size={16} />
 						</Button>
 					</TooltipTrigger>
