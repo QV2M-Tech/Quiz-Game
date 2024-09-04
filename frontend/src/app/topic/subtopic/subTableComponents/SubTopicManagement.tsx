@@ -11,11 +11,11 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowUpDown, ChevronLeft, CircleArrowLeft } from "lucide-react";
+import { ArrowUpDown, ChevronLeft } from "lucide-react";
 import SubTableAction from "@/app/topic/subtopic/subTableComponents/SubTableActions";
 import { ModalSubTopic } from "@/app/topic/subtopic/subTableComponents/ModalSubTopic";
-import { SubtopicApi } from "@/lib/SubTopicApi";
-import { TopicApi } from "@/lib/TopicApi";
+import { SubTopicApi } from "@/lib/subTopicApi";
+import { TopicApi } from "@/lib/topicApi";
 import { Subtopic, SubtopicInput } from "@/types/SubTopic";
 import { Topic } from "@/types/Topic";
 import Pagination from "@/components/ui/Pagination";
@@ -57,7 +57,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 		try {
 			const [fetchedTopic, fetchedSubtopics] = await Promise.all([
 				TopicApi.getTopicById(topicId),
-				SubtopicApi.getAllSubtopicsByTopicId(topicId),
+				SubTopicApi.getAllSubtopicsByTopicId(topicId),
 			]);
 			setTopic(fetchedTopic);
 			setSubtopics(fetchedSubtopics);
@@ -105,7 +105,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 	const handleAddSubtopic = async (subtopicInput: SubtopicInput) => {
 		console.log("Adding subtopic:", subtopicInput);
 		try {
-			const result = await SubtopicApi.createSubtopic({
+			const result = await SubTopicApi.createSubtopic({
 				...subtopicInput,
 				topicId: topicId, // Ensure topicId is always set
 				_id: "", // Set to empty string for new subtopics
@@ -119,7 +119,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 
 	const handleEditSubtopic = async (subtopicInput: SubtopicInput) => {
 		try {
-			await SubtopicApi.updateSubtopic(subtopicInput._id, subtopicInput);
+			await SubTopicApi.updateSubtopic(subtopicInput._id, subtopicInput);
 			await fetchTopicAndSubtopics();
 		} catch (error) {
 			console.error("Error editing subtopic:", error);
@@ -128,7 +128,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 
 	const handleDeleteSubtopic = async (subtopicId: string) => {
 		try {
-			await SubtopicApi.deleteSubtopic(subtopicId);
+			await SubTopicApi.deleteSubtopic(subtopicId);
 			await fetchTopicAndSubtopics();
 		} catch (error) {
 			console.error("Error deleting subtopic:", error);

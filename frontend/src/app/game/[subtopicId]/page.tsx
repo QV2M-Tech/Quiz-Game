@@ -8,13 +8,13 @@ import Leaderboard from "../components/Leaderboard";
 import ModalTimeout from "../components/ModalTimeout";
 import ModalExit from "../components/ModalExit";
 
-import { SubtopicApi } from "@/lib/SubTopicApi";
+import { SubtopicApi } from "@/lib/subTopicApi";
 import { createScore } from "@/lib/scoreApi";
 
 import { Subtopic } from "@/types/SubTopic";
 import { ScoreInput } from "@/types/score";
 import { Question } from "@/types/Question";
-import { QuestionApi } from "@/lib/questionAPI";
+import { QuestionApi } from "@/lib/questionApi";
 import { useUser } from "@/context/userContext";
 
 interface Props {
