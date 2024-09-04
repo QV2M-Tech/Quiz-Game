@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import "./AnimatedForm.css";
 import Image from "next/image";
 import UploadProfileImage from "../components/login/UploadProfileImage";
+import axiosInstance from "../lib/axiosInstance";
 
 const LoginUserPage = () => {
 	const [isLogin, setIsLogin] = useState<boolean>(true);
@@ -15,7 +15,7 @@ const LoginUserPage = () => {
 	const [usernamer, setUsernamer] = useState<string>("");
 	const [passwordr, setPasswordr] = useState<string>("");
 	const [popup, setpopup] = useState<boolean>(false);
-	const [profile, setprofile] = useState<string>("");
+	const [profile, setprofile] = useState<string>("/Jordy.jpg");
 
 	const router = useRouter(); // ใช้ useRouter จาก next/navigation
 
@@ -24,13 +24,10 @@ const LoginUserPage = () => {
 		try {
 			if (isLogin) {
 				// สำหรับการเข้าสู่ระบบ
-				const response = await axios.post(
-					"http://localhost:6969/api/users/login",
-					{
-						username: username,
-						password: password,
-					}
-				);
+				const response = await axiosInstance.post("/users/login", {
+					username: username,
+					password: password,
+				});
 				const { token } = response.data;
 
 				if (token) {
@@ -39,15 +36,12 @@ const LoginUserPage = () => {
 				}
 			} else {
 				// สำหรับการลงทะเบียน
-				const response = await axios.post(
-					"http://localhost:6969/api/users/register",
-					{
-						profile: profile,
-						name: name,
-						username: usernamer,
-						password: passwordr,
-					}
-				);
+				const response = await axiosInstance.post("/users/register", {
+					profile: profile,
+					name: name,
+					username: usernamer,
+					password: passwordr,
+				});
 				const { token } = response.data;
 
 				if (token) {

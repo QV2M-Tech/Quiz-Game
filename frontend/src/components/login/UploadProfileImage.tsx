@@ -5,7 +5,7 @@ interface UploadProfileImageProps {
 }
 
 const UploadProfileImage = ({ onImageUpload }: UploadProfileImageProps) => {
-	const [profileImage, setProfileImage] = useState<string>("");
+	const [profileImage, setProfileImage] = useState<string>("/Jordy.jpg");
 
 	const handleFileChange = async (e: any) => {
 		const file = e.target.files[0];
