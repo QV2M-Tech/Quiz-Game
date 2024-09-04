@@ -25,6 +25,7 @@ export const registerUser = async ({ profile, name, username, password }) => {
 		username: newUser.username,
 		name: newUser.name,
 		profile: newUser.profile,
+		isAdmin: newUser.isAdmin,
 	});
 
 	return { token, user: newUser };
@@ -48,6 +49,7 @@ export const loginUser = async ({ username, password }) => {
 		username: user.username,
 		name: user.name,
 		profile: user.profile,
+		isAdmin: user.isAdmin,
 	});
 
 	return { token, user };
