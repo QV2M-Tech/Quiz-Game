@@ -283,7 +283,7 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 
 	const checkAnswer = () => {
 		if (!isValidExpression(input, numbers, level)) {
-			setMessage("แหกตาดู คำอธิบาย ดิ๊");
+			setMessage("ดูคำอธิบาย ด้วยจร้าา");
 			return;
 		}
 
@@ -292,10 +292,10 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 			if (userResult === target) {
 				// สุ่มข้อความแสดงผล
 				const messages = [
-					"งั้นๆอ่ะ",
+					"ให้ใครเล่นให้อ่ะ",
 					"เด็กๆ",
 					"เหมือนเก่ง",
-					"ไม่เท่าไหร่",
+					"ฟลุ๊คป่ะเนี่ย",
 					"ยืดเลยอ่ะดิ",
 					"ของแทร่",
 				];
@@ -314,11 +314,11 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 			} else {
 				// สุ่มข้อความแสดงผล
 				const messages = [
-					"ควายเอ๋ย",
-					"โง่แท้",
-					"กินหญ้ามั้ยลูก",
+					"กินปลาเยอะๆนะ",
+					"เอาใหม่ๆ",
+					"อย่ามั่วสิหนู",
 					"ไปเล่นมาริโอ้เถอะ",
-					"กินปลาเยอะๆ",
+					"โถ...",
 				];
 				const randomMessage =
 					messages[Math.floor(Math.random() * messages.length)];

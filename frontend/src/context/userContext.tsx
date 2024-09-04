@@ -17,6 +17,7 @@ interface User {
 	username: string;
 	name: string;
 	profile: string;
+	isAdmin: boolean;
 }
 
 // กำหนดประเภทข้อมูลของบริบท User
