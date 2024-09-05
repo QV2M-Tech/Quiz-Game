@@ -5,19 +5,21 @@ import {
 	createScore,
 	deleteScore,
 } from "../controllers/scoreController.js";
+import authenticateUserMiddleware from "../middlewares/userAuthMiddleware.js";
+import authenticateAdminMiddleware from "../middlewares/adminAuthMiddleware.js";
 
 const router = express.Router();
 
 // userAuthMiddleware
-router.get("/top/:subtopicId", getTopScore);
+router.get("/top/:subtopicId", authenticateUserMiddleware, getTopScore);
 
 // adminAuthMiddleware
-router.get("/", getAllScore);
+router.get("/", authenticateAdminMiddleware, getAllScore);
 
 // userAuthMiddleware
-router.post("/", createScore);
+router.post("/", authenticateUserMiddleware, createScore);
 
 // adminAuthMiddleware
-router.delete("/:scoreId", deleteScore);
+router.delete("/:scoreId", authenticateAdminMiddleware, deleteScore);
 
 export default router;
