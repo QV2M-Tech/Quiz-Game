@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import QuestionAction from "./QuestionAction";
 import QuestionModal from "../QuestionTableComponents/QuestionModal";
-import { QuestionApi } from "@/lib/QuestionApi";
+import { QuestionApi } from "@/lib/questionAPI";
 import { SubTopicApi } from "@/lib/SubTopicApi";
 import { Question, QuestionInput } from "@/types/Question";
 import { Subtopic } from "@/types/SubTopic";
