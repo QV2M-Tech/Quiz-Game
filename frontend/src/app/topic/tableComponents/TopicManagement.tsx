@@ -84,14 +84,14 @@ const TopicManagementPage: React.FC = () => {
 					<TableRow>
 						<TableCell colSpan={3}>
 							<div className="flex justify-between items-center mb-4">
-								<h2 className="text-lg font-bold">จัดการหัวข้อ</h2>
+								<h1 className="text-gray-600 pl-4">จัดการหัวข้อ</h1>
 								<div className="flex items-center gap-4">
 									<SearchBar
 										searchTerm={searchTerm}
 										setSearchTerm={setSearchTerm}
 									/>
 									<Button
-										className="bg-secondary text-white"
+										className=" bg-secondary hover:bg-secondary-hover text-white"
 										onClick={() => openModal()}
 									>
 										เพิ่มหัวข้อ

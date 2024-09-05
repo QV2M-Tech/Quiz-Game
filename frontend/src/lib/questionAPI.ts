@@ -10,6 +10,7 @@ export class QuestionApi {
   static async getQuestionsBySubtopicId(subtopicId: string): Promise<Question[]> {
     try {
       const response = await axiosInstance.get<ApiResponse<Question[]>>(`/questions/subtopic/${subtopicId}`);
+      
       return response.data.data;
     } catch (error) {
       console.error("Error fetching questions for subtopic:", error);

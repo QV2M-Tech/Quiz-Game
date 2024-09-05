@@ -151,7 +151,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 			<div className="w-11/12">
 				<Table>
 					<TableRow>
-						<TableCell colSpan={4}>
+						<TableCell colSpan={3}>
 							<div className="flex items-center justify-between mb-4 w-full">
 								{/* Left side content */}
 								<div className="flex items-center">
@@ -167,7 +167,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 											size={32}
 										/>
 									</Button>
-									<h1 className=" font-bold ml-2">
+									<h1 className=" ml-2">
 										การจัดการหัวข้อย่อย: {topic?.topicName}
 									</h1>
 								</div>
@@ -181,7 +181,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 										onChange={handleSearch}
 									/>
 									<Button
-										className="bg-secondary hover:bg-secondary-hover text-white "
+										className="bg-secondary hover:bg-secondary-hover text-white"
 										onClick={() => setIsAddModalOpen(true)}
 									>
 										เพิ่มหัวข้อย่อย
@@ -248,7 +248,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 					setIsOpen={setIsAddModalOpen}
 					mode="add"
 					onSubmit={handleAddSubtopic}
-					initialData={{ topicId: topicId }} // Add this line
+					initialData={{ topicId: topicId }}
 				/>
 				{editingSubtopic && (
 					<ModalSubTopic
