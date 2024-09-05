@@ -25,30 +25,44 @@ export const registerUser = async ({ profile, name, username, password }) => {
 		username: newUser.username,
 		name: newUser.name,
 		profile: newUser.profile,
+		isAdmin: newUser.isAdmin,
 	});
 
 	return { token, user: newUser };
 };
 
 export const loginUser = async ({ username, password }) => {
+	// Log the input to ensure it's received correctly
+	console.log("Received username:", username);
+	console.log("Received password:", password);
+
 	const user = await User.findOne({ username });
 
 	if (!user) {
+		console.log("User not found");
 		throw new Error("Invalid credentials");
 	}
 
 	const isMatch = await comparePassword(password, user.password);
 
+	// Log the result of password comparison
+	console.log("Password match:", isMatch);
+
 	if (!isMatch) {
+		console.log("Password does not match");
 		throw new Error("Invalid credentials");
 	}
 
+	// If everything is okay, generate the token
 	const token = sign({
 		id: user._id,
 		username: user.username,
 		name: user.name,
 		profile: user.profile,
+		isAdmin: user.isAdmin,
 	});
+
+	console.log("Token generated successfully");
 
 	return { token, user };
 };

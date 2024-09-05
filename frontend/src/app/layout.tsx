@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import NavRail from "@/components/ui/NavRail";
 import { UserProvider } from "@/context/userContext";
+import AuthGuard from "@/components/AuthGuard";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,9 @@ export default function RootLayout({
 				<UserProvider>
 					<div className="flex">
 						<NavRail />
-						<main className="ml-20 w-full h-full">{children}</main>
+						<main className="ml-20 w-full h-full">
+							<AuthGuard>{children}</AuthGuard>
+						</main>
 					</div>
 				</UserProvider>
 			</body>

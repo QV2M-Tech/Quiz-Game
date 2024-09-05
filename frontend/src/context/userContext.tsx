@@ -8,7 +8,7 @@ import React, {
 	ReactNode,
 	FC,
 } from "react";
-import { usePathname } from "next/navigation"; // นำเข้า usePathname จาก next/navigation
+import { usePathname, useRouter } from "next/navigation"; // นำเข้า usePathname จาก next/navigation
 import { jwtDecode } from "jwt-decode"; // นำเข้า jwtDecode
 
 // กำหนดประเภทข้อมูล User
@@ -17,6 +17,7 @@ interface User {
 	username: string;
 	name: string;
 	profile: string;
+	isAdmin: boolean;
 }
 
 // กำหนดประเภทข้อมูลของบริบท User
@@ -37,6 +38,8 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
 	const pathname = usePathname(); // ใช้ usePathname เพื่อรับค่าของเส้นทางปัจจุบัน
 
+	const router = useRouter();
+
 	useEffect(() => {
 		const fetchUserData = async () => {
 			try {
@@ -45,6 +48,8 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 					const decodedToken = jwtDecode<User>(token);
 					console.log("Decoded Token:", decodedToken);
 					setUser(decodedToken);
+				} else {
+					router.push("/");
 				}
 			} catch (error) {
 				console.error("Error decoding token or fetching user data:", error);

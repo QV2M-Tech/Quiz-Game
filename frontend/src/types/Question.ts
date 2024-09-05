@@ -7,7 +7,7 @@ export interface Question {
     isCorrect: boolean;
   }>;
   hint: string;
-  updatedAt?: string; // เปลี่ยนเป็น optional
+  createOn?: string; // เปลี่ยนเป็น optional
 }
 
 export interface FormData {

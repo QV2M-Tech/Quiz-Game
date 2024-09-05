@@ -5,7 +5,7 @@ import axios, {
 } from "axios";
 
 const axiosInstance: AxiosInstance = axios.create({
-	baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+	baseURL: "http://localhost:6969/api",
 	timeout: 10000,
 	headers: {
 		"Content-Type": "application/json",
@@ -14,7 +14,7 @@ const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
 	(config: InternalAxiosRequestConfig) => {
-		const token = localStorage.getItem("access_token");
+		const token = localStorage.getItem("token");
 		if (token && config.headers) {
 			config.headers.Authorization = `Bearer ${token}`;
 		}

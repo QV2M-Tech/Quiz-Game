@@ -5,7 +5,7 @@ interface UploadProfileImageProps {
 }
 
 const UploadProfileImage = ({ onImageUpload }: UploadProfileImageProps) => {
-	const [profileImage, setProfileImage] = useState<string>("");
+	const [profileImage, setProfileImage] = useState<string>("/Jordy.jpg");
 
 	const handleFileChange = async (e: any) => {
 		const file = e.target.files[0];
@@ -37,15 +37,11 @@ const UploadProfileImage = ({ onImageUpload }: UploadProfileImageProps) => {
 	return (
 		<div className="flex flex-col items-center">
 			<div className="h-20 w-20 bg-cyan-300 rounded-full flex items-center justify-center">
-				{profileImage ? (
-					<img
-						src={profileImage}
-						alt="Profile"
-						className="rounded-full w-full h-full object-cover"
-					/>
-				) : (
-					<span>อัปรูป</span>
-				)}
+				<img
+					src={profileImage || "/Jordy.jpg"} // ใช้ /Jordy.jpg เมื่อ profileImage เป็นค่าว่าง
+					alt="Profile"
+					className="rounded-full w-full h-full object-cover"
+				/>
 			</div>
 			<input
 				id="uploadfile"

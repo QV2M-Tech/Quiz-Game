@@ -1,24 +1,16 @@
-import axios, { AxiosResponse, AxiosError } from 'axios';
+import axiosInstance from './axiosInstance';
 import { Topic, TopicInput } from '@/types/Topic';
+import { AxiosError } from 'axios';
 
 interface ApiResponse<T> {
   message: string;
   data: T;
 }
 
-const API_BASE_URL = "http://localhost:6969/api/"; 
-
-const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
 export class TopicApi {
   static async getTopicById(id: string): Promise<Topic> {
     try {
-      const response: AxiosResponse<ApiResponse<Topic>> = await apiClient.get(`/topics/${id}`);
+      const response = await axiosInstance.get<ApiResponse<Topic>>(`/topics/${id}`);
       return response.data.data;
     } catch (error) {
       console.error("Error fetching topic:", error);
@@ -28,7 +20,7 @@ export class TopicApi {
 
   static async getAllTopics(): Promise<Topic[]> {
     try {
-      const response: AxiosResponse<ApiResponse<Topic[]>> = await apiClient.get('/topics');
+      const response = await axiosInstance.get<ApiResponse<Topic[]>>('/topics');
       return response.data.data;
     } catch (error) {
       console.error("Error fetching all topics:", error);
@@ -38,7 +30,7 @@ export class TopicApi {
 
   static async createTopic(data: TopicInput): Promise<Topic> {
     try {
-      const response: AxiosResponse<ApiResponse<Topic>> = await apiClient.post('/topics/create', data);
+      const response = await axiosInstance.post<ApiResponse<Topic>>('/topics/create', data);
       return response.data.data;
     } catch (error) {
       console.error("Error creating topic:", error);
@@ -48,7 +40,7 @@ export class TopicApi {
 
   static async updateTopic(id: string, data: TopicInput): Promise<Topic> {
     try {
-      const response: AxiosResponse<ApiResponse<Topic>> = await apiClient.put(`/topics/${id}`, data);
+      const response = await axiosInstance.put<ApiResponse<Topic>>(`/topics/${id}`, data);
       return response.data.data;
     } catch (error) {
       console.error("Error updating topic:", error);
@@ -58,14 +50,13 @@ export class TopicApi {
 
   static async deleteTopic(id: string): Promise<void> {
     try {
-      await apiClient.delete(`/topics/${id}`);
+      await axiosInstance.delete(`/topics/${id}`);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        if (axiosError.response?.status === 404) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 404) {
           console.error(`Topic with id ${id} not found`);
         } else {
-          console.error("Error deleting topic:", axiosError.message);
+          console.error("Error deleting topic:", error.message);
         }
       } else {
         console.error("Unexpected error:", error);

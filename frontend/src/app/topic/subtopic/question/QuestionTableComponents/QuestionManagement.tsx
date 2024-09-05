@@ -11,11 +11,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import QuestionAction from "./QuestionAction";
 import QuestionModal from "../QuestionTableComponents/QuestionModal";
-import { QuestionApi } from "@/lib/questionAPI";
-import { SubtopicApi } from "@/lib/SubTopicApi";
+import { ArrowUpDown, ChevronLeft } from "lucide-react";
+import { QuestionApi } from "@/lib/QuestionApi";
+import { SubTopicApi } from "@/lib/SubTopicApi";
 import { Question, QuestionInput } from "@/types/Question";
 import { Subtopic } from "@/types/SubTopic";
 import Pagination from "@/components/ui/Pagination";
+
+import router from "next/router";
 
 interface QuestionFormData {
 	_id?: string;
@@ -32,6 +35,7 @@ interface QuestionManagementProps {
 	topicId: string;
 	subtopicId: string;
 	topicName: string;
+	createOn: string;
 }
 
 const QuestionManagement: React.FC<QuestionManagementProps> = ({
@@ -62,10 +66,12 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 
 	const fetchSubtopicAndQuestions = async () => {
 		try {
+			console.log("666");
 			const [fetchedSubtopic, fetchedQuestions] = await Promise.all([
-				SubtopicApi.getSubtopicById(subtopicId),
+				SubTopicApi.getSubtopicById(subtopicId),
 				QuestionApi.getQuestionsBySubtopicId(subtopicId),
 			]);
+			console.log("777");
 			setSubtopic(fetchedSubtopic);
 			setQuestions(fetchedQuestions);
 		} catch (error) {
@@ -144,20 +150,40 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 				<Table>
 					<TableRow>
 						<TableCell colSpan={3}>
-							<div className="flex justify-between items-center mb-4">
-								<h2 className="text-lg font-bold">
-									การจัดการโจทย์: {topicName} - {subtopic?.subtopicName}
-								</h2>
-								<div className="flex items-center gap-4">
-									<Button onClick={() => setIsAddModalOpen(true)}>
-										เพิ่มโจทย์
+							<div className="flex items-center justify-between mb-4 w-full">
+								{/* Left side content */}
+								<div className="flex items-center">
+									<Button
+										variant="ghost"
+										size="sm"
+										onClick={() => router.back()}
+									>
+										<ChevronLeft
+											strokeWidth={3}
+											absoluteStrokeWidth
+											className="inline-block"
+											size={32}
+										/>
 									</Button>
+									<h1 className=" ml-2">
+										การจัดการโจทย์: {subtopic?.subtopicName}
+									</h1>
+								</div>
+
+								{/* Right side content */}
+								<div className="flex items-center gap-4">
 									<Input
 										type="text"
-										placeholder="ค้นหาโจทย์"
+										placeholder="ค้นหาหัวโจทย์"
 										value={searchTerm}
 										onChange={handleSearch}
 									/>
+									<Button
+										className="bg-secondary hover:bg-secondary-hover text-white"
+										onClick={() => setIsAddModalOpen(true)}
+									>
+										เพิ่มโจทย์
+									</Button>
 								</div>
 							</div>
 						</TableCell>
@@ -168,18 +194,18 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 						</TableHead>
 						<TableHead className="w-1/5">
 							<div className="flex items-center justify-center">
-								วันที่แก้ไขล่าสุด
+								วันที่สร้างโจทย์
 							</div>
 						</TableHead>
-						<TableHead className="w-1/5 text-center">การดำเนินการ</TableHead>
+						<TableHead className="w-1/5 text-center">ตัวเลือก</TableHead>
 					</TableRow>
 					<TableBody>
 						{currentQuestions.map((question) => (
 							<TableRow key={question._id}>
 								<TableCell>{question.questionName}</TableCell>
 								<TableCell>
-									{question.updatedAt
-										? new Date(question.updatedAt).toLocaleDateString()
+									{question.createOn
+										? new Date(question.createOn).toLocaleDateString()
 										: "N/A"}
 								</TableCell>
 								<TableCell>

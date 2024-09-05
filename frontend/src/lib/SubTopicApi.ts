@@ -1,23 +1,16 @@
-import axios, { AxiosResponse, AxiosError } from 'axios';
-import { Subtopic, SubtopicInput } from '@/types/SubTopic'
+import axiosInstance from './axiosInstance';
+import { Subtopic, SubtopicInput } from '@/types/SubTopic';
+import { AxiosError } from 'axios';
+
 interface ApiResponse<T> {
   message: string;
   data: T;
 }
 
-const API_BASE_URL = "http://localhost:6969/api/"; 
-
-const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-export class SubtopicApi {
+export class SubTopicApi {
   static async getSubtopicById(id: string): Promise<Subtopic> {
     try {
-      const response: AxiosResponse<ApiResponse<Subtopic>> = await apiClient.get(`/subtopics/${id}`);
+      const response = await axiosInstance.get<ApiResponse<Subtopic>>(`/subtopics/${id}`);
       return response.data.data;
     } catch (error) {
       console.error("Error fetching subtopic:", error);
@@ -27,7 +20,7 @@ export class SubtopicApi {
 
   static async getAllSubtopicsByTopicId(topicId: string): Promise<Subtopic[]> {
     try {
-      const response: AxiosResponse<ApiResponse<Subtopic[]>> = await apiClient.get(`/subtopics/topic/${topicId}`);
+      const response = await axiosInstance.get<ApiResponse<Subtopic[]>>(`/subtopics/topic/${topicId}`);
       return response.data.data;
     } catch (error) {
       console.error("Error fetching subtopics for topic:", error);
@@ -37,7 +30,7 @@ export class SubtopicApi {
 
   static async createSubtopic(data: SubtopicInput): Promise<Subtopic> {
     try {
-      const response: AxiosResponse<ApiResponse<Subtopic>> = await apiClient.post('/subtopics/create', data);
+      const response = await axiosInstance.post<ApiResponse<Subtopic>>('/subtopics/create', data);
       return response.data.data;
     } catch (error) {
       console.error("Error creating subtopic:", error);
@@ -47,7 +40,7 @@ export class SubtopicApi {
 
   static async updateSubtopic(id: string, data: SubtopicInput): Promise<Subtopic> {
     try {
-      const response: AxiosResponse<ApiResponse<Subtopic>> = await apiClient.put(`/subtopics/${id}`, data);
+      const response = await axiosInstance.put<ApiResponse<Subtopic>>(`/subtopics/${id}`, data);
       return response.data.data;
     } catch (error) {
       console.error("Error updating subtopic:", error);
@@ -57,14 +50,13 @@ export class SubtopicApi {
 
   static async deleteSubtopic(id: string): Promise<void> {
     try {
-      await apiClient.delete(`/subtopics/${id}`);
+      await axiosInstance.delete(`/subtopics/${id}`);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        if (axiosError.response?.status === 404) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 404) {
           console.error(`Subtopic with id ${id} not found`);
         } else {
-          console.error("Error deleting subtopic:", axiosError.message);
+          console.error("Error deleting subtopic:", error.message);
         }
       } else {
         console.error("Unexpected error:", error);

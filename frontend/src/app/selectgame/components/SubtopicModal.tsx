@@ -7,7 +7,7 @@ import Divider from "@mui/joy/Divider";
 import DialogTitle from "@mui/joy/DialogTitle";
 import { Topic } from "@/types/Topic";
 import { Subtopic } from "@/types/SubTopic";
-import { SubtopicApi } from "@/lib/SubTopicApi";
+import { SubTopicApi } from "@/lib/SubTopicApi";
 import { useRouter } from "next/navigation";
 
 interface SubtopicModalProps {
@@ -27,7 +27,7 @@ const SubtopicModal: React.FC<SubtopicModalProps> = ({
 	useEffect(() => {
 		const fetchSubtopics = async () => {
 			try {
-				const fetchedSubtopics = await SubtopicApi.getAllSubtopicsByTopicId(
+				const fetchedSubtopics = await SubTopicApi.getAllSubtopicsByTopicId(
 					topic._id
 				);
 				setSubtopics(fetchedSubtopics);
