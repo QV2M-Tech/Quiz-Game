@@ -58,6 +58,7 @@ const NavRail: React.FC = () => {
 		(currentPath: string, linkPath: string): boolean => {
 			return (
 				currentPath === linkPath ||
+				currentPath === `${linkPath}/` || // Added this line to handle trailing slash
 				(linkPath === "/topic" && currentPath.startsWith("/topic"))
 			);
 		},

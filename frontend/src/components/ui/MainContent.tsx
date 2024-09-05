@@ -4,7 +4,7 @@ import { Tabs, Tab, Card } from "@mui/material";
 import Button from "@mui/joy/Button";
 import { Topic } from "@/types/Topic";
 import SubsubjectModal from "@/app/selectgame/components/SubtopicModal";
-import { TopicApi } from "@/lib/topicApi";
+import { TopicApi } from "@/lib/TopicApi";
 import { useRouter } from "next/navigation";
 
 type TabValue = 0 | 1;

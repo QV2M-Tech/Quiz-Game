@@ -7,7 +7,7 @@ import Divider from "@mui/joy/Divider";
 import DialogTitle from "@mui/joy/DialogTitle";
 import { Topic } from "@/types/Topic";
 import { Subtopic } from "@/types/SubTopic";
-import { SubTopicApi } from "@/lib/subTopicApi";
+import { SubTopicApi } from "@/lib/SubTopicApi";
 import { useRouter } from "next/navigation";
 
 interface SubtopicModalProps {
