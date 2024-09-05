@@ -7,15 +7,13 @@ import Game from "../components/Game";
 import Leaderboard from "../components/Leaderboard";
 import ModalTimeout from "../components/ModalTimeout";
 import ModalExit from "../components/ModalExit";
-
-import { SubtopicApi } from "@/lib/subTopicApi";
 import { createScore } from "@/lib/scoreApi";
-
 import { Subtopic } from "@/types/SubTopic";
 import { ScoreInput } from "@/types/score";
 import { Question } from "@/types/Question";
-import { QuestionApi } from "@/lib/questionApi";
+import { SubTopicApi } from "@/lib/SubTopicApi";
 import { useUser } from "@/context/userContext";
+import { QuestionApi } from "@/lib/QuestionApi";
 
 interface Props {
 	params: {
@@ -83,7 +81,7 @@ export default function GamePage({ params }: Props) {
 
 	async function getSubtopic(id: string) {
 		try {
-			const getSubtopic = await SubtopicApi.getSubtopicById(id);
+			const getSubtopic = await SubTopicApi.getSubtopicById(id);
 
 			setSubtopic(getSubtopic);
 			setTime(getSubtopic.time);

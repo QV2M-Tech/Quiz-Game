@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Tabs, Tab, Card } from "@mui/material";
 import Button from "@mui/joy/Button";
 import { Topic } from "@/types/Topic";
-import { TopicApi } from "@/lib/topicApi";
+import { TopicApi } from "@/lib/TopicApi";
 import SubtopicModal from "@/app/selectgame/components/SubtopicModal";
 import { useRouter } from "next/navigation";
 

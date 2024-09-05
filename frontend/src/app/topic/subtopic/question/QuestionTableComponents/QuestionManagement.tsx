@@ -11,8 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import QuestionAction from "./QuestionAction";
 import QuestionModal from "../QuestionTableComponents/QuestionModal";
-import { QuestionApi } from "@/lib/questionApi";
-import { SubtopicApi } from "@/lib/subTopicApi";
+import { QuestionApi } from "@/lib/QuestionApi";
+import { SubTopicApi } from "@/lib/SubTopicApi";
 import { Question, QuestionInput } from "@/types/Question";
 import { Subtopic } from "@/types/SubTopic";
 import Pagination from "@/components/ui/Pagination";
@@ -63,7 +63,7 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 	const fetchSubtopicAndQuestions = async () => {
 		try {
 			const [fetchedSubtopic, fetchedQuestions] = await Promise.all([
-				SubtopicApi.getSubtopicById(subtopicId),
+				SubTopicApi.getSubtopicById(subtopicId),
 				QuestionApi.getQuestionsBySubtopicId(subtopicId),
 			]);
 			setSubtopic(fetchedSubtopic);
