@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import QuestionAction from "./QuestionAction";
 import QuestionModal from "../QuestionTableComponents/QuestionModal";
 import { ArrowUpDown, ChevronLeft } from "lucide-react";
-import { QuestionApi } from "@/lib/QuestionApi";
+import { QuestionApi } from "@/lib/questionApi";
 import { SubTopicApi } from "@/lib/SubTopicApi";
 import { Question, QuestionInput } from "@/types/Question";
 import { Subtopic } from "@/types/SubTopic";

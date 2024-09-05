@@ -15,8 +15,10 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
 
 	useEffect(() => {
 		const adminPages = ["/user", "/topic", "/score"];
-		if (adminPages.includes(pathname) && (!User || !User.isAdmin)) {
-			router.push("/403"); // Redirect ไปหน้า 403 Forbidden หากไม่ใช่ Admin
+		if (User) {
+			if (adminPages.includes(pathname) && (!User || !User.isAdmin)) {
+				router.push("/403"); // Redirect ไปหน้า 403 Forbidden หากไม่ใช่ Admin
+			}
 		}
 	}, [User, pathname, router]);
 
