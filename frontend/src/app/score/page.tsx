@@ -183,7 +183,14 @@ export default function ScorePage() {
 						) : (
 							paginatedData.map((item) => (
 								<TableRow key={item._id}>
-									<TableCell>{thDateTime(item.createOn)}</TableCell>
+									<TableCell>
+										<div className="font-medium">
+											{thDateTime(item.createOn).split(" ")[0]}
+										</div>
+										<div className="text-sm text-gray-500">
+											{thDateTime(item.createOn).split(" ")[1]}
+										</div>
+									</TableCell>
 									<TableCell className="text-left">
 										<div className="font-medium">{item.name}</div>
 										<div className="text-sm text-gray-500">{item.username}</div>
@@ -205,7 +212,7 @@ export default function ScorePage() {
 														// disabled={isDeleting}
 													>
 														{/* {isDeleting ? "กำลังลบ..." : ""} */}
-														<Trash className="inline-block" size={16} />
+														<Trash size={16} />
 													</Button>
 												</TooltipTrigger>
 												<TooltipContent>ลบหัวข้อหลัก</TooltipContent>

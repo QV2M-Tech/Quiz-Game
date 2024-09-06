@@ -18,6 +18,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import Loading from "@/components/ui/Loading";
+import { thDateTime } from "@/lib/format";
 
 interface User {
 	_id: string;
@@ -133,7 +134,7 @@ export default function ScorePage() {
 				<Table>
 					<TableHeader>
 						<TableRow>
-							<TableCell colSpan={8}>
+							<TableCell colSpan={4}>
 								<div className="flex justify-between items-center">
 									<h2 className="font-bold">จัดการผู้ใช้งาน</h2>
 									<div className="flex gap-4">
@@ -175,34 +176,41 @@ export default function ScorePage() {
 					<TableBody>
 						{isLoading ? (
 							<TableRow>
-								<TableCell colSpan={8}>
+								<TableCell colSpan={4}>
 									<Loading />
 								</TableCell>
 							</TableRow>
 						) : sortedData.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={8}>
-									<h2>ไม่พบข้อมูลคะแนน</h2>
+								<TableCell colSpan={4}>
+									<h2>ไม่พบข้อมูลผู้ใช้</h2>
 								</TableCell>
 							</TableRow>
 						) : (
 							paginatedData.map((item) => (
 								<TableRow key={item._id}>
 									<TableCell className="text-center">
-										{new Date(item.createOn).toLocaleDateString()}
+										<div className="font-medium">
+											{thDateTime(item.createOn).split(" ")[0]}
+										</div>
+										<div className="text-sm text-gray-500">
+											{thDateTime(item.createOn).split(" ")[1]}
+										</div>
 									</TableCell>
 									<TableCell className="text-center">{item.name}</TableCell>
 									<TableCell className="text-center">{item.username}</TableCell>
 									<TableCell className="text-center flex justify-center gap-2">
 										<Button
+											variant="ghost"
+											size="sm"
 											onClick={() => openEditModal(item._id, item.name)}
-											className="bg-white "
 										>
 											<Edit size={16} />
 										</Button>
 										<Button
+											variant="ghost"
+											size="sm"
 											onClick={() => handleDelete(item._id)}
-											className=" bg-white "
 										>
 											<Trash size={16} />
 										</Button>
@@ -214,7 +222,7 @@ export default function ScorePage() {
 
 					<TableFooter>
 						<TableRow>
-							<TableCell colSpan={8}>
+							<TableCell colSpan={4}>
 								<Pagination
 									currentPage={currentPage}
 									totalPages={totalPages}
