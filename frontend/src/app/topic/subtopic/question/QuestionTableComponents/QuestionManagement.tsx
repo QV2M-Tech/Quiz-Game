@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import QuestionAction from "./QuestionAction";
 import QuestionModal from "../QuestionTableComponents/QuestionModal";
 import { ArrowUpDown, ChevronLeft } from "lucide-react";
-import { QuestionApi } from "@/lib/QuestionApi";
+import { QuestionApi } from "@/lib/questionAPI";
 import { SubTopicApi } from "@/lib/SubTopicApi";
 import { Question, QuestionInput } from "@/types/Question";
 import { Subtopic } from "@/types/SubTopic";
@@ -35,7 +35,7 @@ interface QuestionManagementProps {
 	topicId: string;
 	subtopicId: string;
 	topicName: string;
-	createOn: string;
+	createOn?: string;
 }
 
 const QuestionManagement: React.FC<QuestionManagementProps> = ({

@@ -13,7 +13,12 @@ const Page: React.FC<PageProps> = ({ params }) => {
 	const { subtopicId } = params;
 	return (
 		<div>
-			<QuestionManagement subtopicId={subtopicId} topicId="" topicName="" />
+			<QuestionManagement
+				subtopicId={subtopicId}
+				topicId=""
+				topicName=""
+				createOn="2023-09-01"
+			/>
 		</div>
 	);
 };

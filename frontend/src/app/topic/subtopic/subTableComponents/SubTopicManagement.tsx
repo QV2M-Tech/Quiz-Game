@@ -210,7 +210,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 						{currentSubtopics.map((subtopic) => (
 							<TableRow key={subtopic._id}>
 								<TableCell>{subtopic.subtopicName}</TableCell>
-								<TableCell>{subtopic.time}</TableCell>
+								<TableCell>{subtopic.time / 60000} นาที</TableCell>
 								<TableCell>
 									<SubTableAction
 										subtopicId={subtopic._id}

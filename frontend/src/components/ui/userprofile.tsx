@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useUser } from "@/context/userContext";
+import { LoaderCircle } from "lucide-react";
 
 const UserProfile: React.FC = () => {
 	const { User } = useUser();
@@ -21,7 +22,7 @@ const UserProfile: React.FC = () => {
 			{imageLoaded ? (
 				<img className="h-14 rounded-full" src={User?.profile} alt="Profile" />
 			) : (
-				<p>Loading...</p> // Or some placeholder if image fails to load
+				<LoaderCircle /> // Or some placeholder if image fails to load
 			)}
 		</div>
 	);

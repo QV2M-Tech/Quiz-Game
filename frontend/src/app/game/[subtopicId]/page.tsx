@@ -13,7 +13,7 @@ import { ScoreInput } from "@/types/score";
 import { Question } from "@/types/Question";
 import { SubTopicApi } from "@/lib/SubTopicApi";
 import { useUser } from "@/context/userContext";
-import { QuestionApi } from "@/lib/questionApi";
+import { QuestionApi } from "@/lib/questionAPI";
 
 interface Props {
 	params: {

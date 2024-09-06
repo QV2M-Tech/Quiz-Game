@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import {
 	Table2,
 	Table2Body,
@@ -17,6 +16,7 @@ import { ArrowUpDown } from "lucide-react";
 import { Edit, Trash } from "lucide-react";
 import ModalUserEdit from "./components/ModalUserEdit";
 import { Button } from "@/components/ui/button";
+import axiosInstance from "@/lib/axiosInstance";
 
 interface User {
 	_id: string;
@@ -42,9 +42,7 @@ export default function ScorePage() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await axios.get<User[]>(
-					"http://localhost:6969/api/users"
-				);
+				const response = await axiosInstance.get<User[]>("/users");
 				setData(response.data);
 				setIsLoading(false);
 			} catch (error) {
@@ -59,7 +57,7 @@ export default function ScorePage() {
 		if (!currentUserId) return;
 		setIsSubmitting(true);
 		try {
-			await axios.patch(`http://localhost:6969/api/users/${currentUserId}`, {
+			await axiosInstance.patch(`/users/${currentUserId}`, {
 				name: newName,
 			});
 			setData((prevData) =>
@@ -76,7 +74,7 @@ export default function ScorePage() {
 
 	const handleDelete = async (userId: string) => {
 		try {
-			await axios.delete(`http://localhost:6969/api/users/${userId}`);
+			await axiosInstance.delete(`/users/${userId}`);
 			setData((prevData) => prevData.filter((item) => item._id !== userId));
 		} catch (error) {
 			console.error("Error deleting user:", error);
