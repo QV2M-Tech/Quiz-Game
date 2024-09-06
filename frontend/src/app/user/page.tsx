@@ -199,11 +199,12 @@ export default function ScorePage() {
 									</TableCell>
 									<TableCell className="text-center">{item.name}</TableCell>
 									<TableCell className="text-center">{item.username}</TableCell>
-									<TableCell className="text-center flex justify-center gap-2">
+									<TableCell className="text-center">
 										<Button
 											variant="ghost"
 											size="sm"
 											onClick={() => openEditModal(item._id, item.name)}
+											className="inline-block mr-2"
 										>
 											<Edit size={16} />
 										</Button>
@@ -211,6 +212,7 @@ export default function ScorePage() {
 											variant="ghost"
 											size="sm"
 											onClick={() => handleDelete(item._id)}
+											className="inline-block"
 										>
 											<Trash size={16} />
 										</Button>

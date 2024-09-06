@@ -20,12 +20,6 @@ import { AllScore } from "@/types/score";
 import { deleteScore, getAllScore } from "@/lib/scoreApi";
 import { thDateTime } from "@/lib/format";
 import Loading from "@/components/ui/Loading";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 
 export default function ScorePage() {
@@ -202,22 +196,16 @@ export default function ScorePage() {
 									<TableCell>{item.subtopic}</TableCell>
 									<TableCell className="text-center">{item.score}</TableCell>
 									<TableCell className="text-center">
-										<TooltipProvider>
-											<Tooltip>
-												<TooltipTrigger>
-													<Button
-														variant="ghost"
-														size="sm"
-														onClick={() => handleDelete(item._id)}
-														// disabled={isDeleting}
-													>
-														{/* {isDeleting ? "กำลังลบ..." : ""} */}
-														<Trash size={16} />
-													</Button>
-												</TooltipTrigger>
-												<TooltipContent>ลบหัวข้อหลัก</TooltipContent>
-											</Tooltip>
-										</TooltipProvider>
+										<Button
+											variant="ghost"
+											size="sm"
+											onClick={() => handleDelete(item._id)}
+											className="inline-block"
+											// disabled={isDeleting}
+										>
+											{/* {isDeleting ? "กำลังลบ..." : ""} */}
+											<Trash size={16} />
+										</Button>
 									</TableCell>
 								</TableRow>
 							))
