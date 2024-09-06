@@ -1,5 +1,3 @@
-// src/app/topic/subtopic/subTableComponents/ModalSubTopic.tsx
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,9 +15,10 @@ interface ModalSubTopicProps {
 	isOpen: boolean;
 	setIsOpen: (isOpen: boolean) => void;
 	mode: "add" | "edit";
-	initialData?: Partial<SubtopicInput>; // Change this line
+	initialData?: Partial<SubtopicInput>;
 	onSubmit: (data: SubtopicInput) => void;
 }
+
 export function ModalSubTopic({
 	isOpen,
 	setIsOpen,
@@ -34,10 +33,14 @@ export function ModalSubTopic({
 	const [category, setCategory] = useState(initialData?.category || "");
 
 	const handleSubmit = () => {
+		// Convert time to milliseconds before sending to backend
+		const timeInMilliseconds = parseInt(time, 10) * 60000;
+		console.log("", timeInMilliseconds);
+
 		onSubmit({
 			_id: initialData?._id || "",
 			subtopicName,
-			time: parseInt(time, 10),
+			time: timeInMilliseconds, // Send the time in milliseconds
 			category: category || "",
 			topicId: initialData?.topicId || "",
 		});
