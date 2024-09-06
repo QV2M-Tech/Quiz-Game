@@ -101,7 +101,7 @@ const MainContent: React.FC = () => {
 	};
 
 	return (
-		<div className="min-h-[80%] p-6 w-full max-w-6xl mx-auto overflow-hidden">
+		<div className="min-h-[80%] min-w-[80%] sm:min-w-fit sm:w-4/5 md:w-3/4 lg:w-3/5 overflow-hidden">
 			<Card
 				elevation={4}
 				className="p-4 mx-auto relative"
