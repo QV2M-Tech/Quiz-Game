@@ -3,11 +3,7 @@ import React from "react";
 import TopicManagementPage from "@/app/topic/tableComponents/TopicManagement";
 
 const Page = () => {
-	return (
-		<div>
-			<TopicManagementPage />
-		</div>
-	);
+	return <TopicManagementPage />;
 };
 
 export default Page;

@@ -6,6 +6,7 @@ import {
 	TableCell,
 	TableRow,
 	TableFooter,
+	TableHeader,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,7 +19,9 @@ import { Question, QuestionInput } from "@/types/Question";
 import { Subtopic } from "@/types/SubTopic";
 import Pagination from "@/components/ui/Pagination";
 
-import router from "next/router";
+import { useRouter } from "next/navigation";
+import Loading from "@/components/ui/Loading";
+import { thDateTime } from "@/lib/format";
 
 interface QuestionFormData {
 	_id?: string;
@@ -43,6 +46,7 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 	subtopicId,
 	topicName,
 }) => {
+	const router = useRouter();
 	const [questions, setQuestions] = useState<Question[]>([]);
 	const [subtopic, setSubtopic] = useState<Subtopic | null>(null);
 	const [searchTerm, setSearchTerm] = useState("");
@@ -53,6 +57,7 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [editingQuestion, setEditingQuestion] =
 		useState<QuestionFormData | null>(null);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	useEffect(() => {
 		setIsMounted(true);
@@ -66,14 +71,16 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 
 	const fetchSubtopicAndQuestions = async () => {
 		try {
-			console.log("666");
+			setIsLoading(true);
+
 			const [fetchedSubtopic, fetchedQuestions] = await Promise.all([
 				SubTopicApi.getSubtopicById(subtopicId),
 				QuestionApi.getQuestionsBySubtopicId(subtopicId),
 			]);
-			console.log("777");
+
 			setSubtopic(fetchedSubtopic);
 			setQuestions(fetchedQuestions);
+			setIsLoading(false);
 		} catch (error) {
 			console.error("Error fetching subtopic and questions:", error);
 		}
@@ -148,81 +155,98 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 		<div className="flex flex-col items-center py-10">
 			<div className="w-11/12">
 				<Table>
-					<TableRow>
-						<TableCell colSpan={3}>
-							<div className="flex items-center justify-between mb-4 w-full">
-								{/* Left side content */}
-								<div className="flex items-center">
-									<Button
-										variant="ghost"
-										size="sm"
-										onClick={() => router.back()}
-									>
-										<ChevronLeft
-											strokeWidth={3}
-											absoluteStrokeWidth
-											className="inline-block"
-											size={32}
-										/>
-									</Button>
-									<h1 className=" ml-2">
-										การจัดการโจทย์: {subtopic?.subtopicName}
-									</h1>
-								</div>
+					<TableHeader>
+						<TableRow>
+							<TableCell colSpan={3}>
+								<div className="flex justify-between items-center">
+									{/* Left side content */}
+									<div className="flex items-center gap-2">
+										<Button
+											variant="ghost"
+											size="sm"
+											onClick={() => router.back()}
+											className="p-2 aspect-square rounded-full"
+										>
+											<ChevronLeft
+												strokeWidth={3}
+												absoluteStrokeWidth
+												className="inline-block"
+											/>
+										</Button>
+										<h2 className="font-bold">
+											การจัดการโจทย์: {subtopic?.subtopicName}
+										</h2>
+									</div>
 
-								{/* Right side content */}
-								<div className="flex items-center gap-4">
-									<Input
-										type="text"
-										placeholder="ค้นหาหัวโจทย์"
-										value={searchTerm}
-										onChange={handleSearch}
-									/>
-									<Button
-										className="bg-secondary hover:bg-secondary-hover text-white"
-										onClick={() => setIsAddModalOpen(true)}
-									>
-										เพิ่มโจทย์
-									</Button>
+									{/* Right side content */}
+									<div className="flex items-center gap-4">
+										<Input
+											type="text"
+											placeholder="ค้นหาหัวโจทย์"
+											value={searchTerm}
+											onChange={handleSearch}
+										/>
+										<Button
+											variant="secondary"
+											onClick={() => setIsAddModalOpen(true)}
+										>
+											เพิ่มโจทย์
+										</Button>
+									</div>
 								</div>
-							</div>
-						</TableCell>
-					</TableRow>
-					<TableRow>
-						<TableHead className="w-3/5">
-							<div className="flex items-center justify-center">ชื่อโจทย์</div>
-						</TableHead>
-						<TableHead className="w-1/5">
-							<div className="flex items-center justify-center">
+							</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableHead className="text-center w-1/5">
 								วันที่สร้างโจทย์
-							</div>
-						</TableHead>
-						<TableHead className="w-1/5 text-center">ตัวเลือก</TableHead>
-					</TableRow>
+							</TableHead>
+							<TableHead className="text-center w-3/5">โจทย์</TableHead>
+							<TableHead className="text-center w-1/5">ตัวเลือก</TableHead>
+						</TableRow>
+					</TableHeader>
+
 					<TableBody>
-						{currentQuestions.map((question) => (
-							<TableRow key={question._id}>
-								<TableCell>{question.questionName}</TableCell>
-								<TableCell>
-									{question.createOn
-										? new Date(question.createOn).toLocaleDateString()
-										: "N/A"}
-								</TableCell>
-								<TableCell>
-									<QuestionAction
-										question={question}
-										onEdit={() => {
-											setEditingQuestion(questionToFormData(question));
-											setIsEditModalOpen(true);
-										}}
-										onDelete={() => handleDeleteQuestion(question._id)}
-										isOpen={isEditModalOpen}
-										initialData={question}
-									/>
+						{isLoading ? (
+							<TableRow>
+								<TableCell colSpan={3}>
+									<Loading />
 								</TableCell>
 							</TableRow>
-						))}
+						) : currentQuestions.length === 0 ? (
+							<TableRow>
+								<TableCell colSpan={3}>
+									<h2>ไม่พบโจทย์ของหัวข้อย่อย{subtopic?.subtopicName}</h2>
+								</TableCell>
+							</TableRow>
+						) : (
+							currentQuestions.map((question) => (
+								<TableRow key={question._id}>
+									<TableCell>
+										<div className="font-medium">
+											{thDateTime(question.createOn || "").split(" ")[0]}
+										</div>
+										<div className="text-sm text-gray-500">
+											{thDateTime(question.createOn || "").split(" ")[1]}
+										</div>
+									</TableCell>
+									<TableCell>{question.questionName}</TableCell>
+									<TableCell>
+										<QuestionAction
+											question={question}
+											onEdit={() => {
+												setEditingQuestion(questionToFormData(question));
+												setIsEditModalOpen(true);
+											}}
+											onDelete={() => handleDeleteQuestion(question._id)}
+											isOpen={isEditModalOpen}
+											initialData={question}
+										/>
+									</TableCell>
+								</TableRow>
+							))
+						)}
 					</TableBody>
+
 					{filteredQuestions.length > 0 && (
 						<TableFooter>
 							<TableRow>
@@ -239,6 +263,7 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 						</TableFooter>
 					)}
 				</Table>
+
 				<QuestionModal
 					isOpen={isAddModalOpen}
 					setIsOpen={setIsAddModalOpen}

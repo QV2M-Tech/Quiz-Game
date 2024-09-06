@@ -13,7 +13,7 @@ export default function Leaderboard({
 
 	useEffect(() => {
 		getLeaderboard(subtopicId);
-	}, [subtopicId]);
+	}, [subtopicId, reload]);
 
 	async function getLeaderboard(id: string) {
 		const scoreData = await getTopScore(id);
@@ -21,7 +21,7 @@ export default function Leaderboard({
 	}
 
 	return (
-		<div className="flex flex-col gap-6 w-2/6 tw-box">
+		<div className="flex flex-col gap-6 sm:w-5/6 lg:w-2/6 tw-box">
 			<h1 className="text-center">คะแนนสูงสุด 10 อันดับ</h1>
 			<table className="w-full text-center">
 				<thead>

@@ -81,7 +81,12 @@ const ModalTopicForm: React.FC<ModalTopicFormProps> = ({
 					<DialogClose>
 						<Button variant="outline">ยกเลิก</Button>
 					</DialogClose>
-					<Button type="submit" disabled={isSubmitting} onClick={handleSubmit}>
+					<Button
+						type="submit"
+						variant="secondary"
+						disabled={isSubmitting}
+						onClick={handleSubmit}
+					>
 						{isSubmitting ? "กำลังบันทึก..." : "บันทึก"}
 					</Button>
 				</DialogFooter>

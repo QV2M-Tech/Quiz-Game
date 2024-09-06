@@ -9,11 +9,7 @@ interface PageProps {
 
 const Page: React.FC<PageProps> = ({ params }) => {
 	const { topicId } = params;
-	return (
-		<div>
-			<SubtopicManagementPage topicId={topicId} />
-		</div>
-	);
+	return <SubtopicManagementPage topicId={topicId} />;
 };
 
 export default Page;
