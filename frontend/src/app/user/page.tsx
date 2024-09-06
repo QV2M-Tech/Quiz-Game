@@ -150,25 +150,25 @@ export default function ScorePage() {
 						<TableRow>
 							<TableHead
 								onClick={() => requestSort("createOn")}
-								className="cursor-pointer text-center"
+								className="cursor-pointer text-center w-1/4"
 							>
 								วันที่สร้าง{" "}
 								<ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
 							<TableHead
 								onClick={() => requestSort("name")}
-								className="cursor-pointer text-center"
+								className="cursor-pointer text-center w-1/4"
 							>
 								ชื่อ <ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
 							<TableHead
 								onClick={() => requestSort("username")}
-								className="cursor-pointer text-center"
+								className="cursor-pointer text-center w-1/4"
 							>
 								ชื่อผู้ใช้{" "}
 								<ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
-							<TableHead className="text-center">ตัวเลือก</TableHead>
+							<TableHead className="text-center w-1/4">ตัวเลือก</TableHead>
 						</TableRow>
 					</TableHeader>
 
