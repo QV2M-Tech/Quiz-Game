@@ -74,7 +74,7 @@ export default function Game({
 		<div className="flex flex-col justify-between gap-6 sm:w-4/5 lg:w-3/6 tw-box">
 			<div className="flex flex-col items-center gap-4">
 				<h1>เกมส์ตอบคำถาม</h1>
-				<div className="flex flex-col md:flex-row justify-center items-center lg:justify-around w-full">
+				<div className="flex flex-col md:flex-row justify-center items-center md:justify-around md:gap-4 w-full">
 					<h2>หมวดหมู่ {subtopic?.category}</h2>
 					<h2>หัวข้อ {subtopic?.topicName}</h2>
 				</div>

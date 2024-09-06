@@ -27,7 +27,7 @@ const UserProfile: React.FC = () => {
 					alt="Profile"
 				/>
 			) : (
-				<LoaderCircle /> // Or some placeholder if image fails to load
+				<LoaderCircle className="animate-spin" /> // Or some placeholder if image fails to load
 			)}
 		</div>
 	);
