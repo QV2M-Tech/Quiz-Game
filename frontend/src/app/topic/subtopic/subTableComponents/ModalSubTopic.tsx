@@ -99,7 +99,7 @@ export function ModalSubTopic({
 					<Button variant="outline" onClick={() => setIsOpen(false)}>
 						ยกเลิก
 					</Button>
-					<Button type="submit" onClick={handleSubmit}>
+					<Button type="submit" variant="secondary" onClick={handleSubmit}>
 						ยืนยัน
 					</Button>
 				</DialogFooter>

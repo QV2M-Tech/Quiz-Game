@@ -8,6 +8,7 @@ import {
 	TableCell,
 	TableRow,
 	TableFooter,
+	TableHeader,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +21,7 @@ import { Subtopic, SubtopicInput } from "@/types/SubTopic";
 import { Topic } from "@/types/Topic";
 import Pagination from "@/components/ui/Pagination";
 import { useRouter } from "next/navigation";
+import Loading from "@/components/ui/Loading";
 
 interface SubtopicManagementProps {
 	topicId: string;
@@ -42,12 +44,15 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 	const itemsPerPage = 10;
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [editingSubtopic, setEditingSubtopic] = useState<Subtopic | null>(null);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	useEffect(() => {
+		window.scrollTo(0, 0);
 		setIsMounted(true);
 	}, []);
 
 	useEffect(() => {
+		window.scrollTo(0, 0);
 		if (isMounted) {
 			fetchTopicAndSubtopics();
 		}
@@ -55,12 +60,14 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 
 	const fetchTopicAndSubtopics = async () => {
 		try {
+			setIsLoading(true);
 			const [fetchedTopic, fetchedSubtopics] = await Promise.all([
 				TopicApi.getTopicById(topicId),
 				SubTopicApi.getAllSubtopicsByTopicId(topicId),
 			]);
 			setTopic(fetchedTopic);
 			setSubtopics(fetchedSubtopics);
+			setIsLoading(false);
 		} catch (error) {
 			console.error("Error fetching topic and subtopics:", error);
 		}
@@ -150,83 +157,98 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 		<div className="flex flex-col items-center py-10">
 			<div className="w-11/12">
 				<Table>
-					<TableRow>
-						<TableCell colSpan={3}>
-							<div className="flex items-center justify-between mb-4 w-full">
-								{/* Left side content */}
-								<div className="flex items-center">
-									<Button
-										variant="ghost"
-										size="sm"
-										onClick={() => router.back()}
-									>
-										<ChevronLeft
-											strokeWidth={3}
-											absoluteStrokeWidth
-											className="inline-block"
-											size={32}
-										/>
-									</Button>
-									<h1 className=" ml-2">
-										การจัดการหัวข้อย่อย: {topic?.topicName}
-									</h1>
-								</div>
+					<TableHeader>
+						<TableRow>
+							<TableCell colSpan={3}>
+								<div className="flex justify-between items-center">
+									{/* Left side content */}
+									<div className="flex items-center gap-2">
+										<Button
+											variant="ghost"
+											size="sm"
+											onClick={() => router.back()}
+											className="p-2 aspect-square rounded-full"
+										>
+											<ChevronLeft
+												strokeWidth={3}
+												absoluteStrokeWidth
+												className="inline-block"
+											/>
+										</Button>
+										<h2 className="font-bold">
+											การจัดการหัวข้อย่อย: {topic?.topicName}
+										</h2>
+									</div>
 
-								{/* Right side content */}
-								<div className="flex items-center gap-4">
-									<Input
-										type="text"
-										placeholder="ค้นหาหัวข้อย่อย"
-										value={searchTerm}
-										onChange={handleSearch}
-									/>
-									<Button
-										className="bg-secondary hover:bg-secondary-hover text-white"
-										onClick={() => setIsAddModalOpen(true)}
-									>
-										เพิ่มหัวข้อย่อย
-									</Button>
+									{/* Right side content */}
+									<div className="flex items-center gap-4">
+										<Input
+											type="text"
+											placeholder="ค้นหาหัวข้อย่อย"
+											value={searchTerm}
+											onChange={handleSearch}
+										/>
+										<Button
+											variant="secondary"
+											onClick={() => setIsAddModalOpen(true)}
+										>
+											เพิ่มหัวข้อย่อย
+										</Button>
+									</div>
 								</div>
-							</div>
-						</TableCell>
-					</TableRow>
-					<TableRow>
-						<TableHead className="w-3/5">
-							<div className="flex items-center justify-center">
+							</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableHead className="text-center w-3/5">
 								ชื่อหัวข้อย่อย
-							</div>
-						</TableHead>
-						<TableHead className="w-1/5">
-							<div
-								className="flex items-center justify-center"
+							</TableHead>
+							<TableHead
 								onClick={() => requestSort("time")}
+								className="cursor-pointer text-center w-1/5"
 							>
-								เวลา (นาที) <ArrowUpDown className="ml-2 h-4 w-4" />
-							</div>
-						</TableHead>
-						<TableHead className="w-1/5 text-center">ตัวเลือก</TableHead>
-					</TableRow>
+								เวลา (นาที){" "}
+								<ArrowUpDown className="inline-block ml-2" size={16} />
+							</TableHead>
+							<TableHead className="text-center w-1/5">ตัวเลือก</TableHead>
+						</TableRow>
+					</TableHeader>
+
 					<TableBody>
-						{currentSubtopics.map((subtopic) => (
-							<TableRow key={subtopic._id}>
-								<TableCell>{subtopic.subtopicName}</TableCell>
-								<TableCell>{subtopic.time / 60000} นาที</TableCell>
-								<TableCell>
-									<SubTableAction
-										subtopicId={subtopic._id}
-										onEdit={() => {
-											setEditingSubtopic(subtopic);
-											setIsEditModalOpen(true);
-										}}
-										onDelete={() => handleDeleteSubtopic(subtopic._id)}
-										initialData={subtopic}
-										subtopicName={""}
-										isDeleting={false}
-									/>
+						{isLoading ? (
+							<TableRow>
+								<TableCell colSpan={8}>
+									<Loading />
 								</TableCell>
 							</TableRow>
-						))}
+						) : currentSubtopics.length === 0 ? (
+							<TableRow>
+								<TableCell colSpan={8}>
+									<h2>ไม่พบข้อมูลหัวข้อย่อยของหัวข้อ{topic?.topicName}</h2>
+								</TableCell>
+							</TableRow>
+						) : (
+							currentSubtopics.map((subtopic) => (
+								<TableRow key={subtopic._id}>
+									<TableCell>{subtopic.subtopicName}</TableCell>
+									<TableCell>{subtopic.time / 60000} นาที</TableCell>
+									<TableCell>
+										<SubTableAction
+											subtopicId={subtopic._id}
+											onEdit={() => {
+												setEditingSubtopic(subtopic);
+												setIsEditModalOpen(true);
+											}}
+											onDelete={() => handleDeleteSubtopic(subtopic._id)}
+											initialData={subtopic}
+											subtopicName={""}
+											isDeleting={false}
+										/>
+									</TableCell>
+								</TableRow>
+							))
+						)}
 					</TableBody>
+
 					{filteredSubtopics.length > 0 && (
 						<TableFooter>
 							<TableRow>
@@ -243,6 +265,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 						</TableFooter>
 					)}
 				</Table>
+
 				<ModalSubTopic
 					isOpen={isAddModalOpen}
 					setIsOpen={setIsAddModalOpen}
