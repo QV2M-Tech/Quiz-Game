@@ -15,7 +15,7 @@ const LoginUserPage = () => {
 	const [usernamer, setUsernamer] = useState<string>("");
 	const [passwordr, setPasswordr] = useState<string>("");
 	const [popup, setpopup] = useState<boolean>(false);
-	const [profile, setprofile] = useState<string>("/Jordy.jpg");
+	const [profile, setprofile] = useState<string>("/Gung.jpg");
 
 	const router = useRouter(); // ใช้ useRouter จาก next/navigation
 
