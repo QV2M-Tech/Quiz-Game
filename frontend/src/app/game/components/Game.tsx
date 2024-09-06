@@ -4,6 +4,8 @@ import numberCrunching from "../utils/numberCrunching";
 import { Subtopic } from "@/types/SubTopic";
 import { Question } from "@/types/Question";
 
+import { FaRegLightbulb } from "react-icons/fa6";
+
 export default function Game({
 	time,
 	setTime,
@@ -16,6 +18,8 @@ export default function Game({
 	setShowExit,
 	reload,
 	setReload,
+	countHint,
+	setCountHint,
 }: {
 	time: number;
 	setTime: Function;
@@ -28,7 +32,11 @@ export default function Game({
 	setShowExit: Function;
 	reload: boolean;
 	setReload: Function;
+	countHint: number;
+	setCountHint: Function;
 }) {
+	const [showHint, setShowHint] = useState<boolean>(false);
+
 	useEffect(() => {
 		if (subtopic._id === "66d151ea62f384268532c45c") {
 			setQuestionList((prevList: Question[]) => {
@@ -43,6 +51,8 @@ export default function Game({
 			newList.shift();
 			return newList;
 		});
+
+		setShowHint(false);
 	}, [reload]);
 
 	function handleScore(isCorrect: boolean) {
@@ -55,11 +65,16 @@ export default function Game({
 		setReload(!reload);
 	}
 
+	function handleHint() {
+		if (questionList[0]?.hint !== "") setCountHint(0);
+		setShowHint(true);
+	}
+
 	return (
-		<div className="flex flex-col justify-between gap-6 w-3/6 tw-box">
+		<div className="flex flex-col justify-between gap-6 sm:w-4/5 lg:w-3/6 tw-box">
 			<div className="flex flex-col items-center gap-4">
 				<h1>เกมส์ตอบคำถาม</h1>
-				<div className="flex justify-around w-full">
+				<div className="flex flex-col md:flex-row justify-center items-center lg:justify-around w-full">
 					<h2>หมวดหมู่ {subtopic?.category}</h2>
 					<h2>หัวข้อ {subtopic?.topicName}</h2>
 				</div>
@@ -72,7 +87,18 @@ export default function Game({
 			</div>
 
 			<div className="flex flex-col items-center gap-4">
-				<div className="grid grid-cols-2 grid-rows-2 gap-2 w-1/2">
+				<div className="flex flex-col sm:flex-row items-center justify-start gap-1">
+					<button
+						onClick={handleHint}
+						className="flex items-center gap-2 hover:file:bg-primary"
+					>
+						<FaRegLightbulb /> กดดูคำใบ้ (เหลือ {countHint})
+					</button>
+					{showHint && (
+						<h3>{questionList[0]?.hint || "โจทย์ข้อนี้ไม่มีคำใบ้"}</h3>
+					)}
+				</div>
+				<div className="grid grid-cols-2 grid-rows-2 gap-2 w-3/4 md:w-1/2">
 					{questionList[0]?.option.map((item, index) => {
 						return (
 							<button
