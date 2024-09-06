@@ -6,6 +6,7 @@ import {
 	TableRow,
 	TableCell,
 	TableFooter,
+	TableHeader,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
@@ -16,6 +17,8 @@ import CategoryBadge from "@/components/ui/badge/CategoryBadge";
 import TableActions from "@/app/topic/tableComponents/TableActions";
 import ModalTopicForm from "./ModalTopicForm";
 import { useTopicManagement } from "@/hooks/useTopicManagement";
+import Loading from "@/components/ui/Loading";
+import { Input } from "@/components/ui/input";
 
 const TopicManagementPage: React.FC = () => {
 	const { topics, isLoading, error, createTopic, updateTopic, deleteTopic } =
@@ -69,68 +72,79 @@ const TopicManagementPage: React.FC = () => {
 		currentPage * itemsPerPage
 	);
 
-	if (isLoading) {
-		return <div>Loading...</div>;
-	}
-
-	if (error) {
-		return <div>Error: {error}</div>;
-	}
-
 	return (
 		<div className="flex flex-col items-center py-10">
 			<div className="w-11/12">
 				<Table>
-					<TableRow>
-						<TableCell colSpan={3}>
-							<div className="flex justify-between items-center mb-4">
-								<h1 className="text-gray-600 pl-4">จัดการหัวข้อ</h1>
-								<div className="flex items-center gap-4">
-									<SearchBar
-										searchTerm={searchTerm}
-										setSearchTerm={setSearchTerm}
-									/>
-									<Button
-										className=" bg-secondary hover:bg-secondary-hover text-white"
-										onClick={() => openModal()}
-									>
-										เพิ่มหัวข้อ
-									</Button>
+					<TableHeader>
+						<TableRow>
+							<TableCell colSpan={3}>
+								<div className="flex justify-between items-center">
+									<h2 className="font-bold">จัดการหัวข้อ</h2>
+									<div className="flex gap-4">
+										<Input
+											className="w-64"
+											placeholder="ค้นหา"
+											value={searchTerm}
+											onChange={(e) => setSearchTerm(e.target.value)}
+										/>
+										<Button
+											className=" bg-secondary hover:bg-secondary-hover text-white"
+											onClick={() => openModal()}
+										>
+											เพิ่มหัวข้อ
+										</Button>
+									</div>
 								</div>
-							</div>
-						</TableCell>
-					</TableRow>
-					<TableRow>
-						<TableHead className="w-3/5 text-center">หัวข้อ</TableHead>
-						<TableHead className="cursor-pointer w-1/5">
-							<div className="flex items-center justify-center">
-								หมวดหมู่ <ArrowUpDown className="ml-2" size={16} />
-							</div>
-						</TableHead>
-						<TableHead className="w-1/5 text-center">Action</TableHead>
-					</TableRow>
+							</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableHead className="text-center w-1/3">หัวข้อ</TableHead>
+							<TableHead
+								// onClick={() => requestSort("category")}
+								className="cursor-pointer text-center w-1/3"
+							>
+								หมวดหมู่ <ArrowUpDown className="inline-block ml-2" size={16} />
+							</TableHead>
+							<TableHead className="text-center w-1/3">ตัวเลือก</TableHead>
+						</TableRow>
+					</TableHeader>
+
 					<TableBody>
-						{paginatedData.map((topic) => (
-							<TableRow key={topic._id}>
-								<TableCell>{topic.topicName}</TableCell>
-								<TableCell>
-									<CategoryBadge
-										category={topic.category as "วิชาการ" | "บันเทิง"}
-									/>
-								</TableCell>
-								<TableCell>
-									<TableActions
-										topicId={topic._id}
-										onEdit={() => openModal(topic)}
-										onDelete={() => handleDeleteTopic(topic._id)}
-										isDeleting={isDeleting}
-										topicName={""}
-										category={""}
-									/>
+						{isLoading ? (
+							<TableRow>
+								<TableCell colSpan={3}>
+									<Loading />
 								</TableCell>
 							</TableRow>
-						))}
+						) : filteredTopics.length === 0 ? (
+							<TableRow>
+								<TableCell colSpan={3}>
+									<h2>ไม่พบข้อมูลหัวข้อ</h2>
+								</TableCell>
+							</TableRow>
+						) : (
+							paginatedData.map((topic) => (
+								<TableRow key={topic._id}>
+									<TableCell>{topic.topicName}</TableCell>
+									<TableCell>
+										<CategoryBadge category={topic.category} />
+									</TableCell>
+									<TableCell>
+										<TableActions
+											topicId={topic._id}
+											onEdit={() => openModal(topic)}
+											onDelete={() => handleDeleteTopic(topic._id)}
+											isDeleting={isDeleting}
+											topicName={""}
+											category={""}
+										/>
+									</TableCell>
+								</TableRow>
+							))
+						)}
 					</TableBody>
+
 					<TableFooter>
 						<TableRow>
 							<TableCell colSpan={3}>
