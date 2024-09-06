@@ -216,13 +216,13 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 					<TableBody>
 						{isLoading ? (
 							<TableRow>
-								<TableCell colSpan={8}>
+								<TableCell colSpan={3}>
 									<Loading />
 								</TableCell>
 							</TableRow>
 						) : currentSubtopics.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={8}>
+								<TableCell colSpan={3}>
 									<h2>ไม่พบข้อมูลหัวข้อย่อยของหัวข้อ{topic?.topicName}</h2>
 								</TableCell>
 							</TableRow>
