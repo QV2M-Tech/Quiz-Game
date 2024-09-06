@@ -29,10 +29,14 @@ export default function Game({
 	reload: boolean;
 	setReload: Function;
 }) {
-	const [questionNum, setQuestionNum] = useState<Question>();
-
 	useEffect(() => {
-		setQuestionNum(numberCrunching());
+		if (subtopic._id === "66d151ea62f384268532c45c") {
+			setQuestionList((prevList: Question[]) => {
+				const newList = [...prevList];
+				newList.push(numberCrunching());
+				return newList;
+			});
+		}
 
 		setQuestionList((prevList: Question[]) => {
 			const newList = [...prevList];
@@ -64,44 +68,25 @@ export default function Game({
 
 			<div className="flex flex-col items-center gap-4">
 				{/* <div className="w-2/3 h-40 bg-neutral-200"></div> */}
-				<h2>
-					{subtopic._id === "66d151ea62f384268532c45c"
-						? questionNum?.questionName
-						: questionList[0]?.questionName}
-				</h2>
+				<h2>{questionList[0]?.questionName}</h2>
 			</div>
 
 			<div className="flex flex-col items-center gap-4">
 				<div className="grid grid-cols-2 grid-rows-2 gap-2 w-1/2">
-					{subtopic._id === "66d151ea62f384268532c45c"
-						? questionNum?.option.map((item, index) => {
-								return (
-									<button
-										key={index}
-										disabled={time === 0}
-										onClick={() => {
-											handleScore(item.isCorrect);
-										}}
-										className="tw-btn bg-accent border border-secondary shadow-md hover:bg-accent-hover"
-									>
-										{item.text}
-									</button>
-								);
-						  })
-						: questionList[0]?.option.map((item, index) => {
-								return (
-									<button
-										key={index}
-										disabled={time === 0}
-										onClick={() => {
-											handleScore(item.isCorrect);
-										}}
-										className="tw-btn bg-accent border border-secondary shadow-md hover:bg-accent-hover"
-									>
-										{item.text}
-									</button>
-								);
-						  })}
+					{questionList[0]?.option.map((item, index) => {
+						return (
+							<button
+								key={index}
+								disabled={time === 0}
+								onClick={() => {
+									handleScore(item.isCorrect);
+								}}
+								className="tw-btn bg-accent border border-secondary shadow-md hover:bg-accent-hover"
+							>
+								{item.text}
+							</button>
+						);
+					})}
 				</div>
 				<div className="flex gap-2">
 					<button

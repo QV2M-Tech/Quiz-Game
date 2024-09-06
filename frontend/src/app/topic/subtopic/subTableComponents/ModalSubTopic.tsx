@@ -26,21 +26,21 @@ export function ModalSubTopic({
 	initialData,
 	onSubmit,
 }: ModalSubTopicProps) {
+	// State เก็บเวลาหน่วยนาที
 	const [subtopicName, setSubtopicName] = useState(
 		initialData?.subtopicName || ""
 	);
-	const [time, setTime] = useState(initialData?.time?.toString() || "");
+	const [time, setTime] = useState(""); // ใช้หน่วยนาที
 	const [category, setCategory] = useState(initialData?.category || "");
 
 	const handleSubmit = () => {
-		// Convert time to milliseconds before sending to backend
+		// Convert time from minutes to milliseconds before sending to backend
 		const timeInMilliseconds = parseInt(time, 10) * 60000;
-		console.log("", timeInMilliseconds);
 
 		onSubmit({
 			_id: initialData?._id || "",
 			subtopicName,
-			time: timeInMilliseconds, // Send the time in milliseconds
+			time: timeInMilliseconds, // ส่งค่าในหน่วย milliseconds
 			category: category || "",
 			topicId: initialData?.topicId || "",
 		});
@@ -49,7 +49,14 @@ export function ModalSubTopic({
 
 	useEffect(() => {
 		setSubtopicName(initialData?.subtopicName || "");
-		setTime(initialData?.time?.toString() || "");
+
+		// ถ้า initialData มีค่าเวลา ให้แปลงจาก milliseconds ไปเป็นนาที
+		if (initialData?.time) {
+			setTime((initialData.time / 60000).toString()); // แปลงจาก milliseconds เป็นนาที
+		} else {
+			setTime("");
+		}
+
 		setCategory(initialData?.category || "");
 	}, [initialData]);
 
@@ -83,8 +90,8 @@ export function ModalSubTopic({
 							type="number"
 							placeholder="เวลา"
 							className="col-span-3"
-							value={time}
-							onChange={(e) => setTime(e.target.value)}
+							value={time} // แสดงผลเป็นหน่วยนาที
+							onChange={(e) => setTime(e.target.value)} // เก็บค่าเป็นหน่วยนาที
 						/>
 					</div>
 				</div>

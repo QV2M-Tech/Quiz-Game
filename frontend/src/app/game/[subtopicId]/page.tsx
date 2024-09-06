@@ -12,8 +12,9 @@ import { Subtopic } from "@/types/SubTopic";
 import { ScoreInput } from "@/types/score";
 import { Question } from "@/types/Question";
 import { SubTopicApi } from "@/lib/SubTopicApi";
-import { useUser } from "@/context/userContext";
 import { QuestionApi } from "@/lib/questionAPI";
+import { useUser } from "@/context/userContext";
+import numberCrunching from "../utils/numberCrunching";
 
 interface Props {
 	params: {
@@ -64,7 +65,12 @@ export default function GamePage({ params }: Props) {
 
 	useEffect(() => {
 		setScoreData((prevData) => {
-			return { ...prevData, score: score, timeSpent: subtopic.time - time };
+			return {
+				...prevData,
+				userId: `${User?.id}`,
+				score: score,
+				timeSpent: subtopic.time - time,
+			};
 		});
 
 		if (time === 0) setShowTimeout(true);
@@ -92,9 +98,16 @@ export default function GamePage({ params }: Props) {
 
 	async function getQuestion(id: string) {
 		try {
-			const getQuestion = await QuestionApi.getQuestionsBySubtopicId(id);
-
-			setQuestionList(getQuestion);
+			if (id === "66d151ea62f384268532c45c") {
+				setQuestionList((prevList: Question[]) => {
+					const newList = [...prevList];
+					newList.push(numberCrunching());
+					return newList;
+				});
+			} else {
+				const getQuestion = await QuestionApi.getQuestionsBySubtopicId(id);
+				setQuestionList(getQuestion);
+			}
 		} catch (error) {
 			console.error("Failed to get Question:", error);
 		}
@@ -136,7 +149,7 @@ export default function GamePage({ params }: Props) {
 						reload={reload}
 						setReload={setReload}
 					/>
-					<Leaderboard subtopic={subtopic} />
+					<Leaderboard subtopicId={subtopicId} reload={reload} />
 				</div>
 				<ModalTimeout
 					score={score}
