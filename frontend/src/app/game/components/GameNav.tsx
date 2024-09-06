@@ -8,7 +8,7 @@ export default function GameNav({
 	score: number;
 }) {
 	return (
-		<nav className="flex justify-center sm:justify-end items-center sm:pr-10 gap-8 bg-white shadow-md h-12">
+		<nav className="flex justify-center sm:justify-end items-center sm:pr-10 gap-8 bg-white shadow-md h-12 sticky inset-0">
 			<h3>คะแนน: {score}</h3>
 			<h3 className="text-red-500">เหลือเวลา {timeFormat(time)} นาที</h3>
 		</nav>
