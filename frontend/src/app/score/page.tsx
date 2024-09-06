@@ -106,7 +106,7 @@ export default function ScorePage() {
 	return (
 		<div className="flex flex-col items-center py-10">
 			<div className="w-11/12">
-				<Table className="min-h-[calc(100vh-80px)]">
+				<Table>
 					<TableHeader>
 						<TableRow>
 							<TableCell colSpan={8}>
@@ -119,21 +119,11 @@ export default function ScorePage() {
 											value={searchTerm}
 											onChange={(e) => setSearchTerm(e.target.value)}
 										/>
-										{/* <Button
-											variant="outline"
-											className="hover:bg-secondary/20 border-secondary"
-										>
-											เลือกวันที่
-										</Button>
-										<Button variant="secondary">ตัวกรอง</Button> */}
 									</div>
 								</div>
 							</TableCell>
 						</TableRow>
 						<TableRow>
-							{/* <TableHead className="text-center">
-								<Checkbox />
-							</TableHead> */}
 							<TableHead
 								onClick={() => requestSort("createOn")}
 								className="cursor-pointer text-center w-2/12"
@@ -193,9 +183,6 @@ export default function ScorePage() {
 						) : (
 							paginatedData.map((item) => (
 								<TableRow key={item._id}>
-									{/* <TableCell>
-									<Checkbox />
-								</TableCell> */}
 									<TableCell>{thDateTime(item.createOn)}</TableCell>
 									<TableCell className="text-left">
 										<div className="font-medium">{item.name}</div>

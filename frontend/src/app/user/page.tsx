@@ -1,15 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-	Table2,
-	Table2Body,
-	Table2Cell,
-	Table2Footer,
-	Table2Head,
-	Table2Header,
-	Table2Row,
-} from "@/components/ui/userPage/table2";
 import Pagination from "@/components/ui/Pagination";
 import { Input } from "@/components/ui/input";
 import { ArrowUpDown } from "lucide-react";
@@ -17,6 +8,16 @@ import { Edit, Trash } from "lucide-react";
 import ModalUserEdit from "./components/ModalUserEdit";
 import { Button } from "@/components/ui/button";
 import axiosInstance from "@/lib/axiosInstance";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableFooter,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
+import Loading from "@/components/ui/Loading";
 
 interface User {
 	_id: string;
@@ -126,17 +127,13 @@ export default function ScorePage() {
 		setModalOpen(true);
 	};
 
-	if (isLoading) {
-		return <div>กำลังโหลด...</div>;
-	}
-
 	return (
 		<div className="flex flex-col items-center py-10">
 			<div className="w-11/12">
-				<Table2>
-					<Table2Header>
-						<Table2Row>
-							<Table2Cell colSpan={8}>
+				<Table>
+					<TableHeader>
+						<TableRow>
+							<TableCell colSpan={8}>
 								<div className="flex justify-between items-center">
 									<h2 className="font-bold">จัดการผู้ใช้งาน</h2>
 									<div className="flex gap-4">
@@ -148,62 +145,76 @@ export default function ScorePage() {
 										/>
 									</div>
 								</div>
-							</Table2Cell>
-						</Table2Row>
-						<Table2Row>
-							<Table2Head
+							</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableHead
 								onClick={() => requestSort("createOn")}
 								className="cursor-pointer text-center"
 							>
 								วันที่สร้าง{" "}
 								<ArrowUpDown className="inline-block ml-2" size={16} />
-							</Table2Head>
-							<Table2Head
+							</TableHead>
+							<TableHead
 								onClick={() => requestSort("name")}
 								className="cursor-pointer text-center"
 							>
 								ชื่อ <ArrowUpDown className="inline-block ml-2" size={16} />
-							</Table2Head>
-							<Table2Head
+							</TableHead>
+							<TableHead
 								onClick={() => requestSort("username")}
 								className="cursor-pointer text-center"
 							>
 								ชื่อผู้ใช้{" "}
 								<ArrowUpDown className="inline-block ml-2" size={16} />
-							</Table2Head>
-							<Table2Head className="text-center">ตัวเลือก</Table2Head>
-						</Table2Row>
-					</Table2Header>
+							</TableHead>
+							<TableHead className="text-center">ตัวเลือก</TableHead>
+						</TableRow>
+					</TableHeader>
 
-					<Table2Body>
-						{paginatedData.map((item) => (
-							<Table2Row key={item._id}>
-								<Table2Cell className="text-center">
-									{new Date(item.createOn).toLocaleDateString()}
-								</Table2Cell>
-								<Table2Cell className="text-center">{item.name}</Table2Cell>
-								<Table2Cell className="text-center">{item.username}</Table2Cell>
-								<Table2Cell className="text-center flex justify-center gap-2">
-									<Button
-										onClick={() => openEditModal(item._id, item.name)}
-										className="bg-white "
-									>
-										<Edit size={16} />
-									</Button>
-									<Button
-										onClick={() => handleDelete(item._id)}
-										className=" bg-white "
-									>
-										<Trash size={16} />
-									</Button>
-								</Table2Cell>
-							</Table2Row>
-						))}
-					</Table2Body>
+					<TableBody>
+						{isLoading ? (
+							<TableRow>
+								<TableCell colSpan={8}>
+									<Loading />
+								</TableCell>
+							</TableRow>
+						) : sortedData.length === 0 ? (
+							<TableRow>
+								<TableCell colSpan={8}>
+									<h2>ไม่พบข้อมูลคะแนน</h2>
+								</TableCell>
+							</TableRow>
+						) : (
+							paginatedData.map((item) => (
+								<TableRow key={item._id}>
+									<TableCell className="text-center">
+										{new Date(item.createOn).toLocaleDateString()}
+									</TableCell>
+									<TableCell className="text-center">{item.name}</TableCell>
+									<TableCell className="text-center">{item.username}</TableCell>
+									<TableCell className="text-center flex justify-center gap-2">
+										<Button
+											onClick={() => openEditModal(item._id, item.name)}
+											className="bg-white "
+										>
+											<Edit size={16} />
+										</Button>
+										<Button
+											onClick={() => handleDelete(item._id)}
+											className=" bg-white "
+										>
+											<Trash size={16} />
+										</Button>
+									</TableCell>
+								</TableRow>
+							))
+						)}
+					</TableBody>
 
-					<Table2Footer>
-						<Table2Row>
-							<Table2Cell colSpan={8}>
+					<TableFooter>
+						<TableRow>
+							<TableCell colSpan={8}>
 								<Pagination
 									currentPage={currentPage}
 									totalPages={totalPages}
@@ -211,10 +222,10 @@ export default function ScorePage() {
 									itemsPerPage={itemsPerPage}
 									totalItems={sortedData.length}
 								/>
-							</Table2Cell>
-						</Table2Row>
-					</Table2Footer>
-				</Table2>
+							</TableCell>
+						</TableRow>
+					</TableFooter>
+				</Table>
 			</div>
 
 			<ModalUserEdit

@@ -18,7 +18,7 @@ const UserProfile: React.FC = () => {
 	}, [User]);
 
 	return (
-		<div>
+		<div className="sm:px-2">
 			{imageLoaded ? (
 				// eslint-disable-next-line @next/next/no-img-element
 				<img
