@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { evaluate, string } from "mathjs";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 import { useUser } from "@/context/userContext";
+import axiosInstance from "@/lib/axiosInstance";
 
 interface BodyProps {
 	level: any;
@@ -260,8 +260,8 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 			toast.error("หมดเวลา! กรุณาลองใหม่อีกครั้ง");
 			setStart(false);
 			console.log(User?.id + "-----" + score + "------" + level);
-			axios
-				.post("http://localhost:6969/api/scores24/createAndUpdate", {
+			axiosInstance
+				.post("/scores24/createAndUpdate", {
 					userId: User?.id,
 					score: score,
 					level: level,

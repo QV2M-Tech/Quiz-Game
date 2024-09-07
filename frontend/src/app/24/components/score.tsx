@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "@/lib/axiosInstance";
 
 interface Props {
 	level: string;
@@ -23,8 +23,8 @@ const Score: React.FC<Props> = ({ level, IsEnd }) => {
 
 			try {
 				// GET request เพื่อดึงคะแนนสูงสุด 10 อันดับจาก backend โดยระบุระดับความยาก
-				const response = await axios.get<Score[]>(
-					`http://localhost:6969/api/scores24/top10/${level}`
+				const response = await axiosInstance.get<Score[]>(
+					`/scores24/top10/${level}`
 				);
 				setScores(response.data); // ใช้ข้อมูลที่ได้จาก backend โดยตรง
 			} catch (error: any) {
