@@ -1,11 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import "./AnimatedForm.css";
 import Image from "next/image";
 import UploadProfileImage from "../components/login/UploadProfileImage";
 import axiosInstance from "../lib/axiosInstance";
+import {
+	Button,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+	Divider,
+	Modal,
+	ModalClose,
+	ModalDialog,
+} from "@mui/joy";
 
 const LoginUserPage = () => {
 	const [isLogin, setIsLogin] = useState<boolean>(true);
@@ -15,7 +25,9 @@ const LoginUserPage = () => {
 	const [usernamer, setUsernamer] = useState<string>("");
 	const [passwordr, setPasswordr] = useState<string>("");
 	const [popup, setpopup] = useState<boolean>(false);
-	const [profile, setprofile] = useState<string>("/Gung.jpg");
+	const [profile, setprofile] = useState<string>("/defaultProfile.png");
+
+	const [isError, setIsError] = useState<boolean>(false);
 
 	const router = useRouter(); // ใช้ useRouter จาก next/navigation
 
@@ -47,10 +59,14 @@ const LoginUserPage = () => {
 				if (token) {
 					localStorage.setItem("token", token);
 					setpopup(true);
+					setIsError(false);
 				}
 			}
 		} catch (error) {
 			console.error("Operation failed", error);
+			setIsError(true);
+			setpopup(true);
+
 			// Handle error (e.g., show error message)
 		}
 	};
@@ -85,25 +101,42 @@ const LoginUserPage = () => {
 					height={200}
 				/>
 
-				{popup && (
-					<div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50 ">
-						<div className="relative bg-cyan-100 rounded-lg p-6 text-center border ">
-							<button
-								className="absolute top-2 right-2 text-red-600 hover2:text-red-800"
-								onClick={() => setpopup(false)}
-							>
-								&times;
-							</button>
-							<h2 className="text-xl font-semibold mb-4">สร้างบัญชีสำเร็จ</h2>
-							<button
-								onClick={pop}
-								className="bg-blue-950 text-white py-2 px-4 rounded hover2:bg-blue-700"
-							>
-								เข้าสู่ระบบ
-							</button>
-						</div>
-					</div>
-				)}
+				<React.Fragment>
+					<Modal open={popup} onClose={() => setpopup(false)}>
+						<ModalDialog
+							className={`animate-slide-down`}
+							variant="outlined"
+							role="alertdialog"
+						>
+							<ModalClose />
+							<DialogTitle>
+								{isError ? "มีชื่อผู้ใช้นี้ในระบบแล้ว" : "สร้างบัญชีสำเร็จ"}
+							</DialogTitle>
+							{isError && (
+								<>
+									<Divider />
+									<DialogContent>กรุณาใช้ชื่อผู้ใช้อื่น</DialogContent>
+								</>
+							)}
+							{!isError && (
+								<DialogActions>
+									<Button
+										sx={{
+											backgroundColor: "#0c4a6e",
+											color: "#fff",
+											"&:hover": {
+												backgroundColor: "#082f49",
+											},
+										}}
+										onClick={pop}
+									>
+										เข้าสู่ระบบ
+									</Button>
+								</DialogActions>
+							)}
+						</ModalDialog>
+					</Modal>
+				</React.Fragment>
 
 				<div className="forms">
 					{/* Login Form */}
@@ -145,16 +178,16 @@ const LoginUserPage = () => {
 										required
 									/>
 								</div>
+								<div className="flex ml-12">
+									<button
+										type="button"
+										className="btn-login text-3xl p-2 rounded-xl"
+										onClick={() => handleSubmit(true)}
+									>
+										เข้าสู่ระบบ
+									</button>
+								</div>
 							</fieldset>
-							<div className="flex ml-12">
-								<button
-									type="button"
-									className="btn-login text-3xl p-2 rounded-xl"
-									onClick={() => handleSubmit(true)}
-								>
-									เข้าสู่ระบบ
-								</button>
-							</div>
 						</form>
 					</div>
 
@@ -205,14 +238,14 @@ const LoginUserPage = () => {
 										required
 									/>
 								</div>
+								<button
+									type="button"
+									className="btn-login text-3xl p-2 rounded-xl ml-12"
+									onClick={() => handleSubmit(false)}
+								>
+									ลงทะเบียน
+								</button>
 							</fieldset>
-							<button
-								type="button"
-								className="btn-login text-3xl p-2 rounded-xl ml-12"
-								onClick={() => handleSubmit(false)}
-							>
-								ลงทะเบียน
-							</button>
 						</form>
 					</div>
 				</div>
