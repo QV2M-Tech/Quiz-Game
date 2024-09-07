@@ -17,7 +17,10 @@ export async function getTopScoreService(subtopicId) {
 			},
 		},
 		{
-			$unwind: "$user",
+			$unwind: {
+				path: "$user",
+				preserveNullAndEmptyArrays: false, // ข้อมูล user ที่ไม่มีจะถูกกรองออก
+			},
 		},
 		{
 			$project: {
@@ -50,10 +53,16 @@ export async function getAllScoreService(sort) {
 			},
 		},
 		{
-			$unwind: "$user",
+			$unwind: {
+				path: "$user",
+				preserveNullAndEmptyArrays: false, // ข้อมูล user ที่ไม่มีจะถูกกรองออก
+			},
 		},
 		{
-			$unwind: "$subtopic",
+			$unwind: {
+				path: "$subtopic",
+				preserveNullAndEmptyArrays: false, // ข้อมูล user ที่ไม่มีจะถูกกรองออก
+			},
 		},
 		{
 			$lookup: {
@@ -64,7 +73,10 @@ export async function getAllScoreService(sort) {
 			},
 		},
 		{
-			$unwind: "$topic",
+			$unwind: {
+				path: "$topic",
+				preserveNullAndEmptyArrays: false, // ข้อมูล user ที่ไม่มีจะถูกกรองออก
+			},
 		},
 		{
 			$project: {
