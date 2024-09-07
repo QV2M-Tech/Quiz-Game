@@ -54,18 +54,30 @@ const top10easy = async (req, res) => {
 			.sort({ score: -1 })
 			.limit(10);
 
-		// เพิ่มการแมป userId เป็น name
+		// เพิ่มการแมป userId เป็น name และข้ามคะแนนที่ไม่พบผู้ใช้
 		const scoresWithNames = await Promise.all(
 			scores.map(async (score) => {
-				const user = await fetchUserById(score.userId);
-				return {
-					...score._doc,
-					name: user.name, // แทนที่ userId ด้วย name
-				};
+				try {
+					const user = await fetchUserById(score.userId);
+					if (!user) return null; // ถ้าหาผู้ใช้ไม่เจอให้ข้ามไป
+					return {
+						...score._doc,
+						name: user.name, // แทนที่ userId ด้วย name
+					};
+				} catch (error) {
+					console.error(
+						`Error fetching user for userId ${score.userId}:`,
+						error
+					);
+					return null; // ข้ามถ้าเกิดข้อผิดพลาด
+				}
 			})
 		);
 
-		return res.status(200).json(scoresWithNames);
+		// กรองผลลัพธ์ที่เป็น null (ผู้ใช้ที่ไม่พบ)
+		const filteredScores = scoresWithNames.filter((score) => score !== null);
+
+		return res.status(200).json(filteredScores);
 	} catch (error) {
 		return res.status(500).json({ message: "Server error", error });
 	}
@@ -78,18 +90,28 @@ const top10medium = async (req, res) => {
 			.sort({ score: -1 })
 			.limit(10);
 
-		// เพิ่มการแมป userId เป็น name
 		const scoresWithNames = await Promise.all(
 			scores.map(async (score) => {
-				const user = await fetchUserById(score.userId);
-				return {
-					...score._doc,
-					name: user.name, // แทนที่ userId ด้วย name
-				};
+				try {
+					const user = await fetchUserById(score.userId);
+					if (!user) return null;
+					return {
+						...score._doc,
+						name: user.name,
+					};
+				} catch (error) {
+					console.error(
+						`Error fetching user for userId ${score.userId}:`,
+						error
+					);
+					return null;
+				}
 			})
 		);
 
-		return res.status(200).json(scoresWithNames);
+		const filteredScores = scoresWithNames.filter((score) => score !== null);
+
+		return res.status(200).json(filteredScores);
 	} catch (error) {
 		return res.status(500).json({ message: "Server error", error });
 	}
@@ -102,18 +124,28 @@ const top10hard = async (req, res) => {
 			.sort({ score: -1 })
 			.limit(10);
 
-		// เพิ่มการแมป userId เป็น name
 		const scoresWithNames = await Promise.all(
 			scores.map(async (score) => {
-				const user = await fetchUserById(score.userId);
-				return {
-					...score._doc,
-					name: user.name, // แทนที่ userId ด้วย name
-				};
+				try {
+					const user = await fetchUserById(score.userId);
+					if (!user) return null;
+					return {
+						...score._doc,
+						name: user.name,
+					};
+				} catch (error) {
+					console.error(
+						`Error fetching user for userId ${score.userId}:`,
+						error
+					);
+					return null;
+				}
 			})
 		);
 
-		return res.status(200).json(scoresWithNames);
+		const filteredScores = scoresWithNames.filter((score) => score !== null);
+
+		return res.status(200).json(filteredScores);
 	} catch (error) {
 		return res.status(500).json({ message: "Server error", error });
 	}
