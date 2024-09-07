@@ -44,6 +44,7 @@ export default function GamePage({ params }: Props) {
 		topicName: "",
 	});
 	const [questionList, setQuestionList] = useState<Question[]>([]);
+	const [countHint, setCountHint] = useState<number>(1);
 	const [score, setScore] = useState<number>(0);
 	const [scoreData, setScoreData] = useState<ScoreInput>({
 		userId: `${User?.id}`,
@@ -123,6 +124,7 @@ export default function GamePage({ params }: Props) {
 		setReload(!reload);
 		setScore(0);
 		setTime(subtopic?.time || 30000);
+		setCountHint(1);
 	}
 
 	function handleExit(): void {
@@ -130,39 +132,38 @@ export default function GamePage({ params }: Props) {
 	}
 
 	return (
-		<>
-			<div className="flex flex-col gap-8 h-screen">
-				<div>
-					<GameNav time={time} score={score} />
-				</div>
-				<div className="flex gap-8 justify-center items-center h-11/12">
-					<Game
-						time={time}
-						setTime={setTime}
-						subtopic={subtopic}
-						score={score}
-						setScore={setScore}
-						questionList={questionList}
-						setQuestionList={setQuestionList}
-						setShowExit={setShowExit}
-						handleRestart={handleRestart}
-						reload={reload}
-						setReload={setReload}
-					/>
-					<Leaderboard subtopicId={subtopicId} reload={reload} />
-				</div>
-				<ModalTimeout
+		<div className="flex flex-col gap-8 min-h-screen">
+			<GameNav time={time} score={score} />
+
+			<div className="flex flex-col lg:flex-row gap-8 justify-center items-center h-11/12">
+				<Game
+					time={time}
+					setTime={setTime}
+					subtopic={subtopic}
 					score={score}
-					showTimeout={showTimeout}
-					handleRestart={handleRestart}
-					handleExit={handleExit}
-				/>
-				<ModalExit
-					showExit={showExit}
+					setScore={setScore}
+					questionList={questionList}
+					setQuestionList={setQuestionList}
 					setShowExit={setShowExit}
-					handleExit={handleExit}
+					handleRestart={handleRestart}
+					reload={reload}
+					setReload={setReload}
+					countHint={countHint}
+					setCountHint={setCountHint}
 				/>
+				<Leaderboard subtopicId={subtopicId} reload={reload} />
 			</div>
-		</>
+			<ModalTimeout
+				score={score}
+				showTimeout={showTimeout}
+				handleRestart={handleRestart}
+				handleExit={handleExit}
+			/>
+			<ModalExit
+				showExit={showExit}
+				setShowExit={setShowExit}
+				handleExit={handleExit}
+			/>
+		</div>
 	);
 }

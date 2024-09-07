@@ -149,7 +149,9 @@ const QuestionModal: React.FC<QuestionModalProps> = ({
 						<Button variant="outline" onClick={onClose}>
 							ยกเลิก
 						</Button>
-						<Button type="submit">ยืนยัน</Button>
+						<Button type="submit" variant="secondary">
+							ยืนยัน
+						</Button>
 					</DialogFooter>
 				</form>
 			</DialogContent>

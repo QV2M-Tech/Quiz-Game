@@ -23,7 +23,7 @@ export default function RootLayout({
 				<UserProvider>
 					<div className="flex">
 						<NavRail />
-						<main className="ml-20 w-full h-full">
+						<main className="ml-16 sm:ml-20 w-full h-full">
 							<AuthGuard>{children}</AuthGuard>
 						</main>
 					</div>

@@ -18,11 +18,16 @@ const UserProfile: React.FC = () => {
 	}, [User]);
 
 	return (
-		<div>
+		<div className="sm:px-2">
 			{imageLoaded ? (
-				<img className="h-14 rounded-full" src={User?.profile} alt="Profile" />
+				// eslint-disable-next-line @next/next/no-img-element
+				<img
+					className="w-full aspect-square rounded-full"
+					src={User?.profile}
+					alt="Profile"
+				/>
 			) : (
-				<LoaderCircle /> // Or some placeholder if image fails to load
+				<LoaderCircle className="animate-spin" /> // Or some placeholder if image fails to load
 			)}
 		</div>
 	);
