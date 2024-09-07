@@ -75,7 +75,9 @@ export default function GamePage({ params }: Props) {
 		});
 
 		if (time === 0) setShowTimeout(true);
-		if (time === 0 || questionList.length === 0) saveScore(scoreData);
+		if ((time === 0 || questionList.length === 0) && score !== 0) {
+			saveScore(scoreData);
+		}
 		if (!start || time <= 0) return;
 		if (showExit === true) return;
 
