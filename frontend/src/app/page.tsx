@@ -77,7 +77,6 @@ const LoginUserPage = () => {
 	};
 
 	const pop = () => {
-		console.log("pop");
 		router.push("/selectgame");
 	};
 
