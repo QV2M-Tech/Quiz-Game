@@ -23,7 +23,7 @@ function Page() {
 				<div className="flex w-1/3 m-3 items-center gap-10">
 					<Button
 						className={`bg-blue-950 text-white w-1/3 flex items-center justify-center hover:bg-blue-300 hover:text-black 
-							${level === "easy" ? "scale-120 ring-8 ring-blue-300" : ""} 
+							${level === "easy" ? "scale-120 ring-4 ring-blue-300" : ""} 
 							active:ring-2 active:ring-blue-300`}
 						onClick={() => handleLevelChange("easy")}
 					>
@@ -31,7 +31,7 @@ function Page() {
 					</Button>
 					<Button
 						className={`bg-blue-950 text-white w-1/3 flex items-center justify-center hover:bg-blue-300 hover:text-black 
-							${level === "medium" ? "scale-120 ring-8 ring-blue-300" : ""} 
+							${level === "medium" ? "scale-120 ring-4 ring-blue-300" : ""} 
 							active:ring-2 active:ring-blue-300`}
 						onClick={() => handleLevelChange("medium")}
 					>
@@ -39,16 +39,16 @@ function Page() {
 					</Button>
 					<Button
 						className={`bg-blue-950 text-white w-1/3 flex items-center justify-center hover:bg-blue-300 hover:text-black 
-							${level === "hard" ? "scale-120 ring-8 ring-blue-300" : ""} 
+							${level === "hard" ? "scale-120 ring-4 ring-blue-300" : ""} 
 							active:ring-2 active:ring-blue-300`}
 						onClick={() => handleLevelChange("hard")}
 					>
-						ยากส์
+						ยาก
 					</Button>
 				</div>
 				<div className="flex w-1/3 items-center justify-between p-2 bg-white rounded-xl m-5">
 					<h3>หมวดหมู่: บันเทิง</h3>
-					<h3>หัวข้อย่อย: Puzzle </h3>
+					<h3>หัวข้อย่อย: เกม 24</h3>
 				</div>
 				<div className="flex w-1/3 items-center justify-center p-2 bg-white rounded-xl m-5">
 					<h3>ชื่อ {User?.name}</h3> {/* Safe access using optional chaining */}
