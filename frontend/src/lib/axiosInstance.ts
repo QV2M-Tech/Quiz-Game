@@ -5,7 +5,7 @@ import axios, {
 } from "axios";
 
 const axiosInstance: AxiosInstance = axios.create({
-	baseURL: "http://18.141.75.2:6969/api", 
+	baseURL: "https://backend-kruearth.onrender.com/api", 
 	timeout: 10000,
 	headers: {
 		"Content-Type": "application/json",
