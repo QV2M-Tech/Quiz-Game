@@ -13,6 +13,7 @@ import {
 import { IconButton } from "@mui/material";
 import UserProfile from "./userprofile";
 import { useUser } from "@/context/userContext";
+import path from "path";
 
 interface LinkItem {
 	name: string;
@@ -23,6 +24,7 @@ interface LinkItem {
 
 const NavRail: React.FC = () => {
 	const pathname = usePathname();
+
 	const { User } = useUser();
 
 	const links: LinkItem[] = useMemo(
@@ -86,9 +88,7 @@ const NavRail: React.FC = () => {
 								className="flex flex-col items-center gap-2"
 							>
 								<IconButton
-									className={`${
-										isActive(pathname, link.path) ? "bg-accent" : ""
-									}`}
+									className={`${pathname === link.path ? "bg-accent" : ""}`}
 								>
 									{link.icon}
 								</IconButton>

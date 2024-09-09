@@ -176,7 +176,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 											/>
 										</Button>
 										<h2 className="font-bold">
-											การจัดการหัวข้อย่อย: {topic?.topicName}
+											จัดการหัวข้อย่อย: {topic?.topicName}
 										</h2>
 									</div>
 

@@ -40,24 +40,25 @@ const SubTableAction: React.FC<SubTableActionProps> = ({
 			<TooltipProvider>
 				<Tooltip>
 					<TooltipTrigger>
-						<Button
-							variant="ghost"
-							size="sm"
+						<div
 							onClick={navigateToQuestion}
-							className="mr-2"
+							className="mr-2 inline-block cursor-pointer rounded-md p-2 hover:bg-gray-200"
 						>
 							<LibraryBigIcon className="inline-block" size={16} />
-						</Button>
+						</div>
 					</TooltipTrigger>
-					<TooltipContent>จัดการหัวข้อหลัก</TooltipContent>
+					<TooltipContent>จัดการโจทย์</TooltipContent>
 				</Tooltip>
 			</TooltipProvider>
 			<TooltipProvider>
 				<Tooltip>
 					<TooltipTrigger>
-						<Button variant="ghost" size="sm" onClick={onEdit} className="mr-2">
+						<div
+							onClick={onEdit}
+							className="mr-2 inline-block cursor-pointer rounded-md p-2 hover:bg-gray-200"
+						>
 							<Edit className="inline-block" size={16} />
-						</Button>
+						</div>
 					</TooltipTrigger>
 					<TooltipContent>แก้ไขหัวข้อย่อย</TooltipContent>
 				</Tooltip>
@@ -65,15 +66,20 @@ const SubTableAction: React.FC<SubTableActionProps> = ({
 			<TooltipProvider>
 				<Tooltip>
 					<TooltipTrigger>
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={onDelete}
-							disabled={isDeleting}
+						<div
+							onClick={isDeleting ? undefined : onDelete}
+							className={`mr-2 inline-block cursor-pointer rounded-md p-2 ${
+								isDeleting
+									? "text-gray-500 hover:bg-transparent"
+									: "hover:bg-gray-200"
+							}`}
 						>
-							{isDeleting ? "กำลังลบ..." : ""}
-							<Trash className="inline-block" size={16} />
-						</Button>
+							{isDeleting ? (
+								<span>กำลังลบ...</span>
+							) : (
+								<Trash className="inline-block" size={16} />
+							)}
+						</div>
 					</TooltipTrigger>
 					<TooltipContent>ลบหัวข้อย่อย</TooltipContent>
 				</Tooltip>

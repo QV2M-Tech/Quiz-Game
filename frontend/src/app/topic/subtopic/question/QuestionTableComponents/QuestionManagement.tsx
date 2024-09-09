@@ -174,7 +174,7 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 											/>
 										</Button>
 										<h2 className="font-bold">
-											การจัดการโจทย์: {subtopic?.subtopicName}
+											จัดการโจทย์: {subtopic?.subtopicName}
 										</h2>
 									</div>
 
@@ -240,6 +240,7 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 											onDelete={() => handleDeleteQuestion(question._id)}
 											isOpen={isEditModalOpen}
 											initialData={question}
+											isDeleting={false}
 										/>
 									</TableCell>
 								</TableRow>
