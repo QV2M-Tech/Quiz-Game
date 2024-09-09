@@ -34,11 +34,16 @@ const TableActions: React.FC<TableActionsProps> = ({
 	};
 
 	return (
-		<TableCell className="flex justify-center gap-2">
+		<>
 			<TooltipProvider>
 				<Tooltip>
 					<TooltipTrigger>
-						<Button variant="ghost" size="sm" onClick={navigateToSubtopic}>
+						<Button
+							variant="ghost"
+							size="sm"
+							onClick={navigateToSubtopic}
+							className="mr-2"
+						>
 							<LibraryBigIcon className="inline-block" size={16} />
 						</Button>
 					</TooltipTrigger>
@@ -49,7 +54,7 @@ const TableActions: React.FC<TableActionsProps> = ({
 			<TooltipProvider>
 				<Tooltip>
 					<TooltipTrigger>
-						<Button variant="ghost" size="sm" onClick={onEdit}>
+						<Button variant="ghost" size="sm" onClick={onEdit} className="mr-2">
 							<Edit className="inline-block" size={16} />
 						</Button>
 					</TooltipTrigger>
@@ -73,7 +78,7 @@ const TableActions: React.FC<TableActionsProps> = ({
 					<TooltipContent>ลบหัวข้อหลัก</TooltipContent>
 				</Tooltip>
 			</TooltipProvider>
-		</TableCell>
+		</>
 	);
 };
 

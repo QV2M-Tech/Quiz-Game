@@ -25,11 +25,11 @@ const QuestionAction: React.FC<QuestionActionProps> = ({
 	initialData,
 }) => {
 	return (
-		<div className="flex justify-center gap-2">
+		<>
 			<TooltipProvider>
 				<Tooltip>
 					<TooltipTrigger>
-						<Button variant="ghost" size="sm" onClick={onEdit}>
+						<Button variant="ghost" size="sm" onClick={onEdit} className="mr-2">
 							<Edit className="inline-block" size={16} />
 						</Button>
 					</TooltipTrigger>
@@ -46,7 +46,7 @@ const QuestionAction: React.FC<QuestionActionProps> = ({
 					<TooltipContent>ลบคำถาม</TooltipContent>
 				</Tooltip>
 			</TooltipProvider>
-		</div>
+		</>
 	);
 };
 

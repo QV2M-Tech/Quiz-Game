@@ -32,10 +32,6 @@ export const registerUser = async ({ profile, name, username, password }) => {
 };
 
 export const loginUser = async ({ username, password }) => {
-	// Log the input to ensure it's received correctly
-	console.log("Received username:", username);
-	console.log("Received password:", password);
-
 	const user = await User.findOne({ username });
 
 	if (!user) {

@@ -6,16 +6,7 @@ import "./AnimatedForm.css";
 import Image from "next/image";
 import UploadProfileImage from "../components/login/UploadProfileImage";
 import axiosInstance from "../lib/axiosInstance";
-import {
-	Button,
-	DialogActions,
-	DialogContent,
-	DialogTitle,
-	Divider,
-	Modal,
-	ModalClose,
-	ModalDialog,
-} from "@mui/joy";
+import LoginModal from "@/components/login/LoginModal";
 
 const LoginUserPage = () => {
 	const [isLogin, setIsLogin] = useState<boolean>(true);
@@ -26,6 +17,8 @@ const LoginUserPage = () => {
 	const [passwordr, setPasswordr] = useState<string>("");
 	const [popup, setpopup] = useState<boolean>(false);
 	const [profile, setprofile] = useState<string>("/defaultProfile.png");
+	const [title, setTitle] = useState<string>("");
+	const [content, setContent] = useState<string>("");
 
 	const [isError, setIsError] = useState<boolean>(false);
 
@@ -33,9 +26,9 @@ const LoginUserPage = () => {
 
 	// ฟังก์ชันสำหรับจัดการการคลิกปุ่ม
 	const handleSubmit = async (isLogin: boolean) => {
-		try {
-			if (isLogin) {
-				// สำหรับการเข้าสู่ระบบ
+		if (isLogin) {
+			// สำหรับการเข้าสู่ระบบ
+			try {
 				const response = await axiosInstance.post("/users/login", {
 					username: username,
 					password: password,
@@ -44,10 +37,19 @@ const LoginUserPage = () => {
 
 				if (token) {
 					localStorage.setItem("token", token);
+					setIsError(false);
 					router.push("/selectgame");
 				}
-			} else {
-				// สำหรับการลงทะเบียน
+			} catch (error) {
+				console.error("Operation failed", error);
+				setIsError(true);
+				setpopup(true);
+				setTitle("ชื่อผู้ใช้หรือรหัสผ่านผิด");
+				setContent("กรุณาลองใหม่อีกครั้ง");
+			}
+		} else {
+			// สำหรับการลงทะเบียน
+			try {
 				const response = await axiosInstance.post("/users/register", {
 					profile: profile,
 					name: name,
@@ -60,14 +62,17 @@ const LoginUserPage = () => {
 					localStorage.setItem("token", token);
 					setpopup(true);
 					setIsError(false);
+					setTitle("ลงทะเบียนสำเร็จ");
+					setContent("");
+				} else {
 				}
+			} catch (error) {
+				console.error("Operation failed", error);
+				setIsError(true);
+				setpopup(true);
+				setTitle("มีชื่อผู้ใช้นี้ในระบบแล้ว");
+				setContent("กรุณาลองใหม่อีกครั้ง");
 			}
-		} catch (error) {
-			console.error("Operation failed", error);
-			setIsError(true);
-			setpopup(true);
-
-			// Handle error (e.g., show error message)
 		}
 	};
 
@@ -93,6 +98,14 @@ const LoginUserPage = () => {
 				left: "50%",
 			}}
 		>
+			<LoginModal
+				popup={popup}
+				setpopup={setpopup}
+				title={title}
+				content={content}
+				action={!isError}
+				pop={pop}
+			/>
 			<section className="forms-section h-full relative">
 				<Image
 					src="/LogoLaSalleChote.png"
@@ -100,43 +113,6 @@ const LoginUserPage = () => {
 					width={200}
 					height={200}
 				/>
-
-				<React.Fragment>
-					<Modal open={popup} onClose={() => setpopup(false)}>
-						<ModalDialog
-							className={`animate-slide-down`}
-							variant="outlined"
-							role="alertdialog"
-						>
-							<ModalClose />
-							<DialogTitle>
-								{isError ? "มีชื่อผู้ใช้นี้ในระบบแล้ว" : "สร้างบัญชีสำเร็จ"}
-							</DialogTitle>
-							{isError && (
-								<>
-									<Divider />
-									<DialogContent>กรุณาใช้ชื่อผู้ใช้อื่น</DialogContent>
-								</>
-							)}
-							{!isError && (
-								<DialogActions>
-									<Button
-										sx={{
-											backgroundColor: "#0c4a6e",
-											color: "#fff",
-											"&:hover": {
-												backgroundColor: "#082f49",
-											},
-										}}
-										onClick={pop}
-									>
-										เข้าสู่ระบบ
-									</Button>
-								</DialogActions>
-							)}
-						</ModalDialog>
-					</Modal>
-				</React.Fragment>
 
 				<div className="forms">
 					{/* Login Form */}

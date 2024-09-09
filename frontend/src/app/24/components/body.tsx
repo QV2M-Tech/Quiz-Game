@@ -259,7 +259,7 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 		if (timeLeft === 0 && start) {
 			toast.error("หมดเวลา! กรุณาลองใหม่อีกครั้ง");
 			setStart(false);
-			console.log(User?.id + "-----" + score + "------" + level);
+			// console.log(User?.id + "-----" + score + "------" + level);
 			axiosInstance
 				.post("/scores24/createAndUpdate", {
 					userId: User?.id,
@@ -267,7 +267,7 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 					level: level,
 				})
 				.then((response) => {
-					console.log("Score updated", response.data);
+					// console.log("Score updated", response.data);
 					setIsEnd(true); // เพิ่มบรรทัดนี้เพื่อรีเฟรชหน้าจอ
 				})
 				.catch((error) => {
@@ -283,25 +283,14 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 
 	const checkAnswer = () => {
 		if (!isValidExpression(input, numbers, level)) {
-			setMessage("ดูคำอธิบาย ด้วยจร้าา");
+			setMessage("กรุณาอ่านคำอธิบาย");
 			return;
 		}
 
 		try {
 			const userResult = evaluate(input);
 			if (userResult === target) {
-				// สุ่มข้อความแสดงผล
-				const messages = [
-					"ให้ใครเล่นให้อ่ะ",
-					"เด็กๆ",
-					"เหมือนเก่ง",
-					"ฟลุ๊คป่ะเนี่ย",
-					"ยืดเลยอ่ะดิ",
-					"ของแทร่",
-				];
-				const randomMessage =
-					messages[Math.floor(Math.random() * messages.length)];
-				setMessage(randomMessage);
+				setMessage("+ 5 คะแนน");
 
 				// เพิ่มคะแนน
 				setScore(score + 5);
@@ -311,18 +300,12 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 
 				// รีเซ็ตค่าต่างๆ
 				setInput("");
+
+				setTimeout(() => {
+					setMessage("");
+				}, 5000);
 			} else {
-				// สุ่มข้อความแสดงผล
-				const messages = [
-					"กินปลาเยอะๆนะ",
-					"เอาใหม่ๆ",
-					"อย่ามั่วสิหนู",
-					"ไปเล่นมาริโอ้เถอะ",
-					"โถ...",
-				];
-				const randomMessage =
-					messages[Math.floor(Math.random() * messages.length)];
-				setMessage(randomMessage + " เฉลย " + solution);
+				setMessage("เฉลย " + solution);
 
 				// กำหนดเวลาในการรอขึ้นอยู่กับระดับความยาก
 				let delay;
