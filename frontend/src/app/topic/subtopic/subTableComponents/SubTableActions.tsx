@@ -36,11 +36,16 @@ const SubTableAction: React.FC<SubTableActionProps> = ({
 	};
 
 	return (
-		<div className="flex justify-center gap-2">
+		<>
 			<TooltipProvider>
 				<Tooltip>
 					<TooltipTrigger>
-						<Button variant="ghost" size="sm" onClick={navigateToQuestion}>
+						<Button
+							variant="ghost"
+							size="sm"
+							onClick={navigateToQuestion}
+							className="mr-2"
+						>
 							<LibraryBigIcon className="inline-block" size={16} />
 						</Button>
 					</TooltipTrigger>
@@ -50,7 +55,7 @@ const SubTableAction: React.FC<SubTableActionProps> = ({
 			<TooltipProvider>
 				<Tooltip>
 					<TooltipTrigger>
-						<Button variant="ghost" size="sm" onClick={onEdit}>
+						<Button variant="ghost" size="sm" onClick={onEdit} className="mr-2">
 							<Edit className="inline-block" size={16} />
 						</Button>
 					</TooltipTrigger>
@@ -73,7 +78,7 @@ const SubTableAction: React.FC<SubTableActionProps> = ({
 					<TooltipContent>ลบหัวข้อย่อย</TooltipContent>
 				</Tooltip>
 			</TooltipProvider>
-		</div>
+		</>
 	);
 };
 
