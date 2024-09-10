@@ -21,12 +21,11 @@ const SubjectItem: React.FC<{ topic: Topic; onClick: () => void }> = ({
 			fullWidth
 			sx={{
 				maxWidth: "80%",
-				backgroundColor: "#bae6fd",
-				color: "#082f49",
+				backgroundColor: "#fed7aa",
 				justifyContent: "center",
 				padding: "10px 20px",
 				"&:hover": {
-					backgroundColor: "#7dd3fc",
+					backgroundColor: "#fdba74",
 				},
 			}}
 		>
@@ -114,7 +113,8 @@ const MainContent: React.FC = () => {
 						aria-label="Course tabs"
 						sx={{
 							"& .MuiTabs-indicator": {
-								backgroundColor: "#1E90FF",
+								backgroundColor: "#c2410c",
+								color: "#c2410c",
 								height: "3px",
 							},
 						}}
@@ -122,21 +122,31 @@ const MainContent: React.FC = () => {
 						<Tab
 							label="วิชาการ"
 							sx={{
-								color: tabValue === 0 ? "#1E90FF" : "inherit",
 								fontWeight: "bold",
+								"&.Mui-selected": {
+									color: "#c2410c",
+								},
+								"&.Mui-focusVisible": {
+									backgroundColor: "rgba(194, 65, 12, 0.5)",
+								},
 							}}
 						/>
 						<Tab
 							label="บันเทิง"
 							sx={{
-								color: tabValue === 1 ? "#1E90FF" : "inherit",
 								fontWeight: "bold",
+								"&.Mui-selected": {
+									color: "#c2410c",
+								},
+								"&.Mui-focusVisible": {
+									backgroundColor: "rgba(194, 64, 12, 0.5)",
+								},
 								marginLeft: "30px",
 							}}
 						/>
 					</Tabs>
 				</div>
-				<div className="mt-4 bg-[#F8FBFF] p-4 rounded-lg">
+				<div className="mt-4 bg-primary/20 p-4 rounded-lg">
 					<TabPanel value={tabValue} index={0}>
 						{/* กรอง category ที่เป็น "วิชาการ" */}
 						<SubjectList
@@ -150,18 +160,17 @@ const MainContent: React.FC = () => {
 							<li className="flex justify-center mb-5 w-full">
 								<Button
 									color="neutral"
+									onClick={game24}
 									size="lg"
 									variant="soft"
 									fullWidth
-									onClick={game24}
 									sx={{
 										maxWidth: "80%",
-										backgroundColor: "#bae6fd",
-										color: "#082f49",
+										backgroundColor: "#fed7aa",
 										justifyContent: "center",
 										padding: "10px 20px",
 										"&:hover": {
-											backgroundColor: "#7dd3fc",
+											backgroundColor: "#fdba74",
 										},
 									}}
 								>

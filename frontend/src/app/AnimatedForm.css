@@ -4,23 +4,25 @@
 	box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
-	font-family: Roboto, -apple-system, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
-    position: relative;
-    overflow: hidden;
+	/* font-family: Roboto, -apple-system, "Helvetica Neue", "Segoe UI", Arial,
+		sans-serif; */
+	position: relative;
+	overflow: hidden;
 }
 
 .bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	z-index: -1;
 }
 
 .forms-section {
@@ -44,12 +46,12 @@ html, body {
 }
 
 .form-wrapper {
-	animation: hideLayer .3s ease-out forwards;
-	-webkit-animation: hideLayer .3s ease-out forwards;
+	animation: hideLayer 0.3s ease-out forwards;
+	-webkit-animation: hideLayer 0.3s ease-out forwards;
 }
 
 .form-wrapper.is-active {
-	animation: showLayer .3s ease-in forwards;
+	animation: showLayer 0.3s ease-in forwards;
 }
 
 @keyframes showLayer {
@@ -80,13 +82,13 @@ html, body {
 	text-transform: uppercase;
 	font-family: inherit;
 	font-size: 30px;
-	letter-spacing: .5px;
+	letter-spacing: 0.5px;
 	color: #999;
 	background-color: transparent;
 	border: none;
 	outline: none;
 	transform: translateX(0);
-	transition: all .3s ease-out;
+	transition: all 0.3s ease-out;
 }
 
 .form-wrapper.is-active .switcher-login {
@@ -114,7 +116,7 @@ span:hover2 {
 }
 
 .underline::before {
-	content: '';
+	content: "";
 	position: absolute;
 	top: 0;
 	left: inherit;
@@ -122,7 +124,7 @@ span:hover2 {
 	width: inherit;
 	height: inherit;
 	background-color: currentColor;
-	transition: transform .2s ease-out;
+	transition: transform 0.2s ease-out;
 }
 
 .switcher-login .underline::before {
@@ -142,21 +144,21 @@ span:hover2 {
 	min-width: 520px;
 	margin-top: 50px;
 	padding: 60px 50px;
-  	border-radius: 10px;
+	border-radius: 10px;
 	transform-origin: top;
 }
 
 .form-login {
-	animation: hideLogin .3s ease-out forwards;
+	animation: hideLogin 0.3s ease-out forwards;
 }
 
 .form-wrapper.is-active .form-login {
-	animation: showLogin .3s ease-in forwards;
+	animation: showLogin 0.3s ease-in forwards;
 }
 
 @keyframes showLogin {
 	0% {
-		background: #d7e7f1;
+		background: #b4a49f;
 		transform: translate(40%, 10px);
 	}
 	50% {
@@ -177,26 +179,26 @@ span:hover2 {
 		transform: translate(0, 0);
 	}
 	100% {
-		background: #d7e7f1;
+		background: #b4a49f;
 		transform: translate(40%, 10px);
 	}
 }
 
 .form-signup {
-	animation: hideSignup .3s ease-out forwards;
+	animation: hideSignup 0.3s ease-out forwards;
 }
 
 .form-wrapper.is-active .form-signup {
-	animation: showSignup .3s ease-in forwards;
+	animation: showSignup 0.3s ease-in forwards;
 }
 
 @keyframes showSignup {
 	0% {
-		background: #d7e7f1;
-		transform: translate(-40%, 10px) scaleY(.8);
+		background: #b4a49f;
+		transform: translate(-40%, 10px) scaleY(0.8);
 	}
 	50% {
-		transform: translate(0, 0) scaleY(.8);
+		transform: translate(0, 0) scaleY(0.8);
 	}
 	100% {
 		background-color: #fff;
@@ -210,11 +212,11 @@ span:hover2 {
 		transform: translate(-35%, -20px) scaleY(1);
 	}
 	50% {
-		transform: translate(0, 0) scaleY(.8);
+		transform: translate(0, 0) scaleY(0.8);
 	}
 	100% {
-		background: #d7e7f1;
-		transform: translate(-40%, 10px) scaleY(.8);
+		background: #b4a49f;
+		transform: translate(-40%, 10px) scaleY(0.8);
 	}
 }
 
@@ -224,7 +226,7 @@ span:hover2 {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	transition: all .3s ease-out;
+	transition: all 0.3s ease-out;
 }
 
 .form-login fieldset {
@@ -238,7 +240,7 @@ span:hover2 {
 .form-wrapper.is-active fieldset {
 	opacity: 1;
 	transform: translateX(0);
-	transition: opacity .4s ease-in, transform .35s ease-in;
+	transition: opacity 0.4s ease-in, transform 0.35s ease-in;
 }
 
 .form legend {
@@ -270,7 +272,7 @@ span:hover2 {
 	border-radius: 2px;
 }
 
-.form [type='submit'] {
+.form [type="submit"] {
 	opacity: 0;
 	display: block;
 	min-width: 240px;
@@ -279,16 +281,16 @@ span:hover2 {
 	line-height: 40px;
 	border-radius: 25px;
 	border: none;
-	transition: all .3s ease-out;
+	transition: all 0.3s ease-out;
 }
 
-.form-wrapper.is-active .form [type='submit'] {
+.form-wrapper.is-active .form [type="submit"] {
 	opacity: 1;
 	transform: translateX(0);
-	transition: all .4s ease-in;
+	transition: all 0.4s ease-in;
 }
 
-.btn-login {
+/* .btn-login {
 	color: #fbfdff;
 	background: #0c4a6e;
 	transform: translateX(-30%);
@@ -312,7 +314,7 @@ span:hover2 {
 	background: #fbfdff;
 	box-shadow: inset 0 0 0 2px #060b98;
 	transform: translateX(30%);
-}
+} */
 
 .section-title {
 	font-size: 6rem;
@@ -364,20 +366,20 @@ span {
 .n {
 	text-shadow: -0.025em -0.025em 0 rgba(0, 255, 255, 0.8);
 	animation-duration: 0.3s, 0.2s;
-	animation-delay: 1.0s, 1.1s;
+	animation-delay: 1s, 1.1s;
 	animation-name: colorflash, underline-cyan;
 	animation-fill-mode: none, forwards;
 }
 
 .i {
-    text-shadow: 0.025em 0.025em 0 rgba(255, 0, 255, 0.8);
-    animation-duration: 0.3s, 0.2s;
-    animation-delay: 1.2s, 1.3s;
-    animation-name: colorflash, underline-magenta;
-    animation-fill-mode: none, forwards;
-    position: relative; /* เพิ่มบรรทัดนี้เพื่อให้สระอยู่ในตำแหน่งที่ถูกต้อง */
-    top: -10px; /* ปรับค่าตรงนี้ตามความต้องการ */
-	right: 12px; 
+	text-shadow: 0.025em 0.025em 0 rgba(255, 0, 255, 0.8);
+	animation-duration: 0.3s, 0.2s;
+	animation-delay: 1.2s, 1.3s;
+	animation-name: colorflash, underline-magenta;
+	animation-fill-mode: none, forwards;
+	position: relative; /* เพิ่มบรรทัดนี้เพื่อให้สระอยู่ในตำแหน่งที่ถูกต้อง */
+	top: -10px; /* ปรับค่าตรงนี้ตามความต้องการ */
+	right: 12px;
 }
 
 .t {

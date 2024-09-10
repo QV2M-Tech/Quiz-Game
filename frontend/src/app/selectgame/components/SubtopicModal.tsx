@@ -60,11 +60,12 @@ const SubtopicModal: React.FC<SubtopicModalProps> = ({
 					{subtopics.map((subtopic) => (
 						<Button
 							key={subtopic._id}
+							variant="plain"
+							color="neutral"
 							sx={{
-								backgroundColor: "#bae6fd",
-								color: "#082f49",
+								backgroundColor: "#fef3c7",
 								"&:hover": {
-									backgroundColor: "#7dd3fc",
+									backgroundColor: "#fde68a",
 								},
 							}}
 							onClick={() => handleSubtopicClick(subtopic._id)}

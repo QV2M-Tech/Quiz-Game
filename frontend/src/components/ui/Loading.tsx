@@ -5,7 +5,7 @@ export default function Loading({ className }: { className?: string }) {
 		<div
 			className={`flex flex-col items-center justify-center gap-4 ${className}`}
 		>
-			<CgSpinner className="text-9xl text-sky-600 animate-spin" />
+			<CgSpinner className="text-9xl text-accent animate-spin" />
 			<h2>กำลังโหลด...</h2>
 		</div>
 	);

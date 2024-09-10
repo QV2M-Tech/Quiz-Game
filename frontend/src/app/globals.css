@@ -43,7 +43,7 @@
 		text-wrap: balance;
 	}
 	body {
-		@apply bg-sky-100;
+		@apply bg-y1r2;
 	}
 	*,
 	:hover {
@@ -86,6 +86,7 @@
 	.login-btn {
 		@apply text-3xl py-4 bg-y2r3 hover:bg-y3r4 rounded-xl;
 	}
+
 	.dark {
 		--background: 222.2 84% 4.9%;
 		--foreground: 210 40% 98%;
