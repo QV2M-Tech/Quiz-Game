@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/table";
 import Loading from "@/components/ui/Loading";
 import { thDateTime } from "@/lib/format";
+import TooltipWrapper from "@/components/ui/TooltipWrapper";
 
 interface User {
 	_id: string;
@@ -199,22 +200,26 @@ export default function ScorePage() {
 									<TableCell className="text-center">{item.name}</TableCell>
 									<TableCell className="text-center">{item.username}</TableCell>
 									<TableCell className="text-center">
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={() => openEditModal(item._id, item.name)}
-											className="inline-block mr-2"
-										>
-											<Edit size={16} />
-										</Button>
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={() => handleDelete(item._id)}
-											className="inline-block"
-										>
-											<Trash size={16} />
-										</Button>
+										<TooltipWrapper content="แก้ไขผู้ใช้">
+											<div
+												role="button"
+												aria-label="แก้ไขผู้ใช้"
+												tabIndex={0}
+												onClick={() => openEditModal(item._id, item.name)}
+												className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-sky-200"
+											>
+												<Edit className="inline-block" size={16} />
+											</div>
+										</TooltipWrapper>
+										<TooltipWrapper content="ลบผู้ใช้">
+											<div
+												role="button"
+												className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-red-400"
+												onClick={() => handleDelete(item._id)}
+											>
+												<Trash className="inline-block" size={16} />
+											</div>
+										</TooltipWrapper>
 									</TableCell>
 								</TableRow>
 							))

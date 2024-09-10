@@ -34,7 +34,7 @@ const TableActions: React.FC<TableActionsProps> = ({
 					role="button"
 					aria-label="จัดการหัวข้อหลัก"
 					tabIndex={0}
-					className="relative mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-sky-200"
+					className=" mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-sky-200"
 				>
 					<LibraryBigIcon className="inline-block" size={16} />
 				</div>
