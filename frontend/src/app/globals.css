@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -32,12 +34,16 @@
 	}
 }
 
+* {
+	font-family: "Prompt", sans-serif !important;
+}
+
 @layer utilities {
 	.text-balance {
 		text-wrap: balance;
 	}
 	body {
-		@apply bg-sky-100;
+		@apply bg-y1r2;
 	}
 	*,
 	:hover {
@@ -60,6 +66,27 @@
 	.tw-box {
 		@apply bg-white rounded-2xl shadow-xl py-6 px-8;
 	}
+
+	.bg-y1r2 {
+		@apply bg-gradient-to-br from-yellow-100 to-red-200;
+	}
+	.bg-y2r3 {
+		@apply bg-gradient-to-r from-yellow-200 to-red-300;
+	}
+	.bg-y3r4 {
+		@apply bg-gradient-to-r from-yellow-300 to-red-400;
+	}
+
+	.login-label {
+		@apply flex flex-col text-2xl gap-2;
+	}
+	.login-input {
+		@apply border border-neutral-300 p-4 rounded-lg;
+	}
+	.login-btn {
+		@apply text-3xl py-4 bg-y2r3 hover:bg-y3r4 rounded-xl;
+	}
+
 	.dark {
 		--background: 222.2 84% 4.9%;
 		--foreground: 210 40% 98%;
