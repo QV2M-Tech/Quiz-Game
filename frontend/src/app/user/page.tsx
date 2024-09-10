@@ -172,7 +172,6 @@ export default function ScorePage() {
 							<TableHead className="text-center w-1/4">ตัวเลือก</TableHead>
 						</TableRow>
 					</TableHeader>
-
 					<TableBody>
 						{isLoading ? (
 							<TableRow>
@@ -222,19 +221,21 @@ export default function ScorePage() {
 						)}
 					</TableBody>
 
-					<TableFooter>
-						<TableRow>
-							<TableCell colSpan={4}>
-								<Pagination
-									currentPage={currentPage}
-									totalPages={totalPages}
-									onPageChange={setCurrentPage}
-									itemsPerPage={itemsPerPage}
-									totalItems={sortedData.length}
-								/>
-							</TableCell>
-						</TableRow>
-					</TableFooter>
+					{sortedData.length > 0 && (
+						<TableFooter>
+							<TableRow>
+								<TableCell colSpan={4}>
+									<Pagination
+										currentPage={currentPage}
+										totalPages={totalPages}
+										onPageChange={setCurrentPage}
+										itemsPerPage={itemsPerPage}
+										totalItems={sortedData.length}
+									/>
+								</TableCell>
+							</TableRow>
+						</TableFooter>
+					)}
 				</Table>
 			</div>
 

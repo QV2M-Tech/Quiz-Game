@@ -88,16 +88,7 @@ const LoginUserPage = () => {
 	};
 
 	return (
-		<div
-			className="bg-sky-100 h-full"
-			style={{
-				transform: "translate(-33%, -33%) scale(0.67)",
-				transformOrigin: "top left",
-				position: "absolute",
-				top: "50%",
-				left: "50%",
-			}}
-		>
+		<div className="h-full absolute top-1/2 left-1/2 origin-top-left -translate-x-[33%] -translate-y-[33%] scale-[0.67]">
 			<LoginModal
 				popup={popup}
 				setpopup={setpopup}
@@ -126,43 +117,39 @@ const LoginUserPage = () => {
 							<span className="underline"></span>
 						</button>
 						<form
-							className="form form-login "
+							className="form form-login"
 							onSubmit={(e) => e.preventDefault()}
 							onKeyDown={handleKeyDown}
 						>
-							<fieldset>
-								<div className="input-block">
-									<label htmlFor="login-username" className="">
-										ชื่อผู้ใช้
-									</label>
+							<fieldset className="flex flex-col gap-5">
+								<label htmlFor="login-username" className="login-label">
+									ชื่อผู้ใช้
 									<input
 										id="login-username"
 										value={username}
 										onChange={(e) => setUsername(e.target.value)}
 										required
+										className="login-input"
 									/>
-								</div>
-								<div className="input-block">
-									<label htmlFor="login-password" className="">
-										รหัสผ่าน
-									</label>
+								</label>
+								<label htmlFor="login-password" className="login-label">
+									รหัสผ่าน
 									<input
 										id="login-password"
 										type="password"
 										value={password}
 										onChange={(e) => setPassword(e.target.value)}
 										required
+										className="login-input"
 									/>
-								</div>
-								<div className="flex ml-12">
-									<button
-										type="button"
-										className="btn-login text-3xl p-2 rounded-xl"
-										onClick={() => handleSubmit(true)}
-									>
-										เข้าสู่ระบบ
-									</button>
-								</div>
+								</label>
+								<button
+									type="button"
+									className="login-btn"
+									onClick={() => handleSubmit(true)}
+								>
+									เข้าสู่ระบบ
+								</button>
 							</fieldset>
 						</form>
 					</div>
@@ -182,41 +169,44 @@ const LoginUserPage = () => {
 							onSubmit={(e) => e.preventDefault()}
 							onKeyDown={handleKeyDown}
 						>
-							<fieldset>
+							<fieldset className="flex flex-col gap-5">
 								<UploadProfileImage
 									onImageUpload={(imageUrl: any) => setprofile(imageUrl)} // ส่ง URL ของภาพที่อัปโหลดมาอัปเดต state profile
 								/>
-								<div className="input-block">
-									<label htmlFor="signup-username">ชื่อ</label>
+								<label htmlFor="signup-username" className="login-label">
+									ชื่อ
 									<input
 										id="signup-name"
 										value={name}
 										onChange={(e) => setname(e.target.value)}
 										required
+										className="login-input"
 									/>
-								</div>
-								<div className="input-block">
-									<label htmlFor="signup-username">ชื่อผู้ใช้</label>
+								</label>
+								<label htmlFor="signup-username" className="login-label">
+									ชื่อผู้ใช้
 									<input
 										id="signup-username"
 										value={usernamer}
 										onChange={(e) => setUsernamer(e.target.value)}
 										required
+										className="login-input"
 									/>
-								</div>
-								<div className="input-block">
-									<label htmlFor="signup-password">รหัสผ่าน</label>
+								</label>
+								<label htmlFor="signup-password" className="login-label">
+									รหัสผ่าน
 									<input
 										id="signup-password"
 										type="password"
 										value={passwordr}
 										onChange={(e) => setPasswordr(e.target.value)}
 										required
+										className="login-input"
 									/>
-								</div>
+								</label>
 								<button
 									type="button"
-									className="btn-login text-3xl p-2 rounded-xl ml-12"
+									className="login-btn"
 									onClick={() => handleSubmit(false)}
 								>
 									ลงทะเบียน

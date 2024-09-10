@@ -99,12 +99,7 @@ const TopicManagementPage: React.FC = () => {
 						</TableRow>
 						<TableRow>
 							<TableHead className="text-center w-1/3">หัวข้อ</TableHead>
-							<TableHead
-								// onClick={() => requestSort("category")}
-								className="cursor-pointer text-center w-1/3"
-							>
-								หมวดหมู่ <ArrowUpDown className="inline-block ml-2" size={16} />
-							</TableHead>
+							<TableHead className="text-center w-1/3">หมวดหมู่</TableHead>
 							<TableHead className="text-center w-1/3">ตัวเลือก</TableHead>
 						</TableRow>
 					</TableHeader>
@@ -144,19 +139,21 @@ const TopicManagementPage: React.FC = () => {
 						)}
 					</TableBody>
 
-					<TableFooter>
-						<TableRow>
-							<TableCell colSpan={3}>
-								<Pagination
-									currentPage={currentPage}
-									totalPages={totalPages}
-									onPageChange={setCurrentPage}
-									itemsPerPage={itemsPerPage}
-									totalItems={filteredTopics.length}
-								/>
-							</TableCell>
-						</TableRow>
-					</TableFooter>
+					{filteredTopics.length > 0 && (
+						<TableFooter>
+							<TableRow>
+								<TableCell colSpan={3}>
+									<Pagination
+										currentPage={currentPage}
+										totalPages={totalPages}
+										onPageChange={setCurrentPage}
+										itemsPerPage={itemsPerPage}
+										totalItems={filteredTopics.length}
+									/>
+								</TableCell>
+							</TableRow>
+						</TableFooter>
+					)}
 				</Table>
 			</div>
 			<ModalTopicForm

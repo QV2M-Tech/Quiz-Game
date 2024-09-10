@@ -259,7 +259,7 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 		if (timeLeft === 0 && start) {
 			toast.error("หมดเวลา! กรุณาลองใหม่อีกครั้ง");
 			setStart(false);
-			// console.log(User?.id + "-----" + score + "------" + level);
+
 			axiosInstance
 				.post("/scores24/createAndUpdate", {
 					userId: User?.id,
@@ -267,7 +267,6 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 					level: level,
 				})
 				.then((response) => {
-					// console.log("Score updated", response.data);
 					setIsEnd(true); // เพิ่มบรรทัดนี้เพื่อรีเฟรชหน้าจอ
 				})
 				.catch((error) => {

@@ -17,20 +17,41 @@ const config = {
 		},
 
 		extend: {
+			fontFamily: {
+				prompt: ['"Prompt"', "sans-serif"],
+			},
+
 			colors: {
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",
 				ring: "hsl(var(--ring))",
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",
+				// primary: {
+				// 	DEFAULT: "#e0f2fe",
+				// 	hover: "#bae6fd",
+				// },
+				// secondary: {
+				// 	DEFAULT: "#0c4a6e",
+				// 	hover: "#082f49",
+				// 	foreground: "#fff",
+				// },
+				// accent: {
+				// 	DEFAULT: "#7dd3fc",
+				// 	hover: "#38bdf8",
+				// },
 				primary: {
-					DEFAULT: "#e0f2fe",
-					hover: "#bae6fd",
+					DEFAULT: "#fef3c7",
+					hover: "#fde68a",
 				},
 				secondary: {
-					DEFAULT: "#0c4a6e",
-					hover: "#082f49",
+					DEFAULT: "#c2410c",
+					hover: "#7c2d12",
 					foreground: "#fff",
+				},
+				accent: {
+					DEFAULT: "#fed7aa",
+					hover: "#fdba74",
 				},
 				destructive: {
 					DEFAULT: "hsl(var(--destructive))",
@@ -39,10 +60,6 @@ const config = {
 				muted: {
 					DEFAULT: "hsl(var(--muted))",
 					foreground: "hsl(var(--muted-foreground))",
-				},
-				accent: {
-					DEFAULT: "#7dd3fc",
-					hover: "#38bdf8",
 				},
 				popover: {
 					DEFAULT: "hsl(var(--popover))",

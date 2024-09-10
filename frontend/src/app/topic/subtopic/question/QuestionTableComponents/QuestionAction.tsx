@@ -1,12 +1,6 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
 import { Edit, Trash } from "lucide-react";
-import {
-	TooltipProvider,
-	Tooltip,
-	TooltipTrigger,
-	TooltipContent,
-} from "@/components/ui/tooltip";
+import TooltipWrapper from "@/components/ui/TooltipWrapper";
 import { Question } from "@/types/Question";
 
 interface QuestionActionProps {
@@ -26,26 +20,30 @@ const QuestionAction: React.FC<QuestionActionProps> = ({
 }) => {
 	return (
 		<>
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTrigger>
-						<Button variant="ghost" size="sm" onClick={onEdit} className="mr-2">
-							<Edit className="inline-block" size={16} />
-						</Button>
-					</TooltipTrigger>
-					<TooltipContent>แก้ไขคำถาม</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTrigger>
-						<Button variant="ghost" size="sm" onClick={onDelete}>
-							<Trash className="inline-block" size={16} />
-						</Button>
-					</TooltipTrigger>
-					<TooltipContent>ลบคำถาม</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
+			<TooltipWrapper content="แก้ไขคำถาม">
+				<div
+					onClick={onEdit}
+					role="button"
+					aria-label="แก้ไขคำถาม"
+					tabIndex={0}
+					className="relative mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-gray-200"
+				>
+					<Edit className="inline-block" size={16} />
+				</div>
+			</TooltipWrapper>
+
+			<TooltipWrapper content="ลบคำถาม">
+				<div
+					onClick={isOpen ? undefined : onDelete}
+					aria-label={isOpen ? "กำลังลบ..." : "ลบคำถาม"}
+					tabIndex={0}
+					className={`relative mr-2 cursor-pointer inline-flex items-center rounded-md p-2 ${
+						isOpen ? "text-gray-500 hover:bg-transparent" : "hover:bg-gray-200"
+					}`}
+				>
+					{isOpen ? "กำลังลบ..." : <Trash className="inline-block" size={16} />}
+				</div>
+			</TooltipWrapper>
 		</>
 	);
 };

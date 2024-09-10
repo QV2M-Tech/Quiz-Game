@@ -24,6 +24,7 @@
 		"@radix-ui/react-toast": "^1.2.1",
 		"@radix-ui/react-tooltip": "^1.1.2",
 		"@shadcn/ui": "^0.0.4",
+		"@tippyjs/react": "^4.2.6",
 		"@types/jwt-decode": "^3.1.0",
 		"axios": "^1.7.4",
 		"class-variance-authority": "^0.7.0",
@@ -38,7 +39,8 @@
 		"react-router-dom": "^6.26.1",
 		"react-toastify": "^10.0.5",
 		"tailwind-merge": "^2.5.2",
-		"tailwindcss-animate": "^1.0.7"
+		"tailwindcss-animate": "^1.0.7",
+		"tippy.js": "^6.3.7"
 	},
 	"devDependencies": {
 		"@types/node": "^20",
