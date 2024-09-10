@@ -46,7 +46,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 				const token = localStorage.getItem("token");
 				if (token) {
 					const decodedToken = jwtDecode<User>(token);
-					// console.log("Decoded Token:", decodedToken);
+
 					setUser(decodedToken);
 				} else {
 					router.push("/");

@@ -110,14 +110,13 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 	};
 
 	const handleAddSubtopic = async (subtopicInput: SubtopicInput) => {
-		console.log("Adding subtopic:", subtopicInput);
 		try {
 			const result = await SubTopicApi.createSubtopic({
 				...subtopicInput,
 				topicId: topicId, // Ensure topicId is always set
 				_id: "", // Set to empty string for new subtopics
 			});
-			console.log("Subtopic added:", result);
+
 			await fetchTopicAndSubtopics();
 		} catch (error) {
 			console.error("Error adding subtopic:", error);

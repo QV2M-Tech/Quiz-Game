@@ -212,19 +212,21 @@ export default function ScorePage() {
 						)}
 					</TableBody>
 
-					<TableFooter>
-						<TableRow>
-							<TableCell colSpan={8}>
-								<Pagination
-									currentPage={currentPage}
-									totalPages={totalPages}
-									onPageChange={setCurrentPage}
-									itemsPerPage={itemsPerPage}
-									totalItems={sortedData.length}
-								/>
-							</TableCell>
-						</TableRow>
-					</TableFooter>
+					{sortedData.length > 0 && (
+						<TableFooter>
+							<TableRow>
+								<TableCell colSpan={8}>
+									<Pagination
+										currentPage={currentPage}
+										totalPages={totalPages}
+										onPageChange={setCurrentPage}
+										itemsPerPage={itemsPerPage}
+										totalItems={sortedData.length}
+									/>
+								</TableCell>
+							</TableRow>
+						</TableFooter>
+					)}
 				</Table>
 			</div>
 		</div>
