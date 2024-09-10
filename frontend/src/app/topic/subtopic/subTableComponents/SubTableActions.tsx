@@ -1,14 +1,7 @@
-// src/app/topic/subtopic/subTableComponents/SubTableActions.tsx
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { LibraryBigIcon, Edit, Trash } from "lucide-react";
-import {
-	TooltipProvider,
-	Tooltip,
-	TooltipTrigger,
-	TooltipContent,
-} from "@/components/ui/tooltip";
+import TooltipWrapper from "@/components/ui/TooltipWrapper"; // นำเข้า TooltipWrapper
 import { SubtopicInput } from "@/types/SubTopic";
 import { useRouter } from "next/navigation";
 
@@ -37,47 +30,48 @@ const SubTableAction: React.FC<SubTableActionProps> = ({
 
 	return (
 		<>
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTrigger>
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={navigateToQuestion}
-							className="mr-2"
-						>
-							<LibraryBigIcon className="inline-block" size={16} />
-						</Button>
-					</TooltipTrigger>
-					<TooltipContent>จัดการหัวข้อหลัก</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTrigger>
-						<Button variant="ghost" size="sm" onClick={onEdit} className="mr-2">
-							<Edit className="inline-block" size={16} />
-						</Button>
-					</TooltipTrigger>
-					<TooltipContent>แก้ไขหัวข้อย่อย</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTrigger>
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={onDelete}
-							disabled={isDeleting}
-						>
-							{isDeleting ? "กำลังลบ..." : ""}
-							<Trash className="inline-block" size={16} />
-						</Button>
-					</TooltipTrigger>
-					<TooltipContent>ลบหัวข้อย่อย</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
+			<TooltipWrapper content="จัดการหัวข้อหลัก">
+				<div
+					onClick={navigateToQuestion}
+					role="button"
+					aria-label="จัดการหัวข้อหลัก"
+					tabIndex={0}
+					className="relative mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-gray-200"
+				>
+					<LibraryBigIcon className="inline-block" size={16} />
+				</div>
+			</TooltipWrapper>
+
+			<TooltipWrapper content="แก้ไขหัวข้อย่อย">
+				<div
+					onClick={onEdit}
+					role="button"
+					aria-label="แก้ไขหัวข้อย่อย"
+					tabIndex={0}
+					className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-gray-200"
+				>
+					<Edit className="inline-block" size={16} />
+				</div>
+			</TooltipWrapper>
+
+			<TooltipWrapper content="ลบหัวข้อย่อย">
+				<div
+					onClick={isDeleting ? undefined : onDelete}
+					aria-label={isDeleting ? "กำลังลบ..." : "ลบหัวข้อย่อย"}
+					tabIndex={0}
+					className={`mr-2 cursor-pointer inline-flex items-center rounded-md p-2 ${
+						isDeleting
+							? "text-gray-500 hover:bg-transparent"
+							: "hover:bg-gray-200"
+					}`}
+				>
+					{isDeleting ? (
+						"กำลังลบ..."
+					) : (
+						<Trash className="inline-block" size={16} />
+					)}
+				</div>
+			</TooltipWrapper>
 		</>
 	);
 };

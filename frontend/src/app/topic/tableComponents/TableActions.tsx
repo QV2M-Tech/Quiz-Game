@@ -1,13 +1,6 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
 import { LibraryBigIcon, Edit, Trash } from "lucide-react";
-import {
-	TooltipProvider,
-	Tooltip,
-	TooltipTrigger,
-	TooltipContent,
-} from "@/components/ui/tooltip";
-import { TableCell } from "@/components/ui/table";
+import TooltipWrapper from "@/components/ui/TooltipWrapper";
 import { useRouter } from "next/navigation";
 
 interface TableActionsProps {
@@ -35,49 +28,48 @@ const TableActions: React.FC<TableActionsProps> = ({
 
 	return (
 		<>
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTrigger>
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={navigateToSubtopic}
-							className="mr-2"
-						>
-							<LibraryBigIcon className="inline-block" size={16} />
-						</Button>
-					</TooltipTrigger>
-					<TooltipContent>จัดการหัวข้อหลัก</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
+			<TooltipWrapper content="จัดการหัวข้อหลัก">
+				<div
+					onClick={navigateToSubtopic}
+					role="button"
+					aria-label="จัดการหัวข้อหลัก"
+					tabIndex={0}
+					className="relative mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-gray-200"
+				>
+					<LibraryBigIcon className="inline-block" size={16} />
+				</div>
+			</TooltipWrapper>
 
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTrigger>
-						<Button variant="ghost" size="sm" onClick={onEdit} className="mr-2">
-							<Edit className="inline-block" size={16} />
-						</Button>
-					</TooltipTrigger>
-					<TooltipContent>แก้ไขหัวข้อ</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
+			<TooltipWrapper content="แก้ไขหัวข้อ">
+				<div
+					onClick={onEdit}
+					role="button"
+					aria-label="แก้ไขหัวข้อ"
+					tabIndex={0}
+					className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-gray-200"
+				>
+					<Edit className="inline-block" size={16} />
+				</div>
+			</TooltipWrapper>
 
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTrigger>
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={onDelete}
-							disabled={isDeleting}
-						>
-							{isDeleting ? "กำลังลบ..." : ""}
-							<Trash className="inline-block" size={16} />
-						</Button>
-					</TooltipTrigger>
-					<TooltipContent>ลบหัวข้อหลัก</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
+			<TooltipWrapper content="ลบหัวข้อหลัก">
+				<div
+					onClick={isDeleting ? undefined : onDelete}
+					aria-label={isDeleting ? "กำลังลบ..." : "ลบหัวข้อหลัก"}
+					tabIndex={0}
+					className={`mr-2 cursor-pointer inline-flex items-center rounded-md p-2 ${
+						isDeleting
+							? "text-gray-500 hover:bg-transparent"
+							: "hover:bg-gray-200"
+					}`}
+				>
+					{isDeleting ? (
+						"กำลังลบ..."
+					) : (
+						<Trash className="inline-block" size={16} />
+					)}
+				</div>
+			</TooltipWrapper>
 		</>
 	);
 };
