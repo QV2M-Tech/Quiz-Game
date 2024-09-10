@@ -12,7 +12,12 @@ const TooltipWrapper: React.FC<TooltipWrapperProps> = ({
 	children,
 }) => {
 	return (
-		<Tippy content={content} placement="top" arrow>
+		<Tippy
+			content={content}
+			placement="top"
+			arrow={true}
+			className="custom-tooltip"
+		>
 			<div style={{ display: "inline-block" }}>{children}</div>
 		</Tippy>
 	);
