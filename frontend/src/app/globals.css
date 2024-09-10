@@ -118,6 +118,16 @@ html {
 	animation: tooltipSlideUpAndFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
+.custom-tooltip {
+	background-color: #333; /* สีพื้นหลังของ tooltip */
+	color: #fff; /* สีข้อความ */
+	border-radius: 4px; /* ความมนของมุม */
+	font-size: 14px; /* ขนาดข้อความ */
+	padding: 8px; /* ช่องว่างภายในของ tooltip */
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* เงาเพื่อทำให้ tooltip เหนือกว่า */
+	transform: translateX(-6px); /* เลื่อน tooltip ไปทางซ้าย */
+  }
+
 /* @media (prefers-color-scheme: dark) {
 	:root {
 		--foreground-rgb: 255, 255, 255;

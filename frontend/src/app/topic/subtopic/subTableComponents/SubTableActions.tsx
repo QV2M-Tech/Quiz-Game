@@ -36,7 +36,7 @@ const SubTableAction: React.FC<SubTableActionProps> = ({
 					role="button"
 					aria-label="จัดการหัวข้อหลัก"
 					tabIndex={0}
-					className="relative mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-gray-200"
+					className="relative mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-sky-200"
 				>
 					<LibraryBigIcon className="inline-block" size={16} />
 				</div>
@@ -48,7 +48,7 @@ const SubTableAction: React.FC<SubTableActionProps> = ({
 					role="button"
 					aria-label="แก้ไขหัวข้อย่อย"
 					tabIndex={0}
-					className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-gray-200"
+					className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-sky-200"
 				>
 					<Edit className="inline-block" size={16} />
 				</div>
@@ -60,9 +60,7 @@ const SubTableAction: React.FC<SubTableActionProps> = ({
 					aria-label={isDeleting ? "กำลังลบ..." : "ลบหัวข้อย่อย"}
 					tabIndex={0}
 					className={`mr-2 cursor-pointer inline-flex items-center rounded-md p-2 ${
-						isDeleting
-							? "text-gray-500 hover:bg-transparent"
-							: "hover:bg-gray-200"
+						isDeleting ? "text-gray-500 hover:bg-red-600" : "hover:bg-red-400"
 					}`}
 				>
 					{isDeleting ? (
