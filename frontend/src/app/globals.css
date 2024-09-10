@@ -114,9 +114,7 @@ html {
 	background: #7dd3fc;
 }
 
-.animate-tooltipSlideUpAndFade {
-	animation: tooltipSlideUpAndFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
+
 
 /* @media (prefers-color-scheme: dark) {
 	:root {

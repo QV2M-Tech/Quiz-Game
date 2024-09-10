@@ -1,12 +1,6 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
+import React, { ReactNode } from "react";
 import { Edit, Trash } from "lucide-react";
-import {
-	TooltipProvider,
-	Tooltip,
-	TooltipTrigger,
-	TooltipContent,
-} from "@/components/ui/tooltip";
+import TooltipWrapper from "@/components/ui/TooltipWrapper";
 import { Question } from "@/types/Question";
 
 interface QuestionActionProps {
@@ -26,43 +20,46 @@ const QuestionAction: React.FC<QuestionActionProps> = ({
 	initialData,
 	isDeleting,
 }) => {
+	const actions = [
+		{
+			icon: Edit,
+			onClick: onEdit,
+			tooltip: "แก้ไขคำถาม",
+			className:
+				"transform -rotate-45 transition-transform duration-300 ease-in-out",
+		},
+		{
+			icon: Trash,
+			onClick: isDeleting ? undefined : onDelete,
+			tooltip: "ลบคำถาม",
+			disabled: isDeleting,
+		},
+	];
+
 	return (
-		<>
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTrigger>
-						<div
-							onClick={onEdit}
-							className="mr-2 inline-block cursor-pointer rounded-md p-2 hover:bg-gray-200"
-						>
-							<Edit className="inline-block" size={16} />
-						</div>
-					</TooltipTrigger>
-					<TooltipContent>แก้ไขคำถาม</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTrigger>
-						<div
-							onClick={isDeleting ? undefined : onDelete}
-							className={`mr-2 inline-block cursor-pointer rounded-md p-2 ${
-								isDeleting
-									? "text-gray-500 hover:bg-transparent"
-									: "hover:bg-gray-200"
-							}`}
-						>
-							{isDeleting ? (
-								<span>กำลังลบ...</span>
-							) : (
-								<Trash className="inline-block" size={16} />
-							)}
-						</div>
-					</TooltipTrigger>
-					<TooltipContent>ลบคำถาม</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
-		</>
+		<div className="flex">
+			{actions.map((action, index) => (
+				<TooltipWrapper key={index} content={action.tooltip}>
+					<div
+						onClick={action.onClick}
+						className={`mr-2 inline-block cursor-pointer rounded-md p-2 ${
+							action.disabled
+								? "text-gray-500 hover:bg-transparent"
+								: "hover:bg-gray-200"
+						}`}
+					>
+						{action.disabled && isDeleting ? (
+							<span>กำลังลบ...</span>
+						) : (
+							<action.icon
+								className={`inline-block text-3xl ${action.className || ""}`}
+								size={16}
+							/>
+						)}
+					</div>
+				</TooltipWrapper>
+			))}
+		</div>
 	);
 };
 
