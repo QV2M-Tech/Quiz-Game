@@ -75,7 +75,7 @@ const NavRail: React.FC = () => {
 	};
 
 	return (
-		<div className="flex flex-col justify-between fixed gap-4 h-screen w-16 sm:w-20 px-2 py-4 bg-white shadow-md">
+		<div className="flex flex-col justify-between fixed z-20 gap-4 h-screen w-16 sm:w-20 px-2 py-4 bg-white shadow-md">
 			<div className="flex flex-col items-center gap-4">
 				<UserProfile />
 				{links.map((link, index) => (

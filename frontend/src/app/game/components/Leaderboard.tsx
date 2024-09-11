@@ -21,7 +21,7 @@ export default function Leaderboard({
 	}
 
 	return (
-		<div className="flex flex-col gap-6 sm:w-5/6 lg:w-2/6 tw-box">
+		<div className="flex flex-col gap-6 sm:w-5/6 lg:w-2/6 tw-box h-[calc(100vh-112px)]">
 			<h1 className="text-center">คะแนนสูงสุด 10 อันดับ</h1>
 			<table className="w-full text-center">
 				<thead>
@@ -31,7 +31,7 @@ export default function Leaderboard({
 						<th className="w-1/5">คะแนน</th>
 					</tr>
 				</thead>
-				<tbody className="divide-y divide-sky-200">
+				<tbody className="divide-y divide-primary-hover">
 					{leaderboard.map((item, index) => (
 						<tr key={index} className="h-10 hover:bg-primary">
 							<td>{index + 1}</td>

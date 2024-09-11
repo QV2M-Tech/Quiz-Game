@@ -134,10 +134,10 @@ export default function GamePage({ params }: Props) {
 	}
 
 	return (
-		<div className="flex flex-col gap-8 min-h-screen">
+		<>
 			<GameNav time={time} score={score} />
 
-			<div className="flex flex-col lg:flex-row gap-8 justify-center items-center h-11/12">
+			<div className="flex flex-col lg:flex-row gap-8 justify-center items-center mt-12 py-8 min-h-[calc(100vh-112px)]">
 				<Game
 					time={time}
 					setTime={setTime}
@@ -155,6 +155,7 @@ export default function GamePage({ params }: Props) {
 				/>
 				<Leaderboard subtopicId={subtopicId} reload={reload} />
 			</div>
+
 			<ModalTimeout
 				score={score}
 				showTimeout={showTimeout}
@@ -166,6 +167,6 @@ export default function GamePage({ params }: Props) {
 				setShowExit={setShowExit}
 				handleExit={handleExit}
 			/>
-		</div>
+		</>
 	);
 }
