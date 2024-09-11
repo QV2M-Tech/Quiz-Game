@@ -45,10 +45,10 @@ export default function LoginModal({
 						<DialogActions>
 							<Button
 								sx={{
-									backgroundColor: "#0c4a6e",
+									backgroundColor: "#c2410c",
 									color: "#fff",
 									"&:hover": {
-										backgroundColor: "#082f49",
+										backgroundColor: "#7c2d12",
 									},
 								}}
 								onClick={() => pop()}

@@ -55,7 +55,7 @@ const ModalTopicForm: React.FC<ModalTopicFormProps> = ({
 						value={topicName}
 						onChange={(e) => setTopicName(e.target.value)}
 						placeholder="หัวข้อ"
-						className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+						className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm"
 					/>
 				</div>
 				<div className="mb-4">
@@ -65,7 +65,7 @@ const ModalTopicForm: React.FC<ModalTopicFormProps> = ({
 					<select
 						value={category}
 						onChange={(e) => setCategory(e.target.value)}
-						className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+						className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none sm:text-sm"
 					>
 						<option value="" disabled>
 							เลือกหมวดหมู่

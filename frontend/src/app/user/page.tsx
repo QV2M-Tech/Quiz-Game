@@ -206,7 +206,7 @@ export default function ScorePage() {
 												aria-label="แก้ไขผู้ใช้"
 												tabIndex={0}
 												onClick={() => openEditModal(item._id, item.name)}
-												className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-sky-200"
+												className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-primary-hover"
 											>
 												<Edit className="inline-block" size={16} />
 											</div>

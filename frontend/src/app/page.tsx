@@ -121,7 +121,7 @@ const LoginUserPage = () => {
 							onSubmit={(e) => e.preventDefault()}
 							onKeyDown={handleKeyDown}
 						>
-							<fieldset className="flex flex-col gap-5">
+							<fieldset disabled={!isLogin} className="flex flex-col gap-5">
 								<label htmlFor="login-username" className="login-label">
 									ชื่อผู้ใช้
 									<input
@@ -146,6 +146,7 @@ const LoginUserPage = () => {
 								<button
 									type="button"
 									className="login-btn"
+									disabled={!isLogin}
 									onClick={() => handleSubmit(true)}
 								>
 									เข้าสู่ระบบ
@@ -169,7 +170,7 @@ const LoginUserPage = () => {
 							onSubmit={(e) => e.preventDefault()}
 							onKeyDown={handleKeyDown}
 						>
-							<fieldset className="flex flex-col gap-5">
+							<fieldset disabled={isLogin} className="flex flex-col gap-5">
 								<UploadProfileImage
 									onImageUpload={(imageUrl: any) => setprofile(imageUrl)} // ส่ง URL ของภาพที่อัปโหลดมาอัปเดต state profile
 								/>
@@ -207,6 +208,7 @@ const LoginUserPage = () => {
 								<button
 									type="button"
 									className="login-btn"
+									disabled={isLogin}
 									onClick={() => handleSubmit(false)}
 								>
 									ลงทะเบียน
