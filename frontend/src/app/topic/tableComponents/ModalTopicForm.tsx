@@ -79,15 +79,17 @@ const ModalTopicForm: React.FC<ModalTopicFormProps> = ({
 				</div>
 				<DialogFooter className="flex justify-end space-x-2">
 					<DialogClose>
-						<Button variant="outline">ยกเลิก</Button>
+						<Button asChild variant="outline">
+							<div>ยกเลิก</div>
+						</Button>
 					</DialogClose>
 					<Button
-						type="submit"
+						asChild
 						variant="secondary"
 						disabled={isSubmitting}
 						onClick={handleSubmit}
 					>
-						{isSubmitting ? "กำลังบันทึก..." : "บันทึก"}
+						<div>{isSubmitting ? "กำลังบันทึก..." : "บันทึก"}</div>
 					</Button>
 				</DialogFooter>
 			</DialogContent>

@@ -8,8 +8,8 @@ import React, {
 	ReactNode,
 	FC,
 } from "react";
-import { usePathname, useRouter } from "next/navigation"; // นำเข้า usePathname จาก next/navigation
-import { jwtDecode } from "jwt-decode"; // นำเข้า jwtDecode
+import { usePathname, useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
 
 // กำหนดประเภทข้อมูล User
 interface User {
@@ -36,27 +36,30 @@ interface UserProviderProps {
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 	const [User, setUser] = useState<User | null>(null);
 
-	const pathname = usePathname(); // ใช้ usePathname เพื่อรับค่าของเส้นทางปัจจุบัน
-
+	const pathname = usePathname();
 	const router = useRouter();
 
 	useEffect(() => {
 		const fetchUserData = async () => {
 			try {
 				const token = localStorage.getItem("token");
+				console.log("Token found:", token);
 				if (token) {
 					const decodedToken = jwtDecode<User>(token);
+					console.log("Decoded token:", decodedToken);
 
 					setUser(decodedToken);
 				} else {
+					console.log("No token found, redirecting to login.");
 					router.push("/");
 				}
 			} catch (error) {
 				console.error("Error decoding token or fetching user data:", error);
+				router.push("/"); // Handle redirection in case of error
 			}
 		};
 		fetchUserData();
-	}, [pathname]); // ใส่ pathname ใน dependency array เพื่อให้ useEffect ทำงานเมื่อเส้นทางเปลี่ยน
+	}, [pathname, router]); // เพิ่ม router ลงใน dependency array
 
 	return (
 		<UserContext.Provider value={{ User, setUser }}>
