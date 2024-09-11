@@ -87,12 +87,12 @@ const TopicManagementPage: React.FC = () => {
 											value={searchTerm}
 											onChange={(e) => setSearchTerm(e.target.value)}
 										/>
-										<Button
-											className=" bg-secondary hover:bg-secondary-hover text-white"
+										<div
+											className=" bg-secondary hover:bg-secondary-hover text-white px-4 py-2 cursor-pointer"
 											onClick={() => openModal()}
 										>
 											เพิ่มหัวข้อ
-										</Button>
+										</div>
 									</div>
 								</div>
 							</TableCell>
