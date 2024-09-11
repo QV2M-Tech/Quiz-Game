@@ -1,4 +1,4 @@
-"use client"; // ต้องใส่บรรทัดนี้เพื่อระบุว่าไฟล์นี้เป็น Client Component
+"use client";
 
 import React, {
 	createContext,
@@ -6,12 +6,10 @@ import React, {
 	useEffect,
 	useContext,
 	ReactNode,
-	FC,
 } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 
-// กำหนดประเภทข้อมูล User
 interface User {
 	id: string;
 	username: string;
@@ -20,55 +18,75 @@ interface User {
 	isAdmin: boolean;
 }
 
-// กำหนดประเภทข้อมูลของบริบท User
 interface UserContextType {
 	User: User | null;
 	setUser: React.Dispatch<React.SetStateAction<User | null>>;
+	isLoading: boolean;
+	setUserFromToken: (token: string) => void;
+	refreshUser: () => void;
 }
 
-// สร้าง Context โดยมีค่าเริ่มต้นเป็น undefined
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-interface UserProviderProps {
-	children: ReactNode;
-}
-
-export const UserProvider: FC<UserProviderProps> = ({ children }) => {
+export const UserProvider: React.FC<{ children: ReactNode }> = ({
+	children,
+}) => {
 	const [User, setUser] = useState<User | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
+	const [forceUpdate, setForceUpdate] = useState(0);
 
-	const pathname = usePathname();
 	const router = useRouter();
 
 	useEffect(() => {
 		const fetchUserData = async () => {
 			try {
 				const token = localStorage.getItem("token");
-				console.log("Token found:", token);
+				console.log("Token found in UserContext:", !!token);
 				if (token) {
 					const decodedToken = jwtDecode<User>(token);
-					console.log("Decoded token:", decodedToken);
-
+					console.log("Decoded token in UserContext:", decodedToken);
 					setUser(decodedToken);
 				} else {
-					console.log("No token found, redirecting to login.");
-					router.push("/");
+					console.log("No token found in UserContext");
+					setUser(null);
 				}
 			} catch (error) {
 				console.error("Error decoding token or fetching user data:", error);
-				router.push("/"); // Handle redirection in case of error
+				setUser(null);
+			} finally {
+				setIsLoading(false);
+				console.log("Loading finished in UserContext");
 			}
 		};
 		fetchUserData();
-	}, [pathname, router]); // เพิ่ม router ลงใน dependency array
+	}, [forceUpdate]);
+
+	useEffect(() => {
+		console.log("User state changed:", User);
+	}, [User]);
+
+	const setUserFromToken = (token: string) => {
+		try {
+			const decodedToken = jwtDecode<User>(token);
+			setUser(decodedToken);
+			localStorage.setItem("token", token);
+		} catch (error) {
+			console.error("Error decoding token:", error);
+			setUser(null);
+		}
+	};
+
+	const refreshUser = () => setForceUpdate((prev) => prev + 1);
 
 	return (
-		<UserContext.Provider value={{ User, setUser }}>
+		<UserContext.Provider
+			value={{ User, setUser, isLoading, setUserFromToken, refreshUser }}
+		>
 			{children}
 		</UserContext.Provider>
 	);
 };
 
-// สร้าง Hook สำหรับใช้บริบท UserContext
 export const useUser = (): UserContextType => {
 	const context = useContext(UserContext);
 	if (!context) {

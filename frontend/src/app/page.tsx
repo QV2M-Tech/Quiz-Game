@@ -7,93 +7,86 @@ import Image from "next/image";
 import UploadProfileImage from "../components/login/UploadProfileImage";
 import axiosInstance from "../lib/axiosInstance";
 import LoginModal from "@/components/login/LoginModal";
+import { useUser } from "@/context/userContext";
 
 const LoginUserPage = () => {
-	const [isLogin, setIsLogin] = useState<boolean>(true);
-	const [username, setUsername] = useState<string>("");
-	const [password, setPassword] = useState<string>("");
-	const [name, setname] = useState<string>("");
-	const [usernamer, setUsernamer] = useState<string>("");
-	const [passwordr, setPasswordr] = useState<string>("");
-	const [popup, setpopup] = useState<boolean>(false);
-	const [profile, setprofile] = useState<string>("/defaultProfile.png");
-	const [title, setTitle] = useState<string>("");
-	const [content, setContent] = useState<string>("");
+	const [isLogin, setIsLogin] = useState(true);
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const [name, setName] = useState("");
+	const [usernamer, setUsernamer] = useState("");
+	const [passwordr, setPasswordr] = useState("");
+	const [popup, setPopup] = useState(false);
+	const [profile, setProfile] = useState("/defaultProfile.png");
+	const [title, setTitle] = useState("");
+	const [content, setContent] = useState("");
+	const [isError, setIsError] = useState(false);
 
-	const [isError, setIsError] = useState<boolean>(false);
+	const router = useRouter();
+	const { setUserFromToken } = useUser();
 
-	const router = useRouter(); // ใช้ useRouter จาก next/navigation
-
-	// ฟังก์ชันสำหรับจัดการการคลิกปุ่ม
 	const handleSubmit = async (isLogin: boolean) => {
-		if (isLogin) {
-			// สำหรับการเข้าสู่ระบบ
-			try {
+		try {
+			if (isLogin) {
+				// Login
 				const response = await axiosInstance.post("/users/login", {
-					username: username,
-					password: password,
+					username,
+					password,
 				});
 				const { token } = response.data;
 
 				if (token) {
-					localStorage.setItem("token", token);
+					setUserFromToken(token);
+					console.log("Token set in localStorage:", token);
+					console.log(
+						"Token in localStorage after setting:",
+						localStorage.getItem("token")
+					);
 					setIsError(false);
 					router.push("/selectgame");
 				}
-			} catch (error) {
-				console.error("Operation failed", error);
-				setIsError(true);
-				setpopup(true);
-				setTitle("ชื่อผู้ใช้หรือรหัสผ่านผิด");
-				setContent("กรุณาลองใหม่อีกครั้ง");
-			}
-		} else {
-			// สำหรับการลงทะเบียน
-			try {
+			} else {
+				// Register
 				const response = await axiosInstance.post("/users/register", {
-					profile: profile,
-					name: name,
+					profile,
+					name,
 					username: usernamer,
 					password: passwordr,
 				});
 				const { token } = response.data;
 
 				if (token) {
-					localStorage.setItem("token", token);
-					setpopup(true);
+					setUserFromToken(token);
+					setPopup(true);
 					setIsError(false);
 					setTitle("ลงทะเบียนสำเร็จ");
 					setContent("");
-				} else {
 				}
-			} catch (error) {
-				console.error("Operation failed", error);
-				setIsError(true);
-				setpopup(true);
-				setTitle("มีชื่อผู้ใช้นี้ในระบบแล้ว");
-				setContent("กรุณาลองใหม่อีกครั้ง");
 			}
+		} catch (error) {
+			console.error("Operation failed", error);
+			setIsError(true);
+			setPopup(true);
+			setTitle(
+				isLogin ? "ชื่อผู้ใช้หรือรหัสผ่านผิด" : "มีชื่อผู้ใช้นี้ในระบบแล้ว"
+			);
+			setContent("กรุณาลองใหม่อีกครั้ง");
 		}
-	};
-
-	const pop = () => {
-		router.push("/selectgame");
 	};
 
 	const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
 		if (event.key === "Enter") {
-			event.preventDefault(); // ป้องกันการทำงานแบบ default ของ form
+			event.preventDefault();
 			handleSubmit(isLogin);
 		}
 	};
 
 	return (
-		// <div className="h-full absolute top-1/2 left-1/2 origin-top-left -translate-x-[33%] -translate-y-[33%] scale-[0.67]">
 		<div className="flex flex-col justify-center items-center -ml-16 sm:-ml-20">
 			<section className="flex flex-col justify-center items-center gap-4 h-full py-8">
 				<Image
 					src="/LogoLaSalleChote.png"
-					alt="Landscape picture"
+					alt="Logo"
 					width={140}
 					height={140}
 				/>
@@ -165,14 +158,14 @@ const LoginUserPage = () => {
 						>
 							<fieldset disabled={isLogin} className="flex flex-col gap-5">
 								<UploadProfileImage
-									onImageUpload={(imageUrl: any) => setprofile(imageUrl)} // ส่ง URL ของภาพที่อัปโหลดมาอัปเดต state profile
+									onImageUpload={(imageUrl: any) => setProfile(imageUrl)}
 								/>
-								<label htmlFor="signup-username" className="login-label">
+								<label htmlFor="signup-name" className="login-label">
 									ชื่อ
 									<input
 										id="signup-name"
 										value={name}
-										onChange={(e) => setname(e.target.value)}
+										onChange={(e) => setName(e.target.value)}
 										required
 										className="login-input"
 									/>
@@ -214,11 +207,11 @@ const LoginUserPage = () => {
 
 			<LoginModal
 				popup={popup}
-				setpopup={setpopup}
+				setpopup={setPopup}
 				title={title}
 				content={content}
 				action={!isError}
-				pop={pop}
+				pop={() => router.push("/selectgame")}
 			/>
 		</div>
 	);

@@ -1,6 +1,6 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 import NavRail from "@/components/ui/NavRail";
 import { UserProvider } from "@/context/userContext";
 import AuthGuard from "@/components/AuthGuard";
@@ -18,15 +18,15 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en">
+		<html lang={"en"}>
 			<body className={inter.className}>
 				<UserProvider>
-					<div className="flex">
-						<NavRail />
-						<main className="ml-16 sm:ml-20 w-full h-full">
-							<AuthGuard>{children}</AuthGuard>
-						</main>
-					</div>
+					<AuthGuard>
+						<div className="flex">
+							<NavRail />
+							<main className="ml-16 sm:ml-20 w-full h-full">{children}</main>
+						</div>
+					</AuthGuard>
 				</UserProvider>
 			</body>
 		</html>

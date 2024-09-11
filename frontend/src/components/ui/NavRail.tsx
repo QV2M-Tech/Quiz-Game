@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -18,12 +18,12 @@ interface LinkItem {
 	name: string;
 	path: string;
 	icon: React.ReactNode;
-	isAdmin?: boolean; // Add isAdmin optional property
+	isAdmin?: boolean;
 }
 
 const NavRail: React.FC = () => {
 	const pathname = usePathname();
-	const { User } = useUser();
+	const { User, isLoading, refreshUser } = useUser();
 
 	const links: LinkItem[] = useMemo(
 		() => [
@@ -54,48 +54,36 @@ const NavRail: React.FC = () => {
 		[]
 	);
 
-	const isActive = useCallback(
-		(currentPath: string, linkPath: string): boolean => {
-			return (
-				currentPath === linkPath ||
-				currentPath === `${linkPath}/` || // Added this line to handle trailing slash
-				(linkPath === "/topic" && currentPath.startsWith("/topic"))
-			);
-		},
-		[]
-	);
-
-	// Hide NavRail on /login and /register routes
-	if (pathname === "/" || pathname === "/register") {
+	if (isLoading || pathname === "/" || pathname === "/register") {
 		return null;
 	}
-	console.log("Rendering NavRail with user:", User); // Log User state
-	console.log("Current pathname:", pathname); // Log current pathname
+
 	const handleLogout = () => {
-		localStorage.removeItem("token"); // Clear the token from localStorage
+		localStorage.removeItem("token");
+		refreshUser();
 	};
 
 	return (
-		<div className="flex flex-col justify-between fixed z-20 gap-4 h-screen w-16 sm:w-20 px-2 py-4 bg-white shadow-md">
+		<nav className="flex flex-col justify-between fixed z-20 gap-4 h-screen w-16 sm:w-20 px-2 py-4 bg-white shadow-md">
 			<div className="flex flex-col items-center gap-4">
 				<UserProfile />
 				{links.map((link, index) => (
 					<React.Fragment key={link.name}>
-						{!link.isAdmin || (User && User.isAdmin) ? ( // Only render if isAdmin is false or User.isAdmin is true
+						{(!link.isAdmin || (User && User.isAdmin)) && (
 							<Link
 								href={link.path}
-								className="flex flex-col items-center gap-2"
+								className={`flex flex-col items-center gap-1 ${
+									link.path === pathname
+										? "text-orange-600"
+										: "text-gray-600 hover:text-orange-600"
+								} transition-all`}
 							>
-								<IconButton
-									className={`${
-										isActive(pathname, link.path) ? "bg-accent" : ""
-									}`}
-								>
+								<div className="flex items-center justify-center">
 									{link.icon}
-								</IconButton>
+								</div>
 								<span className="text-xs text-center">{link.name}</span>
 							</Link>
-						) : null}
+						)}
 						{index === 0 && <div className="w-3/4 h-px bg-gray-300" />}
 					</React.Fragment>
 				))}
@@ -113,7 +101,7 @@ const NavRail: React.FC = () => {
 					<span className="text-xs text-center">ออกจากระบบ</span>
 				</Link>
 			</div>
-		</div>
+		</nav>
 	);
 };
 

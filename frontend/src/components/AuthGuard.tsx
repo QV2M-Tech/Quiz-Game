@@ -1,7 +1,6 @@
-// AuthGuard.tsx
 "use client";
 
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useUser } from "@/context/userContext";
 
@@ -10,27 +9,47 @@ interface AuthGuardProps {
 }
 
 const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
-	const { User } = useUser();
+	const { User, isLoading } = useUser();
 	const router = useRouter();
 	const pathname = usePathname();
+	const [isAuthorized, setIsAuthorized] = useState(false);
 
 	useEffect(() => {
-		console.log("Checking user authentication in AuthGuard", User);
-		const adminPages = ["/user", "/topic", "/score"];
+		console.log("AuthGuard effect running");
+		console.log("isLoading:", isLoading);
+		console.log("User:", User);
+		console.log("Current pathname:", pathname);
 
-		if (!User) {
-			console.log("User not found, redirecting to login.");
-			router.push("/"); // เปลี่ยนไปยังหน้าเข้าสู่ระบบถ้ายังไม่เข้าสู่ระบบ
+		if (isLoading) {
+			console.log("Still loading, waiting...");
 			return;
 		}
 
-		if (adminPages.includes(pathname) && !User.isAdmin) {
-			console.log("User is not an admin, redirecting to 403.");
-			router.push("/403"); // เปลี่ยนไปยังหน้า 403 Forbidden ถ้าไม่ใช่ Admin
+		if (!User && pathname !== "/") {
+			console.log("User not found, redirecting to login.");
+			router.push("/");
+			return;
 		}
-	}, [User, pathname, router]);
 
-	return <>{children}</>;
+		if (
+			User &&
+			!User.isAdmin &&
+			["/user", "/topic", "/score"].includes(pathname)
+		) {
+			console.log("User is not an admin, redirecting to 403.");
+			router.push("/403");
+			return;
+		}
+
+		console.log("User is authorized");
+		setIsAuthorized(true);
+	}, [User, pathname, router, isLoading]);
+
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
+
+	return isAuthorized ? <>{children}</> : null;
 };
 
 export default AuthGuard;
