@@ -26,7 +26,7 @@ const QuestionAction: React.FC<QuestionActionProps> = ({
 					role="button"
 					aria-label="แก้ไขคำถาม"
 					tabIndex={0}
-					className="relative mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-sky-200"
+					className="relative mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-primary-hover"
 				>
 					<Edit className="inline-block" size={16} />
 				</div>

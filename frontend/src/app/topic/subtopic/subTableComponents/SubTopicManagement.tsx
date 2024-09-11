@@ -198,17 +198,17 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 							</TableCell>
 						</TableRow>
 						<TableRow>
-							<TableHead className="text-center w-3/5">
+							<TableHead className="text-center w-3/6">
 								ชื่อหัวข้อย่อย
 							</TableHead>
 							<TableHead
 								onClick={() => requestSort("time")}
-								className="cursor-pointer text-center w-1/5"
+								className="cursor-pointer text-center w-1/6"
 							>
 								เวลา (นาที){" "}
 								<ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
-							<TableHead className="text-center w-1/5">ตัวเลือก</TableHead>
+							<TableHead className="text-center w-2/6">ตัวเลือก</TableHead>
 						</TableRow>
 					</TableHeader>
 

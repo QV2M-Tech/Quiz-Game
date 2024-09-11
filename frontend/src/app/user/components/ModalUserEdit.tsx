@@ -55,7 +55,7 @@ const ModalUserEdit: React.FC<ModalUserEditProps> = ({
 						value={userName}
 						onChange={(e) => setUserName(e.target.value)}
 						placeholder="ชื่อ"
-						className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+						className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm"
 					/>
 				</div>
 				<DialogFooter className="flex justify-end space-x-2">
