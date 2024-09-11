@@ -122,6 +122,12 @@ html {
 	scroll-behavior: smooth;
 }
 
+@media (hover: none) {
+	.tooltip {
+	  display: none;
+	}
+  }
+
 /* width */
 ::-webkit-scrollbar {
 	width: 5px;
