@@ -88,24 +88,17 @@ const LoginUserPage = () => {
 	};
 
 	return (
-		<div className="h-full absolute top-1/2 left-1/2 origin-top-left -translate-x-[33%] -translate-y-[33%] scale-[0.67]">
-			<LoginModal
-				popup={popup}
-				setpopup={setpopup}
-				title={title}
-				content={content}
-				action={!isError}
-				pop={pop}
-			/>
-			<section className="forms-section h-full relative">
+		// <div className="h-full absolute top-1/2 left-1/2 origin-top-left -translate-x-[33%] -translate-y-[33%] scale-[0.67]">
+		<div className="flex flex-col justify-center items-center -ml-16 sm:-ml-20">
+			<section className="flex flex-col justify-center items-center gap-4 h-full py-8">
 				<Image
 					src="/LogoLaSalleChote.png"
 					alt="Landscape picture"
-					width={200}
-					height={200}
+					width={140}
+					height={140}
 				/>
 
-				<div className="forms">
+				<div className="flex">
 					{/* Login Form */}
 					<div className={`form-wrapper ${isLogin ? "is-active" : ""}`}>
 						<button
@@ -218,6 +211,15 @@ const LoginUserPage = () => {
 					</div>
 				</div>
 			</section>
+
+			<LoginModal
+				popup={popup}
+				setpopup={setpopup}
+				title={title}
+				content={content}
+				action={!isError}
+				pop={pop}
+			/>
 		</div>
 	);
 };

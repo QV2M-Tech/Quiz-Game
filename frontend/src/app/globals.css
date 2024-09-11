@@ -81,13 +81,13 @@
 	}
 
 	.login-label {
-		@apply flex flex-col text-2xl gap-2;
+		@apply flex flex-col text-xl gap-2;
 	}
 	.login-input {
-		@apply border border-neutral-300 p-4 rounded-lg;
+		@apply border border-neutral-300 px-4 py-2 rounded-lg;
 	}
 	.login-btn {
-		@apply text-3xl py-4 bg-y2r3 hover:bg-y3r4 rounded-xl;
+		@apply text-xl px-4 py-2 bg-y2r3 hover:bg-y3r4 rounded-xl;
 	}
 
 	.dark {
