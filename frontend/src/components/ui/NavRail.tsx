@@ -69,7 +69,8 @@ const NavRail: React.FC = () => {
 	if (pathname === "/" || pathname === "/register") {
 		return null;
 	}
-
+	console.log("Rendering NavRail with user:", User); // Log User state
+	console.log("Current pathname:", pathname); // Log current pathname
 	const handleLogout = () => {
 		localStorage.removeItem("token"); // Clear the token from localStorage
 	};

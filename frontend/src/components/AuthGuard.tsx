@@ -1,7 +1,8 @@
-"use client"; // เนื่องจากไฟล์นี้จะทำงานฝั่ง client
+// AuthGuard.tsx
+"use client";
 
 import { useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation"; // นำเข้า usePathname
+import { useRouter, usePathname } from "next/navigation";
 import { useUser } from "@/context/userContext";
 
 interface AuthGuardProps {
@@ -11,14 +12,21 @@ interface AuthGuardProps {
 const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
 	const { User } = useUser();
 	const router = useRouter();
-	const pathname = usePathname(); // ใช้ usePathname เพื่อดึง pathname ปัจจุบัน
+	const pathname = usePathname();
 
 	useEffect(() => {
+		console.log("Checking user authentication in AuthGuard", User);
 		const adminPages = ["/user", "/topic", "/score"];
-		if (User) {
-			if (adminPages.includes(pathname) && (!User || !User.isAdmin)) {
-				router.push("/403"); // Redirect ไปหน้า 403 Forbidden หากไม่ใช่ Admin
-			}
+
+		if (!User) {
+			console.log("User not found, redirecting to login.");
+			router.push("/"); // เปลี่ยนไปยังหน้าเข้าสู่ระบบถ้ายังไม่เข้าสู่ระบบ
+			return;
+		}
+
+		if (adminPages.includes(pathname) && !User.isAdmin) {
+			console.log("User is not an admin, redirecting to 403.");
+			router.push("/403"); // เปลี่ยนไปยังหน้า 403 Forbidden ถ้าไม่ใช่ Admin
 		}
 	}, [User, pathname, router]);
 
