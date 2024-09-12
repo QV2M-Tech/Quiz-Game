@@ -41,29 +41,24 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
 		const fetchUserData = async () => {
 			try {
 				const token = localStorage.getItem("token");
-				console.log("Token found in UserContext:", !!token);
+
 				if (token) {
 					const decodedToken = jwtDecode<User>(token);
-					console.log("Decoded token in UserContext:", decodedToken);
+
 					setUser(decodedToken);
 				} else {
-					console.log("No token found in UserContext");
 					setUser(null);
 				}
 			} catch (error) {
-				console.error("Error decoding token or fetching user data:", error);
 				setUser(null);
 			} finally {
 				setIsLoading(false);
-				console.log("Loading finished in UserContext");
 			}
 		};
 		fetchUserData();
 	}, [forceUpdate]);
 
-	useEffect(() => {
-		console.log("User state changed:", User);
-	}, [User]);
+	useEffect(() => {}, [User]);
 
 	const setUserFromToken = (token: string) => {
 		try {

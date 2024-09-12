@@ -37,11 +37,7 @@ const LoginUserPage = () => {
 
 				if (token) {
 					setUserFromToken(token);
-					console.log("Token set in localStorage:", token);
-					console.log(
-						"Token in localStorage after setting:",
-						localStorage.getItem("token")
-					);
+
 					setIsError(false);
 					router.push("/selectgame");
 				}
@@ -64,7 +60,6 @@ const LoginUserPage = () => {
 				}
 			}
 		} catch (error) {
-			console.error("Operation failed", error);
 			setIsError(true);
 			setPopup(true);
 			setTitle(

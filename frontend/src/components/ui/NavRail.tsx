@@ -27,11 +27,7 @@ const NavRail: React.FC = () => {
 
 	const links: LinkItem[] = useMemo(
 		() => [
-			{
-				name: "เลือกหมวดหมู่",
-				path: "/selectgame",
-				icon: <MenuBookRounded />,
-			},
+			{ name: "เลือกหมวดหมู่", path: "/selectgame", icon: <MenuBookRounded /> },
 			{
 				name: "สรุปคะแนนรวม",
 				path: "/score",
@@ -72,34 +68,42 @@ const NavRail: React.FC = () => {
 						{(!link.isAdmin || (User && User.isAdmin)) && (
 							<Link
 								href={link.path}
-								className={`flex flex-col items-center gap-1 ${
-									link.path === pathname
-										? "text-orange-600"
-										: "text-gray-600 hover:text-orange-600"
-								} transition-all`}
+								className={`group flex flex-col items-center gap-1 transition-all ${
+									pathname.startsWith(link.path)
+										? "text-[#FA8072]"
+										: "text-[default]"
+								}`}
 							>
-								<div className="flex items-center justify-center">
-									{link.icon}
-								</div>
-								<span className="text-xs text-center">{link.name}</span>
+								<IconButton
+									size="large"
+									className="transition-all duration-300 ease-in-out group-hover:bg-[rgba(250,128,114,0.05)]"
+								>
+									{React.cloneElement(link.icon as React.ReactElement, {
+										className: `${
+											pathname.startsWith(link.path)
+												? "text-[#FA8072]"
+												: "text-[default]"
+										} group-hover:text-[#E9967A]`,
+									})}
+								</IconButton>
+								<span className="text-xs text-center transition-colors duration-300 group-hover:text-[#E9967A]">
+									{link.name}
+								</span>
 							</Link>
 						)}
 						{index === 0 && <div className="w-3/4 h-px bg-gray-300" />}
 					</React.Fragment>
 				))}
 			</div>
-
-			<div className="flex justify-center items-center">
-				<Link
-					href="/"
-					className="flex flex-col items-center gap-2"
+			<div className="flex flex-col items-center">
+				<IconButton
 					onClick={handleLogout}
+					size="large"
+					className="transition-all duration-300 ease-in-out text-[default] hover:bg-[rgba(250,128,114,0.05)] hover:text-[#E9967A]"
 				>
-					<IconButton>
-						<Logout />
-					</IconButton>
-					<span className="text-xs text-center">ออกจากระบบ</span>
-				</Link>
+					<Logout />
+				</IconButton>
+				<span className="text-xs text-center text-[default]">ออกจากระบบ</span>
 			</div>
 		</nav>
 	);
