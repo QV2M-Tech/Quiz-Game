@@ -185,7 +185,7 @@ export default function ScorePage() {
 											{thDateTime(item.createOn).split(" ")[1]}
 										</div>
 									</TableCell>
-									<TableCell className="text-left">
+									<TableCell className="text-center">
 										<div className="font-medium">{item.name}</div>
 										<div className="text-sm text-gray-500">{item.username}</div>
 									</TableCell>
@@ -196,16 +196,15 @@ export default function ScorePage() {
 									<TableCell>{item.subtopic}</TableCell>
 									<TableCell className="text-center">{item.score}</TableCell>
 									<TableCell className="text-center">
-										<Button
-											variant="ghost"
-											size="sm"
+										<div
+											role="button"
 											onClick={() => handleDelete(item._id)}
-											className="inline-block"
+											className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-red-400"
 											// disabled={isDeleting}
 										>
 											{/* {isDeleting ? "กำลังลบ..." : ""} */}
-											<Trash size={16} />
-										</Button>
+											<Trash className="inline-block" size={16} />
+										</div>
 									</TableCell>
 								</TableRow>
 							))

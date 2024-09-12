@@ -71,7 +71,7 @@ export default function Game({
 	}
 
 	return (
-		<div className="flex flex-col justify-between gap-6 sm:w-4/5 lg:w-3/6 tw-box">
+		<div className="flex flex-col justify-between gap-6 sm:w-4/5 lg:w-3/4 xl:w-2/3 tw-box h-[calc(100vh-112px)]">
 			<div className="flex flex-col items-center gap-4">
 				<h1>เกมส์ตอบคำถาม</h1>
 				<div className="flex flex-col md:flex-row justify-center items-center md:justify-around md:gap-4 w-full">
@@ -82,23 +82,24 @@ export default function Game({
 			</div>
 
 			<div className="flex flex-col items-center gap-4">
-				{/* <div className="w-2/3 h-40 bg-neutral-200"></div> */}
-				<h2>{questionList[0]?.questionName}</h2>
+				<h1>{questionList[0]?.questionName}</h1>
 			</div>
 
-			<div className="flex flex-col items-center gap-4">
-				<div className="flex flex-col sm:flex-row items-center justify-start gap-1">
+			<div className="flex flex-col items-center gap-4 w-full">
+				<div className="flex flex-col sm:flex-row items-center justify-start gap-1 w-full px-4">
 					<button
 						onClick={handleHint}
-						className="flex items-center gap-2 hover:file:bg-primary"
+						className="flex items-center gap-2 hover:bg-primary p-2 rounded text-lg"
 					>
 						<FaRegLightbulb /> กดดูคำใบ้ (เหลือ {countHint})
 					</button>
 					{showHint && (
-						<h3>{questionList[0]?.hint || "โจทย์ข้อนี้ไม่มีคำใบ้"}</h3>
+						<h3 className="text-lg">
+							{questionList[0]?.hint || "โจทย์ข้อนี้ไม่มีคำใบ้"}
+						</h3>
 					)}
 				</div>
-				<div className="grid grid-cols-2 grid-rows-2 gap-2 w-3/4 md:w-1/2">
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full px-4 max-w-2xl">
 					{questionList[0]?.option.map((item, index) => {
 						return (
 							<button
@@ -107,23 +108,23 @@ export default function Game({
 								onClick={() => {
 									handleScore(item.isCorrect);
 								}}
-								className="tw-btn bg-accent border border-secondary shadow-md hover:bg-accent-hover"
+								className="tw-btn bg-accent border border-secondary shadow-md hover:bg-accent-hover p-4 text-lg min-h-[60px]"
 							>
 								{item.text}
 							</button>
 						);
 					})}
 				</div>
-				<div className="flex gap-2">
+				<div className="flex gap-4 mt-4">
 					<button
 						onClick={() => handleRestart()}
-						className="tw-btn bg-white border border-secondary shadow-md hover:bg-secondary/20"
+						className="tw-btn bg-white border border-secondary shadow-md hover:bg-secondary/20 p-3 text-lg"
 					>
 						เริ่มเกมใหม่
 					</button>
 					<button
 						onClick={() => setShowExit(true)}
-						className="tw-btn bg-secondary text-white shadow-md hover:bg-secondary-hover"
+						className="tw-btn bg-secondary text-white shadow-md hover:bg-secondary-hover p-3 text-lg"
 					>
 						ออกจากเกม
 					</button>

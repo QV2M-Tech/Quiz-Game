@@ -1,7 +1,7 @@
-"use client"; // เนื่องจากไฟล์นี้จะทำงานฝั่ง client
+"use client";
 
-import { useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation"; // นำเข้า usePathname
+import React, { useEffect, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { useUser } from "@/context/userContext";
 
 interface AuthGuardProps {
@@ -9,20 +9,38 @@ interface AuthGuardProps {
 }
 
 const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
-	const { User } = useUser();
+	const { User, isLoading } = useUser();
 	const router = useRouter();
-	const pathname = usePathname(); // ใช้ usePathname เพื่อดึง pathname ปัจจุบัน
+	const pathname = usePathname();
+	const [isAuthorized, setIsAuthorized] = useState(false);
 
 	useEffect(() => {
-		const adminPages = ["/user", "/topic", "/score"];
-		if (User) {
-			if (adminPages.includes(pathname) && (!User || !User.isAdmin)) {
-				router.push("/403"); // Redirect ไปหน้า 403 Forbidden หากไม่ใช่ Admin
-			}
+		if (isLoading) {
+			return;
 		}
-	}, [User, pathname, router]);
 
-	return <>{children}</>;
+		if (!User && pathname !== "/") {
+			router.push("/");
+			return;
+		}
+
+		if (
+			User &&
+			!User.isAdmin &&
+			["/user", "/topic", "/score"].includes(pathname)
+		) {
+			router.push("/403");
+			return;
+		}
+
+		setIsAuthorized(true);
+	}, [User, pathname, router, isLoading]);
+
+	if (isLoading) {
+		return null;
+	}
+
+	return isAuthorized ? <>{children}</> : null;
 };
 
 export default AuthGuard;

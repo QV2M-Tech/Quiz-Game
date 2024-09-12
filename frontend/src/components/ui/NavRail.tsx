@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -18,20 +18,16 @@ interface LinkItem {
 	name: string;
 	path: string;
 	icon: React.ReactNode;
-	isAdmin?: boolean; // Add isAdmin optional property
+	isAdmin?: boolean;
 }
 
 const NavRail: React.FC = () => {
 	const pathname = usePathname();
-	const { User } = useUser();
+	const { User, isLoading, refreshUser } = useUser();
 
 	const links: LinkItem[] = useMemo(
 		() => [
-			{
-				name: "เลือกหมวดหมู่",
-				path: "/selectgame",
-				icon: <MenuBookRounded />,
-			},
+			{ name: "เลือกหมวดหมู่", path: "/selectgame", icon: <MenuBookRounded /> },
 			{
 				name: "สรุปคะแนนรวม",
 				path: "/score",
@@ -54,65 +50,62 @@ const NavRail: React.FC = () => {
 		[]
 	);
 
-	const isActive = useCallback(
-		(currentPath: string, linkPath: string): boolean => {
-			return (
-				currentPath === linkPath ||
-				currentPath === `${linkPath}/` || // Added this line to handle trailing slash
-				(linkPath === "/topic" && currentPath.startsWith("/topic"))
-			);
-		},
-		[]
-	);
-
-	// Hide NavRail on /login and /register routes
-	if (pathname === "/" || pathname === "/register") {
+	if (isLoading || pathname === "/" || pathname === "/register") {
 		return null;
 	}
 
 	const handleLogout = () => {
-		localStorage.removeItem("token"); // Clear the token from localStorage
+		localStorage.removeItem("token");
+		refreshUser();
 	};
 
 	return (
-		<div className="flex flex-col justify-between fixed gap-4 h-screen w-16 sm:w-20 px-2 py-4 bg-white shadow-md">
+		<nav className="flex flex-col justify-between fixed z-20 gap-4 h-screen w-16 sm:w-20 px-2 py-4 bg-white shadow-md">
 			<div className="flex flex-col items-center gap-4">
 				<UserProfile />
 				{links.map((link, index) => (
 					<React.Fragment key={link.name}>
-						{!link.isAdmin || (User && User.isAdmin) ? ( // Only render if isAdmin is false or User.isAdmin is true
+						{(!link.isAdmin || (User && User.isAdmin)) && (
 							<Link
 								href={link.path}
-								className="flex flex-col items-center gap-2"
+								className={`group flex flex-col items-center gap-1 transition-all ${
+									pathname.startsWith(link.path)
+										? "text-[#FA8072]"
+										: "text-[default]"
+								}`}
 							>
 								<IconButton
-									className={`${
-										isActive(pathname, link.path) ? "bg-accent" : ""
-									}`}
+									size="large"
+									className="transition-all duration-300 ease-in-out group-hover:bg-[rgba(250,128,114,0.05)]"
 								>
-									{link.icon}
+									{React.cloneElement(link.icon as React.ReactElement, {
+										className: `${
+											pathname.startsWith(link.path)
+												? "text-[#FA8072]"
+												: "text-[default]"
+										} group-hover:text-[#E9967A]`,
+									})}
 								</IconButton>
-								<span className="text-xs text-center">{link.name}</span>
+								<span className="text-xs text-center transition-colors duration-300 group-hover:text-[#E9967A]">
+									{link.name}
+								</span>
 							</Link>
-						) : null}
+						)}
 						{index === 0 && <div className="w-3/4 h-px bg-gray-300" />}
 					</React.Fragment>
 				))}
 			</div>
-
-			<div className="flex justify-center items-center">
-				<Link
-					href="/"
-					className="flex flex-col items-center gap-2"
+			<div className="flex flex-col items-center">
+				<IconButton
 					onClick={handleLogout}
+					size="large"
+					className="transition-all duration-300 ease-in-out text-[default] hover:bg-[rgba(250,128,114,0.05)] hover:text-[#E9967A]"
 				>
-					<IconButton>
-						<Logout />
-					</IconButton>
-					<span className="text-xs text-center">ออกจากระบบ</span>
-				</Link>
+					<Logout />
+				</IconButton>
+				<span className="text-xs text-center text-[default]">ออกจากระบบ</span>
 			</div>
-		</div>
+		</nav>
 	);
 };
 

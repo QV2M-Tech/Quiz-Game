@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import ModalClose from "@mui/joy/ModalClose";
-import Button from "@mui/joy/Button";
-import Divider from "@mui/joy/Divider";
 import DialogTitle from "@mui/joy/DialogTitle";
+import Divider from "@mui/joy/Divider";
+import Button from "@mui/joy/Button";
+import DialogContent from "@mui/joy/DialogContent";
 import { Topic } from "@/types/Topic";
 import { Subtopic } from "@/types/SubTopic";
 import { SubTopicApi } from "@/lib/SubTopicApi";
@@ -57,22 +58,26 @@ const SubtopicModal: React.FC<SubtopicModalProps> = ({
 					<ModalClose />
 					<DialogTitle>{topic.topicName}</DialogTitle>
 					<Divider />
-					{subtopics.map((subtopic) => (
-						<Button
-							key={subtopic._id}
-							variant="plain"
-							color="neutral"
-							sx={{
-								backgroundColor: "#fef3c7",
-								"&:hover": {
-									backgroundColor: "#fde68a",
-								},
-							}}
-							onClick={() => handleSubtopicClick(subtopic._id)}
-						>
-							{subtopic.subtopicName}
-						</Button>
-					))}
+					{subtopics.length !== 0 ? (
+						subtopics.map((subtopic) => (
+							<Button
+								key={subtopic._id}
+								variant="plain"
+								color="neutral"
+								sx={{
+									backgroundColor: "#fef3c7",
+									"&:hover": {
+										backgroundColor: "#fde68a",
+									},
+								}}
+								onClick={() => handleSubtopicClick(subtopic._id)}
+							>
+								{subtopic.subtopicName}
+							</Button>
+						))
+					) : (
+						<DialogContent>ไม่มีหัวข้อย่อย</DialogContent>
+					)}
 				</ModalDialog>
 			</Modal>
 		</React.Fragment>

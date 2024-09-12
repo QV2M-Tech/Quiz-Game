@@ -38,7 +38,7 @@ const SubjectList: React.FC<{
 	topics: Topic[];
 	onTopicClick: (topic: Topic) => void;
 }> = ({ topics, onTopicClick }) => (
-	<ul className="w-full pr-4 max-h-[400px] overflow-y-auto custom-scrollbar">
+	<ul className="flex flex-col w-full pr-4 overflow-y-auto">
 		{topics.map((topic) => (
 			<SubjectItem
 				key={topic._id}
@@ -57,7 +57,7 @@ const TabPanel: React.FC<{
 	<div
 		hidden={value !== index}
 		role="tabpanel"
-		className="flex justify-center items-start h-full w-full flex-col"
+		className={`flex h-full w-full flex-col ${value !== index ? "hidden" : ""}`}
 	>
 		{value === index && children}
 	</div>
@@ -100,12 +100,8 @@ const MainContent: React.FC = () => {
 	};
 
 	return (
-		<div className="min-h-[80%] min-w-[80%] sm:min-w-fit sm:w-4/5 md:w-3/4 lg:w-3/5 overflow-hidden">
-			<Card
-				elevation={4}
-				className="p-4 mx-auto relative"
-				sx={{ boxShadow: "0 4px 8px rgba(0,0,0,0.1)" }}
-			>
+		<>
+			<div className="flex flex-col p-4 rounded min-h-5/6 min-w-4/5 w-11/12 sm:w-4/5 md:w-3/4 lg:w-3/5 bg-white">
 				<div className="flex justify-center mb-6 pb-2 border-b">
 					<Tabs
 						value={tabValue}
@@ -146,7 +142,8 @@ const MainContent: React.FC = () => {
 						/>
 					</Tabs>
 				</div>
-				<div className="mt-4 bg-primary/20 p-4 rounded-lg">
+
+				<div className="flex flex-col bg-primary/20 p-4 rounded-lg h-full">
 					<TabPanel value={tabValue} index={0}>
 						{/* กรอง category ที่เป็น "วิชาการ" */}
 						<SubjectList
@@ -154,6 +151,7 @@ const MainContent: React.FC = () => {
 							onTopicClick={handleTopicClick}
 						/>
 					</TabPanel>
+
 					<TabPanel value={tabValue} index={1}>
 						{/* กรอง category ที่เป็น "บันเทิง" */}
 						<div className="flex justify-center w-full items-center pr-4">
@@ -184,7 +182,8 @@ const MainContent: React.FC = () => {
 						/>
 					</TabPanel>
 				</div>
-			</Card>
+			</div>
+
 			{selectedTopic && (
 				<SubtopicModal
 					isOpen={isModalOpen}
@@ -192,7 +191,7 @@ const MainContent: React.FC = () => {
 					topic={selectedTopic}
 				/>
 			)}
-		</div>
+		</>
 	);
 };
 
