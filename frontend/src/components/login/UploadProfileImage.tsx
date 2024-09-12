@@ -37,8 +37,8 @@ const UploadProfileImage = ({ onImageUpload }: UploadProfileImageProps) => {
 	};
 
 	return (
-		<div className="flex flex-col items-center">
-			<div className="h-20 w-20 bg-cyan-300 rounded-full flex items-center justify-center">
+		<div className="flex items-center justify-center gap-4">
+			<div className="w-16 h-16 rounded-full flex items-center justify-center">
 				<img
 					src={profileImage || "/defaultProfile.png"}
 					alt="Profile"
@@ -53,7 +53,7 @@ const UploadProfileImage = ({ onImageUpload }: UploadProfileImageProps) => {
 			/>
 			<button
 				type="button"
-				className="mt-2 bg-gray-200 py-1 px-3 rounded-lg"
+				className="mt-2 bg-gray-200 py-1 px-3 rounded-lg text-sm"
 				onClick={() => document.getElementById("uploadfile")?.click()}
 			>
 				เลือกไฟล์

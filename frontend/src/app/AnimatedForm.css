@@ -81,7 +81,7 @@ body {
 	padding: 0;
 	text-transform: uppercase;
 	font-family: inherit;
-	font-size: 24px;
+	font-size: 20px;
 	letter-spacing: 0.5px;
 	color: #999;
 	background-color: transparent;
@@ -144,7 +144,7 @@ span:hover2 {
 	/*min-width: 520px;
 	*/
 	margin-top: 50px;
-	padding: 30px;
+	padding: 20px;
 	transform-origin: top;
 	border-radius: 10px;
 	-webkit-border-radius: 10px;

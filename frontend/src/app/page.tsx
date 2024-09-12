@@ -102,7 +102,7 @@ const LoginUserPage = () => {
 							onSubmit={(e) => e.preventDefault()}
 							onKeyDown={handleKeyDown}
 						>
-							<fieldset disabled={!isLogin} className="flex flex-col gap-5">
+							<fieldset disabled={!isLogin} className="flex flex-col gap-3">
 								<label htmlFor="login-username" className="login-label">
 									ชื่อผู้ใช้
 									<input
@@ -151,7 +151,7 @@ const LoginUserPage = () => {
 							onSubmit={(e) => e.preventDefault()}
 							onKeyDown={handleKeyDown}
 						>
-							<fieldset disabled={isLogin} className="flex flex-col gap-5">
+							<fieldset disabled={isLogin} className="flex flex-col gap-3">
 								<UploadProfileImage
 									onImageUpload={(imageUrl: any) => setProfile(imageUrl)}
 								/>
