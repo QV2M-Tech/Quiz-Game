@@ -6,21 +6,23 @@ interface DescriptionProps {
 
 const Description: React.FC<DescriptionProps> = ({ level }) => {
 	return (
-		<div className="flex w-4/12 bg-white shadow-lg rounded-xl justify-center p-5 ml-10">
+		<div className="flex gap-6 w-4/12 bg-white shadow-lg rounded-xl justify-center p-6">
 			{level === "easy" && (
-				<div>
+				<div className="flex flex-col gap-3">
 					<h2 className="flex justify-center items-center">กติกา</h2>
-					<ol>
-						<li>1. มีตัวเลข 4 ตัว นำมา + - * / ให้ได้ 24</li>
-						<li>2. ตัวเลขใช้ได้ตัวละครั้ง</li>
-						<li>3. ดำเนินการใช้ได้แค่ + - * / ( ) เท่านั้น</li>
-						<li>4. มีเวลา 60 วิ</li>
-						<li>5. ตอบถูก +5 คะแนน ตอบผิด รอ 5 วิ ถึงเริ่มข้อใหม่</li>
-					</ol>
+					<ul className="list-decimal flex flex-col gap-1 ml-6">
+						<li>มีตัวเลข 4 ตัว นำมา + - * / ให้ได้ 24</li>
+						<li>ตัวเลขใช้ได้ตัวละครั้ง</li>
+						<li>ดำเนินการใช้ได้แค่ + - * / ( ) เท่านั้น</li>
+						<li>มีเวลา 60 วิ</li>
+						<li>ตอบถูก +5 คะแนน ตอบผิด รอ 5 วิ ถึงเริ่มข้อใหม่</li>
+					</ul>
 					<h2 className="flex justify-center items-center">ตัวอย่าง</h2>
-					<p>ชุดตัวเลข: 3 5 7 9</p>
-					<p>คำตอบ: 24</p>
-					<p>วิธีคิด: (7-5)*(9+3)</p>
+					<ul>
+						<li>ชุดตัวเลข: 3 5 7 9</li>
+						<li>คำตอบ: 24</li>
+						<li>วิธีคิด: (7-5)*(9+3)</li>
+					</ul>
 
 					<h2 className="flex justify-center items-center">เทคนิค</h2>
 					<ul>
@@ -30,19 +32,21 @@ const Description: React.FC<DescriptionProps> = ({ level }) => {
 				</div>
 			)}
 			{level === "medium" && (
-				<div>
+				<div className="flex flex-col gap-3">
 					<h2 className="flex justify-center items-center">กติกา</h2>
-					<ol>
+					<ul className="list-decimal flex flex-col gap-1 ml-6">
 						<li>1. มีตัวเลข 4 ตัว นำมา + - * / ^ ให้ได้คำตอบ</li>
 						<li>2. ตัวเลขใช้ได้ตัวละครั้ง</li>
 						<li>3. ดำเนินการใช้ได้แค่ + - * / ^ ( ) เท่านั้น</li>
 						<li>4. มีเวลา 300 วิ</li>
 						<li>5. ตอบถูก +5 คะแนน ตอบผิด รอ 10 วิ ถึงเริ่มข้อใหม่</li>
-					</ol>
+					</ul>
 					<h2 className="flex justify-center items-center">ตัวอย่าง</h2>
-					<p>ชุดตัวเลข: 2 5 5 9</p>
-					<p>คำตอบ: 1015</p>
-					<p>วิธีคิด: 2^(5+5)-9</p>
+					<ul>
+						<li>ชุดตัวเลข: 2 5 5 9</li>
+						<li>คำตอบ: 1015</li>
+						<li>วิธีคิด: 2^(5+5)-9</li>
+					</ul>
 
 					<h2 className="flex justify-center items-center">เทคนิค</h2>
 					<ul>
@@ -52,19 +56,21 @@ const Description: React.FC<DescriptionProps> = ({ level }) => {
 				</div>
 			)}
 			{level === "hard" && (
-				<div>
+				<div className="flex flex-col gap-3">
 					<h2 className="flex justify-center items-center">กติกา</h2>
-					<ol>
+					<ul className="list-decimal flex flex-col gap-1 ml-6">
 						<li>1. มีตัวเลข 5 ตัว นำมา + - * / ^ ! ให้ได้คำตอบ</li>
 						<li>2. ตัวเลขใช้ได้ตัวละครั้ง</li>
 						<li>3. ดำเนินการใช้ได้แค่ + - * / ^ ! ( ) เท่านั้น</li>
 						<li>4. มีเวลา 600 วิ</li>
 						<li>5. ตอบถูก +5 คะแนน ตอบผิด รอ 15 วิ ถึงเริ่มข้อใหม่</li>
-					</ol>
+					</ul>
 					<h2 className="flex justify-center items-center">ตัวอย่าง</h2>
-					<p>ชุดตัวเลข: 2 2 3 9 4</p>
-					<p>คำตอบ: 184</p>
-					<p>วิธีคิด: 2^(3*2) + (9-4)!</p>
+					<ul>
+						<li>ชุดตัวเลข: 2 2 3 9 4</li>
+						<li>คำตอบ: 184</li>
+						<li>วิธีคิด: 2^(3*2) + (9-4)!</li>
+					</ul>
 
 					<h2 className="flex justify-center items-center">เทคนิค</h2>
 					<ul>

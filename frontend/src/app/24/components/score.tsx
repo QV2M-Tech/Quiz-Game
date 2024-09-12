@@ -38,7 +38,7 @@ const Score: React.FC<Props> = ({ level, IsEnd }) => {
 	}, [level, IsEnd]);
 
 	return (
-		<div className="flex w-4/12 mr-10">
+		<div className="flex w-4/12">
 			<div className="flex flex-col gap-6 w-full tw-box">
 				<h2 className="text-center">คะแนนสูงสุด 10 อันดับ</h2>
 				{loading ? (
@@ -54,7 +54,7 @@ const Score: React.FC<Props> = ({ level, IsEnd }) => {
 								<th className="w-1/5">คะแนน</th>
 							</tr>
 						</thead>
-						<tbody className="divide-y divide-sky-200">
+						<tbody className="divide-y divide-primary-hover">
 							{scores.map((row, index) => (
 								<tr key={index} className="h-10 hover:bg-primary">
 									<td>{index + 1}</td>
