@@ -1,6 +1,6 @@
 import React, { ReactNode, useState, useEffect } from "react";
 import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css"; // นำเข้า CSS ของ Tippy.js
+import "tippy.js/dist/tippy.css";
 
 interface TooltipWrapperProps {
 	content: string;
@@ -11,22 +11,22 @@ const TooltipWrapper: React.FC<TooltipWrapperProps> = ({
 	content,
 	children,
 }) => {
-	const [isTouchDevice, setIsTouchDevice] = useState(false);
+	const [isDesktop, setIsDesktop] = useState(false);
 
-	// ใช้ useEffect เพื่อตรวจสอบว่ามีการรองรับ touch screen หรือไม่
 	useEffect(() => {
-		const checkIfTouchDevice = () => {
-			setIsTouchDevice(
-				"ontouchstart" in window || navigator.maxTouchPoints > 0
-			);
+		const checkIfDesktop = () => {
+			setIsDesktop(window.innerWidth >= 1024); // ขนาด desktop ทั่วไปคือ 1024px
 		};
 
-		checkIfTouchDevice();
+		checkIfDesktop();
+		window.addEventListener("resize", checkIfDesktop);
+
+		return () => {
+			window.removeEventListener("resize", checkIfDesktop);
+		};
 	}, []);
 
-	return isTouchDevice ? (
-		<div style={{ display: "inline-block" }}>{children}</div>
-	) : (
+	return isDesktop ? (
 		<Tippy
 			content={content}
 			placement="top"
@@ -35,6 +35,8 @@ const TooltipWrapper: React.FC<TooltipWrapperProps> = ({
 		>
 			<div style={{ display: "inline-block" }}>{children}</div>
 		</Tippy>
+	) : (
+		<div style={{ display: "inline-block" }}>{children}</div>
 	);
 };
 

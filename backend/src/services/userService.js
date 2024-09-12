@@ -35,17 +35,12 @@ export const loginUser = async ({ username, password }) => {
 	const user = await User.findOne({ username });
 
 	if (!user) {
-		console.log("User not found");
 		throw new Error("Invalid credentials");
 	}
 
 	const isMatch = await comparePassword(password, user.password);
 
-	// Log the result of password comparison
-	console.log("Password match:", isMatch);
-
 	if (!isMatch) {
-		console.log("Password does not match");
 		throw new Error("Invalid credentials");
 	}
 
@@ -57,8 +52,6 @@ export const loginUser = async ({ username, password }) => {
 		profile: user.profile,
 		isAdmin: user.isAdmin,
 	});
-
-	console.log("Token generated successfully");
 
 	return { token, user };
 };

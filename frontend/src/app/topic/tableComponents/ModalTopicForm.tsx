@@ -86,10 +86,14 @@ const ModalTopicForm: React.FC<ModalTopicFormProps> = ({
 					<Button
 						asChild
 						variant="secondary"
-						disabled={isSubmitting}
-						onClick={handleSubmit}
+						disabled={isSubmitting} // Disable the button when isSubmitting is true
+						onClick={!isSubmitting ? handleSubmit : undefined} // Use undefined instead of null
 					>
-						<div>{isSubmitting ? "กำลังบันทึก..." : "บันทึก"}</div>
+						<div
+							className={isSubmitting ? "cursor-not-allowed" : "cursor-pointer"}
+						>
+							{isSubmitting ? "กำลังบันทึก..." : "บันทึก"}
+						</div>
 					</Button>
 				</DialogFooter>
 			</DialogContent>
