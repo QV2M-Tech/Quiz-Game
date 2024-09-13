@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import CategoryBadge from "@/components/ui/badge/CategoryBadge";
 import Pagination from "@/components/ui/Pagination";
-
+import TooltipWrapper from "@/components/ui/TooltipWrapper";
 import { ArrowUpDown, Trash } from "lucide-react";
 
 import { AllScore } from "@/types/score";
@@ -196,15 +196,17 @@ export default function ScorePage() {
 									<TableCell>{item.subtopic}</TableCell>
 									<TableCell className="text-center">{item.score}</TableCell>
 									<TableCell className="text-center">
-										<div
-											role="button"
-											onClick={() => handleDelete(item._id)}
-											className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-red-400"
-											// disabled={isDeleting}
-										>
-											{/* {isDeleting ? "กำลังลบ..." : ""} */}
-											<Trash className="inline-block" size={16} />
-										</div>
+										<TooltipWrapper content="ลบคะแนน">
+											<div
+												role="button"
+												onClick={() => handleDelete(item._id)}
+												className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-red-400"
+												// disabled={isDeleting}
+											>
+												{/* {isDeleting ? "กำลังลบ..." : ""} */}
+												<Trash className="inline-block" size={16} />
+											</div>
+										</TooltipWrapper>
 									</TableCell>
 								</TableRow>
 							))
