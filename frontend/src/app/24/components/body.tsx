@@ -43,13 +43,6 @@ const generateExpression = (
 	level: "easy" | "medium" | "hard"
 ) => {
 	const expressions: string[] = [];
-	const operators =
-		level === "hard"
-			? ["+", "-", "*", "/", "^", "!"]
-			: level === "medium"
-			? ["+", "-", "*", "/", "^"]
-			: ["+", "-", "*", "/"];
-
 	// สร้างสมการพื้นฐาน
 	for (let i = 0; i < 3; i++) {
 		expressions.push(
