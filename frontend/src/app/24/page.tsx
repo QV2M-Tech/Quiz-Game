@@ -43,43 +43,41 @@ function Page() {
 					isPortrait ? "hidden" : ""
 				}`}
 			>
-				<header className="flex w-full h-20">
-					<div className="flex w-1/3 m-3 items-center gap-10">
+				<header className="flex w-full gap-10 p-6">
+					<div className="flex w-2/5 items-center gap-6">
 						<Button
-							className={`bg-blue-950 text-white w-1/3 flex items-center justify-center hover:bg-blue-300 hover:text-black 
-								${level === "easy" ? "scale-120 ring-4 ring-blue-300" : ""} 
-								active:ring-2 active:ring-blue-300`}
+							className={`w-1/3 px-2 py-3 bg-white border border-secondary hover:bg-secondary hover:text-white
+								${level === "easy" ? "bg-secondary text-white" : ""}`}
 							onClick={() => handleLevelChange("easy")}
 						>
 							ง่าย
 						</Button>
 						<Button
-							className={`bg-blue-950 text-white w-1/3 flex items-center justify-center hover:bg-blue-300 hover:text-black 
-								${level === "medium" ? "scale-120 ring-4 ring-blue-300" : ""} 
-								active:ring-2 active:ring-blue-300`}
+							className={`w-1/3 px-2 py-3 bg-white border border-secondary hover:bg-secondary hover:text-white
+								${level === "medium" ? "bg-secondary text-white" : ""}`}
 							onClick={() => handleLevelChange("medium")}
 						>
 							ปานกลาง
 						</Button>
 						<Button
-							className={`bg-blue-950 text-white w-1/3 flex items-center justify-center hover:bg-blue-300 hover:text-black 
-								${level === "hard" ? "scale-120 ring-4 ring-blue-300" : ""} 
-								active:ring-2 active:ring-blue-300`}
+							className={`w-1/3 px-2 py-3 bg-white border border-secondary hover:bg-secondary hover:text-white
+								${level === "hard" ? "bg-secondary text-white" : ""}`}
 							onClick={() => handleLevelChange("hard")}
 						>
 							ยาก
 						</Button>
 					</div>
-					<div className="flex w-1/3 items-center justify-between p-2 bg-white rounded-xl m-5">
+					<div className="flex w-2/5 items-center justify-around px-2 py-3 bg-white rounded-lg">
 						<h3>หมวดหมู่: บันเทิง</h3>
 						<h3>หัวข้อย่อย: เกม 24</h3>
 					</div>
-					<div className="flex w-1/3 items-center justify-center p-2 bg-white rounded-xl m-5">
+					<div className="flex w-1/5 items-center justify-center px-2 py-3 bg-white rounded-lg">
 						<h3>ชื่อ {User?.name}</h3>{" "}
 						{/* Safe access using optional chaining */}
 					</div>
 				</header>
-				<div className="flex h-[500px]">
+
+				<div className="flex gap-8 justify-center px-10">
 					<Description level={level} />
 					<Body level={level} IsEnd={IsEnd} setIsEnd={setIsEnd} />
 					<Score level={level} IsEnd={IsEnd} />

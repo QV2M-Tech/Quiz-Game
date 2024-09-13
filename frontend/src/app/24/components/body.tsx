@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { evaluate, string } from "mathjs";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -160,6 +161,7 @@ const isValidExpression = (
 };
 
 const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
+	const router = useRouter();
 	const [numbers, setNumbers] = useState<number[]>([]);
 	const [target, setTarget] = useState<number>();
 	const [input, setInput] = useState<string>("");
@@ -275,7 +277,7 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 
 	const checkAnswer = () => {
 		if (!isValidExpression(input, numbers, level)) {
-			setMessage("กรุณาอ่านคำอธิบาย");
+			setMessage("กรุณาอ่านกติกา");
 			return;
 		}
 
@@ -335,20 +337,20 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 	};
 
 	return (
-		<div className="flex flex-col items-center w-8/12">
-			<div className="max-w-md mx-auto p-6 bg-white shadow-lg rounded-xl w-full">
-				<h1 className=" font-bold text-center mb-4">เกม 24</h1>
-				<div className="flex h-20 ">
-					<div className="m-5 bg-blue-200 justify-center items-center p-2 w-full">
+		<>
+			<div className="flex flex-col items-center gap-6 w-8/12 max-w-md mx-auto p-6 bg-white shadow-lg rounded-xl">
+				<h1>เกม 24</h1>
+				<div className="flex w-full gap-4">
+					<div className="bg-primary p-2 w-1/2 text-center rounded-md">
 						คะแนน : {score} คะแนน
 					</div>
-					<div className="m-5 bg-blue-200 justify-center items-center p-2 w-full">
+					<div className="bg-primary p-2 w-1/2 text-center rounded-md">
 						เวลา : {timeLeft} วิ
 					</div>
 				</div>
-				<div className="mb-4">
-					<p>ชุดตัวเลข: {numbers.join(", ")}</p>
-					<p>คำตอบ: {target}</p>
+				<div className="flex flex-col gap-4 w-full items-start text-left">
+					<h3>ชุดตัวเลข: {numbers.join(", ")}</h3>
+					<h3>คำตอบ: {target}</h3>
 				</div>
 				<input
 					type="text"
@@ -356,24 +358,32 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 					onChange={handleChange}
 					onKeyPress={handleKeyPress}
 					className="w-full p-2 border border-gray-300 rounded-md"
-					placeholder="พิมวิธีคิดตรงนี้"
+					placeholder="วิธีคิด"
 				/>
+				{message && <p>{message}</p>}
 				<button
 					onClick={checkAnswer}
-					className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-md"
+					className="w-full bg-accent hover:bg-accent-hover border border-secondary py-2 px-4 rounded-md shadow-md"
 				>
 					ตอบ
 				</button>
-				{message && <p className="mt-4 text-center">{message}</p>}
-				<button
-					onClick={resetGame}
-					className="mt-4 w-full bg-green-500 text-white py-2 px-4 rounded-md"
-				>
-					เริ่มเกมใหม่
-				</button>
+				<div className="flex gap-4 w-full">
+					<button
+						onClick={resetGame}
+						className="tw-btn w-1/2 bg-white border border-secondary hover:bg-secondary/20 shadow-md p-3 text-lg"
+					>
+						เริ่มเกมใหม่
+					</button>
+					<button
+						onClick={() => router.push("/selectgame")}
+						className="tw-btn w-1/2 bg-secondary hover:bg-secondary-hover text-white shadow-md p-3 text-lg"
+					>
+						ออกจากเกม
+					</button>
+				</div>
 			</div>
-			<ToastContainer />
-		</div>
+			{/* <ToastContainer /> */}
+		</>
 	);
 };
 

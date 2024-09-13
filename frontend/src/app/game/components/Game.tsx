@@ -89,7 +89,7 @@ export default function Game({
 				<div className="flex flex-col sm:flex-row items-center justify-start gap-1 w-full px-4">
 					<button
 						onClick={handleHint}
-						className="flex items-center gap-2 hover:bg-primary p-2 rounded text-lg"
+						className="flex items-center gap-2 hover:bg-primary py-2 px-4 rounded-full text-lg"
 					>
 						<FaRegLightbulb /> กดดูคำใบ้ (เหลือ {countHint})
 					</button>

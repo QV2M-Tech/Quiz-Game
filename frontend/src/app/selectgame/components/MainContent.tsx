@@ -38,7 +38,7 @@ const SubjectList: React.FC<{
 	topics: Topic[];
 	onTopicClick: (topic: Topic) => void;
 }> = ({ topics, onTopicClick }) => (
-	<ul className="flex flex-col w-full pr-4 overflow-y-auto">
+	<ul className="flex flex-col w-full pr-4">
 		{topics.map((topic) => (
 			<SubjectItem
 				key={topic._id}
@@ -143,7 +143,7 @@ const MainContent: React.FC = () => {
 					</Tabs>
 				</div>
 
-				<div className="flex flex-col bg-primary/20 p-4 rounded-lg h-full">
+				<div className="flex flex-col bg-primary/20 p-4 rounded-lg h-full overflow-y-scroll">
 					<TabPanel value={tabValue} index={0}>
 						{/* กรอง category ที่เป็น "วิชาการ" */}
 						<SubjectList
