@@ -35,11 +35,11 @@ const Description: React.FC<DescriptionProps> = ({ level }) => {
 				<div className="flex flex-col gap-3">
 					<h2 className="flex justify-center items-center">กติกา</h2>
 					<ul className="list-decimal flex flex-col gap-1 ml-6">
-						<li>1. มีตัวเลข 4 ตัว นำมา + - * / ^ ให้ได้คำตอบ</li>
-						<li>2. ตัวเลขใช้ได้ตัวละครั้ง</li>
-						<li>3. ดำเนินการใช้ได้แค่ + - * / ^ ( ) เท่านั้น</li>
-						<li>4. มีเวลา 300 วิ</li>
-						<li>5. ตอบถูก +5 คะแนน ตอบผิด รอ 10 วิ ถึงเริ่มข้อใหม่</li>
+						<li>มีตัวเลข 4 ตัว นำมา + - * / ^ ให้ได้คำตอบ</li>
+						<li>ตัวเลขใช้ได้ตัวละครั้ง</li>
+						<li>ดำเนินการใช้ได้แค่ + - * / ^ ( ) เท่านั้น</li>
+						<li>มีเวลา 300 วิ</li>
+						<li>ตอบถูก +5 คะแนน ตอบผิด รอ 10 วิ ถึงเริ่มข้อใหม่</li>
 					</ul>
 					<h2 className="flex justify-center items-center">ตัวอย่าง</h2>
 					<ul>
@@ -59,11 +59,11 @@ const Description: React.FC<DescriptionProps> = ({ level }) => {
 				<div className="flex flex-col gap-3">
 					<h2 className="flex justify-center items-center">กติกา</h2>
 					<ul className="list-decimal flex flex-col gap-1 ml-6">
-						<li>1. มีตัวเลข 5 ตัว นำมา + - * / ^ ! ให้ได้คำตอบ</li>
-						<li>2. ตัวเลขใช้ได้ตัวละครั้ง</li>
-						<li>3. ดำเนินการใช้ได้แค่ + - * / ^ ! ( ) เท่านั้น</li>
-						<li>4. มีเวลา 600 วิ</li>
-						<li>5. ตอบถูก +5 คะแนน ตอบผิด รอ 15 วิ ถึงเริ่มข้อใหม่</li>
+						<li>มีตัวเลข 5 ตัว นำมา + - * / ^ ! ให้ได้คำตอบ</li>
+						<li>ตัวเลขใช้ได้ตัวละครั้ง</li>
+						<li>ดำเนินการใช้ได้แค่ + - * / ^ ! ( ) เท่านั้น</li>
+						<li>มีเวลา 600 วิ</li>
+						<li>ตอบถูก +5 คะแนน ตอบผิด รอ 15 วิ ถึงเริ่มข้อใหม่</li>
 					</ul>
 					<h2 className="flex justify-center items-center">ตัวอย่าง</h2>
 					<ul>
