@@ -29,7 +29,7 @@ export default function ModalTimeout({
 				>
 					<DialogTitle>
 						<WarningRoundedIcon />
-						หมดเวลาแล้ว
+						เกมจบแล้ว
 					</DialogTitle>
 					<Divider />
 					<DialogContent>คะแนนของคุณคือ {score} คะแนน</DialogContent>

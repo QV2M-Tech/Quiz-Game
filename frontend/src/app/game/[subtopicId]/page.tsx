@@ -74,7 +74,7 @@ export default function GamePage({ params }: Props) {
 			};
 		});
 
-		if (time === 0) setShowTimeout(true);
+		if (time === 0 || questionList.length === 0) setShowTimeout(true);
 		if ((time === 0 || questionList.length === 0) && score !== 0) {
 			setScoreData((prevData) => {
 				const updatedData = {
