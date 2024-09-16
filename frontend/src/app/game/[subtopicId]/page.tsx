@@ -45,6 +45,7 @@ export default function GamePage({ params }: Props) {
 	});
 	const [questionList, setQuestionList] = useState<Question[]>([]);
 	const [countHint, setCountHint] = useState<number>(1);
+	const [countQuestion, setCountQuestion] = useState<number>(0);
 	const [score, setScore] = useState<number>(0);
 	const [scoreData, setScoreData] = useState<ScoreInput>({
 		userId: `${User?.id}`,
@@ -78,7 +79,7 @@ export default function GamePage({ params }: Props) {
 			time === 0 ||
 			(subtopicId !== "66d151ea62f384268532c45c" &&
 				questionList.length === 0 &&
-				(score > 0 || time !== subtopic.time))
+				(score > 0 || countQuestion > 0))
 		) {
 			setShowTimeout(true);
 		}
@@ -139,12 +140,14 @@ export default function GamePage({ params }: Props) {
 	}
 
 	function handleRestart(): void {
+		setCountQuestion(0);
+		setTime(subtopic?.time || 30000);
 		setShowTimeout(false);
 		setShowExit(false);
 		setReload(!reload);
 		setScore(0);
-		setTime(subtopic?.time || 30000);
 		setCountHint(1);
+		getQuestion(subtopicId);
 	}
 
 	function handleExit(): void {
@@ -155,7 +158,7 @@ export default function GamePage({ params }: Props) {
 		<>
 			<GameNav time={time} score={score} />
 
-			<div className="flex flex-col lg:flex-row gap-8 justify-center items-center mt-12 py-8 px-8 min-h-[calc(100vh-112px)]">
+			<div className="flex flex-col lg:flex-row gap-8 justify-center lg:justify-startlg:items-center mt-12 py-8 px-8 h-[calc(100vh-48px)] overflow-y-auto">
 				<Game
 					time={time}
 					setTime={setTime}
@@ -170,6 +173,7 @@ export default function GamePage({ params }: Props) {
 					setReload={setReload}
 					countHint={countHint}
 					setCountHint={setCountHint}
+					setCountQuestion={setCountQuestion}
 				/>
 				<Leaderboard subtopicId={subtopicId} reload={reload} />
 			</div>
