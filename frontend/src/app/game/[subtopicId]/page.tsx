@@ -76,7 +76,17 @@ export default function GamePage({ params }: Props) {
 
 		if (time === 0) setShowTimeout(true);
 		if ((time === 0 || questionList.length === 0) && score !== 0) {
-			saveScore(scoreData);
+			setScoreData((prevData) => {
+				const updatedData = {
+					...prevData,
+					userId: `${User?.id}`,
+					score: score,
+					timeSpent: subtopic.time - time,
+				};
+
+				saveScore(updatedData);
+				return updatedData;
+			});
 		}
 		if (!start || time <= 0) return;
 		if (showExit === true) return;
@@ -86,7 +96,7 @@ export default function GamePage({ params }: Props) {
 		}, 1000);
 
 		return () => clearInterval(intervalId);
-	}, [start, time, showExit]);
+	}, [start, time, showExit, questionList.length, score, User?.id]);
 
 	async function getSubtopic(id: string) {
 		try {
