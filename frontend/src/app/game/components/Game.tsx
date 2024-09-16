@@ -20,6 +20,7 @@ export default function Game({
 	setReload,
 	countHint,
 	setCountHint,
+	setCountQuestion,
 }: {
 	time: number;
 	setTime: Function;
@@ -34,6 +35,7 @@ export default function Game({
 	setReload: Function;
 	countHint: number;
 	setCountHint: Function;
+	setCountQuestion: Function;
 }) {
 	const [showHint, setShowHint] = useState<boolean>(false);
 
@@ -63,6 +65,7 @@ export default function Game({
 			setTime(0);
 		}
 		setReload(!reload);
+		setCountQuestion((prev: number) => prev + 1);
 	}
 
 	function handleHint() {
@@ -71,7 +74,7 @@ export default function Game({
 	}
 
 	return (
-		<div className="flex flex-col justify-between gap-6 sm:w-4/5 lg:w-3/4 xl:w-2/3 tw-box h-[calc(100vh-112px)]">
+		<div className="flex flex-col justify-between gap-6 sm:w-4/5 lg:w-3/4 xl:w-2/3 tw-box min-h-[calc(100vh-112px)] h-fit">
 			<div className="flex flex-col items-center gap-4">
 				<h1>เกมส์ตอบคำถาม</h1>
 				<div className="flex flex-col md:flex-row justify-center items-center md:justify-around md:gap-4 w-full">
