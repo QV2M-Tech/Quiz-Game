@@ -74,7 +74,15 @@ export default function GamePage({ params }: Props) {
 			};
 		});
 
-		if (time === 0 || questionList.length === 0) setShowTimeout(true);
+		if (
+			time === 0 ||
+			(subtopicId !== "66d151ea62f384268532c45c" &&
+				questionList.length === 0 &&
+				(score > 0 || time !== subtopic.time))
+		) {
+			setShowTimeout(true);
+		}
+
 		if ((time === 0 || questionList.length === 0) && score !== 0) {
 			setScoreData((prevData) => {
 				const updatedData = {
