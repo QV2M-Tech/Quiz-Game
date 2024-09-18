@@ -223,10 +223,14 @@ const QuestionManagement: React.FC<QuestionManagementProps> = ({
 								<TableRow key={question._id}>
 									<TableCell>
 										<div className="font-medium">
-											{thDateTime(question.createOn || "").split(" ")[0]}
+											{question.createOn
+												? thDateTime(question.createOn).split(" ")[0]
+												: "ไม่ระบุวันที่"}
 										</div>
 										<div className="text-sm text-gray-500">
-											{thDateTime(question.createOn || "").split(" ")[1]}
+											{question.createOn
+												? thDateTime(question.createOn).split(" ")[1]
+												: ""}
 										</div>
 									</TableCell>
 									<TableCell>{question.questionName}</TableCell>

@@ -89,7 +89,8 @@ const QuestionModal: React.FC<QuestionModalProps> = ({
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		onSubmit(formData);
+		const now = new Date().toISOString();
+		onSubmit({ ...formData, createOn: now });
 	};
 
 	return (
