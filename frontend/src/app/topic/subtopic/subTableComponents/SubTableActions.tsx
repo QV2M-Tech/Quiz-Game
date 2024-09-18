@@ -30,11 +30,11 @@ const SubTableAction: React.FC<SubTableActionProps> = ({
 
 	return (
 		<>
-			<TooltipWrapper content="จัดการหัวข้อหลัก">
+			<TooltipWrapper content="จัดการหัวข้อย่อย">
 				<div
 					onClick={navigateToQuestion}
 					role="button"
-					aria-label="จัดการหัวข้อหลัก"
+					aria-label="จัดการหัวข้อย่อย"
 					tabIndex={0}
 					className=" mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-primary-hover"
 				>

@@ -8,7 +8,7 @@ import AuthGuard from "@/components/AuthGuard";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-	title: "Quiz Game",
+	title: "Quiz Hub",
 	description: "Quiz Game",
 };
 
