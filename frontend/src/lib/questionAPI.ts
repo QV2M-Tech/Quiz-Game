@@ -24,16 +24,20 @@ export class QuestionApi {
 
 	static async createQuestion(newQuestion: QuestionInput): Promise<Question> {
 		try {
-			const response = await axiosInstance.post<ApiResponse<Question>>(
-				"/questions",
-				newQuestion
-			);
-			return response.data.data;
+		  const questionWithTimestamp = {
+			...newQuestion,
+			createOn: newQuestion.createOn || new Date().toISOString(),
+		  };
+		  const response = await axiosInstance.post<ApiResponse<Question>>(
+			"/questions",
+			questionWithTimestamp
+		  );
+		  return response.data.data;
 		} catch (error) {
-			console.error("Error creating question:", error);
-			throw error;
+		  console.error("Error creating question:", error);
+		  throw error;
 		}
-	}
+	  }
 
 	static async updateQuestion(
 		questionId: string,
