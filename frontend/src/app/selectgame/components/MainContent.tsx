@@ -72,6 +72,7 @@ const MainContent: React.FC = () => {
 	const router = useRouter();
 
 	const game24 = () => router.push(`/24`);
+	const fastMath = () => router.push(`/game/66d151ea62f384268532c45c`);
 
 	React.useEffect(() => {
 		const fetchTopics = async () => {
@@ -96,7 +97,10 @@ const MainContent: React.FC = () => {
 	};
 
 	const filterTopicsByCategory = (category: string) => {
-		return topics.filter((topic) => topic.category === category);
+		return topics.filter(
+			(topic) =>
+				topic.category === category && topic._id !== "66f3e854b4bc1daba5211ca3"
+		);
 	};
 
 	return (
@@ -158,6 +162,28 @@ const MainContent: React.FC = () => {
 							<li className="flex justify-center mb-5 w-full">
 								<Button
 									color="neutral"
+									onClick={fastMath}
+									size="lg"
+									variant="soft"
+									fullWidth
+									sx={{
+										maxWidth: "80%",
+										backgroundColor: "#fed7aa",
+										justifyContent: "center",
+										padding: "10px 20px",
+										"&:hover": {
+											backgroundColor: "#fdba74",
+										},
+									}}
+								>
+									เกมคณิตคิดเร็ว
+								</Button>
+							</li>
+						</div>
+						<div className="flex justify-center w-full items-center pr-4">
+							<li className="flex justify-center mb-5 w-full">
+								<Button
+									color="neutral"
 									onClick={game24}
 									size="lg"
 									variant="soft"
@@ -176,6 +202,7 @@ const MainContent: React.FC = () => {
 								</Button>
 							</li>
 						</div>
+
 						<SubjectList
 							topics={filterTopicsByCategory("บันเทิง")}
 							onTopicClick={handleTopicClick}
