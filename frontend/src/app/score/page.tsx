@@ -14,13 +14,21 @@ import { Input } from "@/components/ui/input";
 import CategoryBadge from "@/components/ui/badge/CategoryBadge";
 import Pagination from "@/components/ui/Pagination";
 import TooltipWrapper from "@/components/ui/TooltipWrapper";
-import { ArrowUpDown, Trash } from "lucide-react";
+import { ArrowUpDown, Edit, Trash } from "lucide-react";
 
-import { AllScore } from "@/types/score";
-import { deleteScore, getAllScore } from "@/lib/scoreApi";
+import { AllScore, ScoreInput } from "@/types/score";
+import { deleteScore, getAllScore, updateScore } from "@/lib/scoreApi";
 import { thDateTime } from "@/lib/format";
 import Loading from "@/components/ui/Loading";
 import { Button } from "@/components/ui/button";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogFooter,
+} from "@/components/ui/dialog";
+import { Score } from "@mui/icons-material";
 
 export default function ScorePage() {
 	const [data, setData] = useState<AllScore[]>([]);
@@ -35,6 +43,10 @@ export default function ScorePage() {
 		key: keyof AllScore;
 		direction: "asc" | "desc";
 	} | null>(null);
+
+	const [editingScore, setEditingScore] = useState<AllScore | null>(null);
+	const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+	const [editedScore, setEditedScore] = useState<number>(0);
 
 	useEffect(() => {
 		window.scrollTo(0, 0);
@@ -90,6 +102,33 @@ export default function ScorePage() {
 			direction = "desc";
 		}
 		setSortConfig({ key, direction });
+	};
+
+	const handleEdit = (score: AllScore) => {
+		setEditingScore(score);
+		setEditedScore(score.score);
+		setIsEditModalOpen(true);
+	};
+
+	const handleUpdateScore = async () => {
+		if (editingScore) {
+			// กำหนดข้อมูลที่ต้องการอัปเดตแค่ score
+			const updatedScore = {
+				score: editedScore,
+			};
+
+			try {
+				// เรียก API เพื่ออัปเดตคะแนน
+				const message = await updateScore(editingScore._id, updatedScore);
+				console.log(message);
+
+				// ปิด modal และรีเฟรชข้อมูล
+				setIsEditModalOpen(false);
+				setAction(!action);
+			} catch (error) {
+				console.error("Error updating score:", error);
+			}
+		}
 	};
 
 	async function handleDelete(scoreId: string) {
@@ -196,14 +235,21 @@ export default function ScorePage() {
 									<TableCell>{item.subtopic}</TableCell>
 									<TableCell className="text-center">{item.score}</TableCell>
 									<TableCell className="text-center">
+										<TooltipWrapper content="แก้ไขคะแนน">
+											<div
+												role="button"
+												onClick={() => handleEdit(item)}
+												className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-blue-400"
+											>
+												<Edit className="inline-block" size={16} />
+											</div>
+										</TooltipWrapper>
 										<TooltipWrapper content="ลบคะแนน">
 											<div
 												role="button"
 												onClick={() => handleDelete(item._id)}
 												className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-red-400"
-												// disabled={isDeleting}
 											>
-												{/* {isDeleting ? "กำลังลบ..." : ""} */}
 												<Trash className="inline-block" size={16} />
 											</div>
 										</TooltipWrapper>
@@ -229,6 +275,33 @@ export default function ScorePage() {
 						</TableFooter>
 					)}
 				</Table>
+			</div>
+			<div>
+				<Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+					<DialogContent className="max-w-sm w-30">
+						<DialogHeader>
+							<DialogTitle>แก้ไขคะแนน</DialogTitle>
+						</DialogHeader>
+						<div className="py-4 justify-center">
+							<Input
+								type="number"
+								value={editedScore}
+								onChange={(e) => setEditedScore(Number(e.target.value))}
+								className="w-24"
+								placeholder="Enter new score"
+							/>
+						</div>
+						<DialogFooter>
+							<Button
+								variant="outline"
+								onClick={() => setIsEditModalOpen(false)}
+							>
+								ยกเลิก
+							</Button>
+							<Button onClick={handleUpdateScore}>บันทึก</Button>
+						</DialogFooter>
+					</DialogContent>
+				</Dialog>
 			</div>
 		</div>
 	);

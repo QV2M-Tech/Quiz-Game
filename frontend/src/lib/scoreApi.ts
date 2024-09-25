@@ -36,6 +36,16 @@ export async function createScore(scoreInput: ScoreInput): Promise<string> {
 	}
 }
 
+export async function updateScore(scoreId: string, updatedScore: { score: number }): Promise<string> {
+	try {
+		await axiosInstance.patch(`/scores/${scoreId}`, updatedScore);
+		return `Update score success`;
+	} catch (error) {
+		console.log(`Failed to update score, error`);
+		return `Failed to update score`;
+	}
+}
+
 export async function deleteScore(scoreId: string): Promise<string> {
 	try {
 		await axiosInstance.delete(`/scores/${scoreId}`);
