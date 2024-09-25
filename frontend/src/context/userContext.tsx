@@ -7,23 +7,16 @@ import React, {
 	useContext,
 	ReactNode,
 } from "react";
-import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
-
-interface User {
-	id: string;
-	username: string;
-	name: string;
-	profile: string;
-	isAdmin: boolean;
-}
+import { getUserById } from "@/lib/userApi";
+import { User } from "@/types/user"; // Import User type
 
 interface UserContextType {
 	User: User | null;
 	setUser: React.Dispatch<React.SetStateAction<User | null>>;
 	isLoading: boolean;
 	setUserFromToken: (token: string) => void;
-	refreshUser: () => void;
+	refreshUser: () => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -33,32 +26,33 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
 	const [User, setUser] = useState<User | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
-	const [forceUpdate, setForceUpdate] = useState(0);
-
-	const router = useRouter();
 
 	useEffect(() => {
-		const fetchUserData = async () => {
-			try {
-				const token = localStorage.getItem("token");
+		fetchUserData();
+	}, []);
 
-				if (token) {
-					const decodedToken = jwtDecode<User>(token);
-
-					setUser(decodedToken);
+	const fetchUserData = async () => {
+		try {
+			const token = localStorage.getItem("token");
+			if (token) {
+				const decodedToken = jwtDecode<{ id: string }>(token);
+				const userData = await getUserById(decodedToken.id);
+				if (userData) {
+					setUser(userData);
 				} else {
+					console.error("User data not found");
 					setUser(null);
 				}
-			} catch (error) {
+			} else {
 				setUser(null);
-			} finally {
-				setIsLoading(false);
 			}
-		};
-		fetchUserData();
-	}, [forceUpdate]);
-
-	useEffect(() => {}, [User]);
+		} catch (error) {
+			console.error("Error fetching user data:", error);
+			setUser(null);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	const setUserFromToken = (token: string) => {
 		try {
@@ -71,7 +65,9 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
 		}
 	};
 
-	const refreshUser = () => setForceUpdate((prev) => prev + 1);
+	const refreshUser = async () => {
+		await fetchUserData();
+	};
 
 	return (
 		<UserContext.Provider

@@ -2,12 +2,16 @@ import { useState } from "react";
 import { CgSpinner } from "react-icons/cg";
 
 interface UploadProfileImageProps {
+	profileImg: string;
 	onImageUpload: (imageUrl: string) => void;
 }
 
-const UploadProfileImage = ({ onImageUpload }: UploadProfileImageProps) => {
+const UploadProfileImage = ({
+	profileImg,
+	onImageUpload,
+}: UploadProfileImageProps) => {
 	const [profileImage, setProfileImage] = useState<string>(
-		"/defaultProfile.png"
+		`${profileImg}` || "/defaultProfile.png"
 	);
 	const [loading, setLoading] = useState<boolean>(false);
 
