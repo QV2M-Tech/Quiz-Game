@@ -10,46 +10,26 @@ import ProfileModal from "./components/ProfileModal";
 export default function Profile() {
 	const { User, refreshUser } = useUser();
 	const userId = User?._id || "";
-	const [userProfile, setUserProfile] = useState<User>({
-		_id: "",
-		profile: "",
-		name: "",
-		username: "",
-		password: "",
-		isAdmin: User?.isAdmin || false,
-		createOn: "",
-	});
+	const [userProfile, setUserProfile] = useState<User | null>(null);
 	const [popup, setPopup] = useState<boolean>(false);
 	const [popupTitle, setPopupTitle] = useState<string>("");
 	const [popupContent, setPopupContent] = useState<string>("");
 
 	useEffect(() => {
-		if (userId) {
-			getUser(userId);
+		if (User) {
+			setUserProfile(User);
 		}
-	}, [userId]);
-
-	async function getUser(userId: string) {
-		const userInfo = await getUserById(userId);
-
-		if (userInfo) {
-			setUserProfile((prev) => ({
-				...prev,
-				profile: userInfo.profile,
-				name: userInfo.name,
-				username: userInfo.username,
-			}));
-		}
-	}
+	}, [User]);
 
 	function handleChange(e: { target: { name: string; value: any } }) {
 		const { name, value } = e.target;
 
-		setUserProfile((prev) => ({ ...prev, [name]: value }));
+		setUserProfile((prev) => (prev ? { ...prev, [name]: value } : null));
 	}
 
 	async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
 		event.preventDefault();
+		if (!userProfile) return;
 
 		try {
 			const res = await updateUserById(userId, userProfile);
@@ -73,9 +53,11 @@ export default function Profile() {
 				>
 					<h2 className="font-bold">แก้ไขข้อมูลผู้ใช้</h2>
 					<UploadProfileImage
-						profileImg={userProfile.profile || User?.profile || ""}
+						profileImg={userProfile?.profile || User?.profile || ""}
 						onImageUpload={(imageUrl: string) => {
-							setUserProfile((prev) => ({ ...prev, profile: imageUrl }));
+							setUserProfile((prev) =>
+								prev ? { ...prev, profile: imageUrl } : null
+							);
 						}}
 					/>
 

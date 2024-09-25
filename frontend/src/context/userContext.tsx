@@ -31,12 +31,13 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
 		fetchUserData();
 	}, []);
 
-	const fetchUserData = async () => {
+	async function fetchUserData() {
 		try {
 			const token = localStorage.getItem("token");
 			if (token) {
 				const decodedToken = jwtDecode<{ id: string }>(token);
 				const userData = await getUserById(decodedToken.id);
+
 				if (userData) {
 					setUser(userData);
 				} else {
@@ -52,7 +53,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}
 
 	const setUserFromToken = (token: string) => {
 		try {
