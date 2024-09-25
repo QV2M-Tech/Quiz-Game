@@ -48,7 +48,7 @@ export default function GamePage({ params }: Props) {
 	const [countQuestion, setCountQuestion] = useState<number>(0);
 	const [score, setScore] = useState<number>(0);
 	const [scoreData, setScoreData] = useState<ScoreInput>({
-		userId: `${User?.id}`,
+		userId: `${User?._id}`,
 		subtopicId: `${subtopicId}`,
 		score: 0,
 		timeSpent: 0,
@@ -69,7 +69,7 @@ export default function GamePage({ params }: Props) {
 		setScoreData((prevData) => {
 			return {
 				...prevData,
-				userId: `${User?.id}`,
+				userId: `${User?._id}`,
 				score: score,
 				timeSpent: subtopic.time - time,
 			};
@@ -88,7 +88,7 @@ export default function GamePage({ params }: Props) {
 			setScoreData((prevData) => {
 				const updatedData = {
 					...prevData,
-					userId: `${User?.id}`,
+					userId: `${User?._id}`,
 					score: score,
 					timeSpent: subtopic.time - time,
 				};
@@ -105,7 +105,7 @@ export default function GamePage({ params }: Props) {
 		}, 1000);
 
 		return () => clearInterval(intervalId);
-	}, [start, time, showExit, questionList.length, score, User?.id]);
+	}, [start, time, showExit, questionList.length, score, User?._id]);
 
 	async function getSubtopic(id: string) {
 		try {

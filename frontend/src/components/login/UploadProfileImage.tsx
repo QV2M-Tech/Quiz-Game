@@ -1,22 +1,30 @@
 import { useState } from "react";
+import { CgSpinner } from "react-icons/cg";
 
 interface UploadProfileImageProps {
+	profileImg: string;
 	onImageUpload: (imageUrl: string) => void;
 }
 
-const UploadProfileImage = ({ onImageUpload }: UploadProfileImageProps) => {
+const UploadProfileImage = ({
+	profileImg,
+	onImageUpload,
+}: UploadProfileImageProps) => {
 	const [profileImage, setProfileImage] = useState<string>(
-		"/defaultProfile.png"
+		`${profileImg}` || "/defaultProfile.png"
 	);
+	const [loading, setLoading] = useState<boolean>(false);
 
 	const handleFileChange = async (e: any) => {
 		const file = e.target.files[0];
 		if (!file) return;
 
 		try {
+			setLoading(true);
 			const imageURL = await uploadToCloudinary(file);
 			setProfileImage(imageURL);
 			onImageUpload(imageURL); // ส่ง URL ของภาพที่อัปโหลดกลับไปที่ component แม่
+			setLoading(false);
 		} catch (error) {
 			console.error("Error uploading image:", error);
 		}
@@ -38,12 +46,17 @@ const UploadProfileImage = ({ onImageUpload }: UploadProfileImageProps) => {
 
 	return (
 		<div className="flex items-center justify-center gap-4">
-			<div className="w-16 h-16 rounded-full flex items-center justify-center">
-				<img
-					src={profileImage || "/defaultProfile.png"}
-					alt="Profile"
-					className="rounded-full w-full h-full object-cover"
-				/>
+			<div className="w-16 h-16 rounded-full border flex items-center justify-center">
+				{loading ? (
+					<CgSpinner className="text-4xl text-accent animate-spin" />
+				) : (
+					// eslint-disable-next-line @next/next/no-img-element
+					<img
+						src={profileImage || "/defaultProfile.png"}
+						alt="Profile"
+						className="rounded-full w-full h-full object-cover"
+					/>
+				)}
 			</div>
 			<input
 				id="uploadfile"

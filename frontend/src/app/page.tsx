@@ -154,6 +154,7 @@ const LoginUserPage = () => {
 							<fieldset disabled={isLogin} className="flex flex-col gap-3">
 								<UploadProfileImage
 									onImageUpload={(imageUrl: any) => setProfile(imageUrl)}
+									profileImg={""}
 								/>
 								<label htmlFor="signup-name" className="login-label">
 									ชื่อ

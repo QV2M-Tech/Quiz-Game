@@ -62,7 +62,19 @@ const NavRail: React.FC = () => {
 	return (
 		<nav className="flex flex-col justify-between fixed z-20 gap-4 h-screen w-16 sm:w-20 px-2 py-4 bg-white shadow-md">
 			<div className="flex flex-col items-center gap-4">
-				<UserProfile />
+				<Link
+					href="/profile"
+					className={`group flex flex-col items-center gap-1 transition-all ${
+						pathname.startsWith("/profile")
+							? "text-[#FA8072]"
+							: "text-[default]"
+					}`}
+				>
+					<UserProfile />
+					<span className="text-xs text-center transition-colors duration-300 group-hover:text-[#E9967A]">
+						โปรไฟล์
+					</span>
+				</Link>
 				{links.map((link, index) => (
 					<React.Fragment key={link.name}>
 						{(!link.isAdmin || (User && User.isAdmin)) && (
