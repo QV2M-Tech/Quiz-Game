@@ -2,19 +2,16 @@ import React from "react";
 import {
 	Button,
 	DialogActions,
-	DialogContent,
 	DialogTitle,
 	Divider,
 	FormControl,
 	FormLabel,
-	// Input,
 	Modal,
 	ModalClose,
 	ModalDialog,
 	Stack,
 } from "@mui/joy";
 import { Input } from "@/components/ui/input";
-import { AllScore } from "@/types/score";
 
 export default function ScoreModal({
 	isEditModalOpen,
@@ -41,7 +38,6 @@ export default function ScoreModal({
 					<DialogTitle>แก้ไขคะแนน</DialogTitle>
 
 					<Divider />
-					{/* <DialogContent>xxx</DialogContent> */}
 					<form
 						onSubmit={(event) => {
 							event.preventDefault();

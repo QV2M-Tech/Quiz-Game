@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
+
 import {
-	Dialog,
+	Button,
+	DialogActions,
 	DialogTitle,
-	DialogContent,
-	DialogFooter,
-	DialogClose,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+	Divider,
+	FormControl,
+	FormLabel,
+	Modal,
+	ModalClose,
+	ModalDialog,
+	Stack,
+} from "@mui/joy";
+import { Input } from "@/components/ui/input";
 
 interface ModalUserEditProps {
 	isOpen: boolean;
@@ -41,38 +47,60 @@ const ModalUserEdit: React.FC<ModalUserEditProps> = ({
 	};
 
 	return (
-		<Dialog open={isOpen} onOpenChange={setIsOpen}>
-			<DialogContent className="max-w-sm mx-auto p-4 rounded-lg bg-white shadow-lg">
-				<DialogTitle className="text-lg font-semibold mb-4">
-					แก้ไขชื่อ
-				</DialogTitle>
-				<div className="mb-4">
-					<label className="block text-sm font-medium text-gray-700">
-						ชื่อ
-					</label>
-					<input
-						type="text"
-						value={userName}
-						onChange={(e) => setUserName(e.target.value)}
-						placeholder="ชื่อ"
-						className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm"
-					/>
-				</div>
-				<DialogFooter className="flex justify-end space-x-2">
-					<DialogClose>
-						<Button variant="outline">ยกเลิก</Button>
-					</DialogClose>
-					<Button
-						type="submit"
-						variant="secondary"
-						disabled={isSubmitting}
-						onClick={handleSubmit}
+		<React.Fragment>
+			<Modal open={isOpen} onClose={() => setIsOpen(false)}>
+				<ModalDialog
+					className={`animate-slide-down`}
+					variant="outlined"
+					role="alertdialog"
+				>
+					<ModalClose />
+					<DialogTitle>แก้ไขชื่อ</DialogTitle>
+
+					<Divider />
+
+					<form
+						onSubmit={(event) => {
+							event.preventDefault();
+							handleSubmit();
+						}}
 					>
-						{isSubmitting ? "กำลังบันทึก..." : "บันทึก"}
-					</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+						<Stack spacing={2}>
+							<FormControl>
+								<FormLabel>ชื่อ</FormLabel>
+								<Input
+									type="text"
+									value={userName}
+									onChange={(e) => setUserName(e.target.value)}
+									placeholder="ชื่อ"
+								/>
+							</FormControl>
+							<DialogActions>
+								<Button
+									type="submit"
+									sx={{
+										backgroundColor: "#c2410c",
+										color: "#fff",
+										"&:hover": {
+											backgroundColor: "#7c2d12",
+										},
+									}}
+								>
+									บันทึก
+								</Button>
+								<Button
+									variant="outlined"
+									color="neutral"
+									onClick={() => setIsOpen(false)}
+								>
+									ยกเลิก
+								</Button>
+							</DialogActions>
+						</Stack>
+					</form>
+				</ModalDialog>
+			</Modal>
+		</React.Fragment>
 	);
 };
 
