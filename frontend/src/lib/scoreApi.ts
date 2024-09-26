@@ -39,6 +39,7 @@ export async function createScore(scoreInput: ScoreInput): Promise<string> {
 // Update an existing score
 export async function updateScore(scoreId: string, updatedScore: { score: number }): Promise<string> {
 	try {
+		console.log(`Updating score with ID: ${scoreId}`, updatedScore);
 		await axiosInstance.patch(`/scores/${scoreId}`, updatedScore);
 		return `Update score success`;
 	} catch (error: any) {
