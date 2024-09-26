@@ -19,12 +19,14 @@ export default function ScoreModal({
 	handleUpdateScore,
 	editedScore,
 	setEditedScore,
+	isSubmitting,
 }: {
 	isEditModalOpen: boolean;
 	setIsEditModalOpen: Function;
 	handleUpdateScore: Function;
 	editedScore: number;
 	setEditedScore: Function;
+	isSubmitting: boolean;
 }) {
 	return (
 		<React.Fragment>
@@ -52,12 +54,15 @@ export default function ScoreModal({
 									type="number"
 									value={editedScore}
 									onChange={(e) => setEditedScore(Number(e.target.value))}
-									placeholder="Enter new score"
+									placeholder="คะแนน"
 								/>
 							</FormControl>
 							<DialogActions>
 								<Button
 									type="submit"
+									color="warning"
+									disabled={isSubmitting}
+									loading={isSubmitting}
 									sx={{
 										backgroundColor: "#c2410c",
 										color: "#fff",

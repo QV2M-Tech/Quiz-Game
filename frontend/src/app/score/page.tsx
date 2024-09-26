@@ -39,6 +39,7 @@ export default function ScorePage() {
 	const [editingScore, setEditingScore] = useState<AllScore | null>(null);
 	const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 	const [editedScore, setEditedScore] = useState<number>(0);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	useEffect(() => {
 		window.scrollTo(0, 0);
@@ -110,6 +111,7 @@ export default function ScorePage() {
 			};
 
 			try {
+				setIsSubmitting(true);
 				// เรียก API เพื่ออัปเดตคะแนน
 				const message = await updateScore(editingScore._id, updatedScore);
 				console.log(message);
@@ -117,7 +119,9 @@ export default function ScorePage() {
 				// ปิด modal และรีเฟรชข้อมูล
 				setIsEditModalOpen(false);
 				setAction(!action);
+				setIsSubmitting(false);
 			} catch (error) {
+				setIsSubmitting(false);
 				console.error("Error updating score:", error);
 			}
 		}
@@ -274,6 +278,7 @@ export default function ScorePage() {
 				handleUpdateScore={handleUpdateScore}
 				editedScore={editedScore}
 				setEditedScore={setEditedScore}
+				isSubmitting={isSubmitting}
 			/>
 		</div>
 	);

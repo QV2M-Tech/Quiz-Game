@@ -78,6 +78,9 @@ const ModalUserEdit: React.FC<ModalUserEditProps> = ({
 							<DialogActions>
 								<Button
 									type="submit"
+									color="warning"
+									disabled={isSubmitting}
+									loading={isSubmitting}
 									sx={{
 										backgroundColor: "#c2410c",
 										color: "#fff",
