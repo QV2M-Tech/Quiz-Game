@@ -46,7 +46,7 @@ export default function Profile() {
 
 	return (
 		<>
-			<div className="flex flex-col items-center py-10 min-h-screen">
+			<div className="flex flex-col items-center py-14 sm:py-10 min-h-screen">
 				<form
 					className="tw-box flex flex-col gap-6 sm:w-1/2"
 					onSubmit={handleSubmit}

@@ -14,6 +14,17 @@ import { IconButton } from "@mui/material";
 import UserProfile from "./userprofile";
 import { useUser } from "@/context/userContext";
 
+import {
+	NavigationMenu,
+	NavigationMenuContent,
+	NavigationMenuIndicator,
+	NavigationMenuItem,
+	NavigationMenuLink,
+	NavigationMenuList,
+	NavigationMenuTrigger,
+	NavigationMenuViewport,
+} from "@/components/ui/navigation-menu";
+
 interface LinkItem {
 	name: string;
 	path: string;
@@ -60,64 +71,117 @@ const NavRail: React.FC = () => {
 	};
 
 	return (
-		<nav className="flex flex-col justify-between fixed z-20 gap-4 h-screen w-16 sm:w-20 px-2 py-4 bg-white shadow-md">
-			<div className="flex flex-col items-center gap-4">
-				<Link
-					href="/profile"
-					className={`group flex flex-col items-center gap-1 transition-all ${
-						pathname.startsWith("/profile")
-							? "text-[#FA8072]"
-							: "text-[default]"
-					}`}
-				>
-					<UserProfile />
-					<span className="text-xs text-center transition-colors duration-300 group-hover:text-[#E9967A]">
-						โปรไฟล์
-					</span>
-				</Link>
-				{links.map((link, index) => (
-					<React.Fragment key={link.name}>
-						{(!link.isAdmin || (User && User.isAdmin)) && (
-							<Link
-								href={link.path}
-								className={`group flex flex-col items-center gap-1 transition-all ${
-									pathname.startsWith(link.path)
-										? "text-[#FA8072]"
-										: "text-[default]"
-								}`}
-							>
-								<IconButton
-									size="large"
-									className="transition-all duration-300 ease-in-out group-hover:bg-[rgba(250,128,114,0.05)]"
+		<>
+			<nav className="hidden sm:flex flex-col justify-between fixed z-20 gap-4 h-screen sm:w-20 px-2 py-4 bg-white shadow-md">
+				<div className="flex flex-col items-center gap-4">
+					<Link
+						href="/profile"
+						className={`group flex flex-col items-center gap-1 transition-all ${
+							pathname.startsWith("/profile")
+								? "text-[#FA8072]"
+								: "text-[default]"
+						}`}
+					>
+						<UserProfile />
+						<span className="text-xs text-center transition-colors duration-300 group-hover:text-[#E9967A]">
+							โปรไฟล์
+						</span>
+					</Link>
+					{links.map((link, index) => (
+						<React.Fragment key={link.name}>
+							{(!link.isAdmin || (User && User.isAdmin)) && (
+								<Link
+									href={link.path}
+									className={`group flex flex-col items-center gap-1 transition-all ${
+										pathname.startsWith(link.path)
+											? "text-[#FA8072]"
+											: "text-[default]"
+									}`}
 								>
-									{React.cloneElement(link.icon as React.ReactElement, {
-										className: `${
-											pathname.startsWith(link.path)
+									<IconButton
+										size="large"
+										className="transition-all duration-300 ease-in-out group-hover:bg-[rgba(250,128,114,0.05)]"
+									>
+										{React.cloneElement(link.icon as React.ReactElement, {
+											className: `${
+												pathname.startsWith(link.path)
+													? "text-[#FA8072]"
+													: "text-[default]"
+											} group-hover:text-[#E9967A]`,
+										})}
+									</IconButton>
+									<span className="text-xs text-center transition-colors duration-300 group-hover:text-[#E9967A]">
+										{link.name}
+									</span>
+								</Link>
+							)}
+							{index === 0 && <div className="w-3/4 h-px bg-gray-300" />}
+						</React.Fragment>
+					))}
+				</div>
+				<div className="flex flex-col items-center">
+					<IconButton
+						onClick={handleLogout}
+						size="large"
+						className="transition-all duration-300 ease-in-out text-[default] hover:bg-[rgba(250,128,114,0.05)] hover:text-[#E9967A]"
+					>
+						<Logout />
+					</IconButton>
+					<span className="text-xs text-center text-[default]">ออกจากระบบ</span>
+				</div>
+			</nav>
+
+			<nav className="flex items-start gap-2 sm:hidden fixed z-20 left-2 top-2">
+				<NavigationMenu>
+					<NavigationMenuList>
+						<NavigationMenuItem>
+							<NavigationMenuTrigger>
+								<div className="w-8">
+									<UserProfile />
+								</div>
+							</NavigationMenuTrigger>
+							<NavigationMenuContent className="divide-y w-32">
+								<div className="p-2">
+									<Link
+										href="/profile"
+										className={`group flex flex-col items-center transition-all ${
+											pathname.startsWith("/profile")
 												? "text-[#FA8072]"
 												: "text-[default]"
-										} group-hover:text-[#E9967A]`,
-									})}
-								</IconButton>
-								<span className="text-xs text-center transition-colors duration-300 group-hover:text-[#E9967A]">
-									{link.name}
-								</span>
-							</Link>
-						)}
-						{index === 0 && <div className="w-3/4 h-px bg-gray-300" />}
-					</React.Fragment>
-				))}
-			</div>
-			<div className="flex flex-col items-center">
-				<IconButton
-					onClick={handleLogout}
-					size="large"
-					className="transition-all duration-300 ease-in-out text-[default] hover:bg-[rgba(250,128,114,0.05)] hover:text-[#E9967A]"
-				>
-					<Logout />
-				</IconButton>
-				<span className="text-xs text-center text-[default]">ออกจากระบบ</span>
-			</div>
-		</nav>
+										}`}
+									>
+										<NavigationMenuLink>โปรไฟล์</NavigationMenuLink>
+									</Link>
+								</div>
+								{links.map(
+									(link, index) =>
+										(!link.isAdmin || (User && User.isAdmin)) && (
+											<div key={index} className="p-2">
+												<Link
+													href={link.path}
+													className={`group flex flex-col items-center gap-1 transition-all ${
+														pathname.startsWith(link.path)
+															? "text-[#FA8072]"
+															: "text-[default]"
+													}`}
+												>
+													<NavigationMenuLink>{link.name}</NavigationMenuLink>
+												</Link>
+											</div>
+										)
+								)}
+								<div
+									onClick={handleLogout}
+									className="p-2 flex justify-center items-center cursor-pointer"
+								>
+									<NavigationMenuLink>ออกจากระบบ</NavigationMenuLink>
+								</div>
+							</NavigationMenuContent>
+						</NavigationMenuItem>
+					</NavigationMenuList>
+				</NavigationMenu>
+			</nav>
+		</>
 	);
 };
 

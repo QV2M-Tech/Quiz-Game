@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
-import {
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogFooter,
-	DialogClose,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Topic, TopicInput } from "@/types/Topic";
 
+import {
+	Button,
+	DialogActions,
+	DialogTitle,
+	Divider,
+	FormControl,
+	FormLabel,
+	Modal,
+	ModalClose,
+	ModalDialog,
+	Stack,
+} from "@mui/joy";
+import { Input } from "@/components/ui/input";
+
+import { Topic, TopicInput } from "@/types/Topic";
 interface ModalTopicFormProps {
 	isOpen: boolean;
 	setIsOpen: (isOpen: boolean) => void;
@@ -41,63 +47,82 @@ const ModalTopicForm: React.FC<ModalTopicFormProps> = ({
 	};
 
 	return (
-		<Dialog open={isOpen} onOpenChange={setIsOpen}>
-			<DialogContent className="max-w-sm mx-auto p-4 rounded-lg bg-white shadow-lg">
-				<DialogTitle className="text-lg font-semibold mb-4">
-					{initialData ? "แก้ไขหัวข้อ" : "เพิ่มหัวข้อ"}
-				</DialogTitle>
-				<div className="mb-4">
-					<label className="block text-sm font-medium text-gray-700">
-						หัวข้อ
-					</label>
-					<input
-						type="text"
-						value={topicName}
-						onChange={(e) => setTopicName(e.target.value)}
-						placeholder="หัวข้อ"
-						className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm"
-					/>
-				</div>
-				<div className="mb-4">
-					<label className="block text-sm font-medium text-gray-700">
-						หมวดหมู่
-					</label>
-					<select
-						value={category}
-						onChange={(e) => setCategory(e.target.value)}
-						className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none sm:text-sm"
+		<React.Fragment>
+			<Modal open={isOpen} onClose={() => setIsOpen(false)}>
+				<ModalDialog
+					className={`animate-slide-down`}
+					variant="outlined"
+					role="alertdialog"
+				>
+					<ModalClose />
+					<DialogTitle>
+						{initialData ? "แก้ไขหัวข้อ" : "เพิ่มหัวข้อ"}
+					</DialogTitle>
+
+					<Divider />
+
+					<form
+						onSubmit={(event) => {
+							event.preventDefault();
+							handleSubmit();
+						}}
 					>
-						<option value="" disabled>
-							เลือกหมวดหมู่
-						</option>
-						{categories.map((cat) => (
-							<option key={cat} value={cat}>
-								{cat}
-							</option>
-						))}
-					</select>
-				</div>
-				<DialogFooter className="flex justify-end space-x-2">
-					<DialogClose>
-						<Button asChild variant="outline">
-							<div>ยกเลิก</div>
-						</Button>
-					</DialogClose>
-					<Button
-						asChild
-						variant="secondary"
-						disabled={isSubmitting} // Disable the button when isSubmitting is true
-						onClick={!isSubmitting ? handleSubmit : undefined} // Use undefined instead of null
-					>
-						<div
-							className={isSubmitting ? "cursor-not-allowed" : "cursor-pointer"}
-						>
-							{isSubmitting ? "กำลังบันทึก..." : "บันทึก"}
-						</div>
-					</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+						<Stack spacing={2}>
+							<FormControl>
+								<FormLabel>หัวข้อ</FormLabel>
+								<Input
+									type="text"
+									value={topicName}
+									onChange={(e) => setTopicName(e.target.value)}
+									placeholder="หัวข้อ"
+								/>
+							</FormControl>
+							<FormControl>
+								<FormLabel>หมวดหมู่</FormLabel>
+								<select
+									value={category}
+									onChange={(e) => setCategory(e.target.value)}
+									className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none sm:text-sm"
+								>
+									<option value="" disabled>
+										เลือกหมวดหมู่
+									</option>
+									{categories.map((cat) => (
+										<option key={cat} value={cat}>
+											{cat}
+										</option>
+									))}
+								</select>
+							</FormControl>
+							<DialogActions>
+								<Button
+									type="submit"
+									color="warning"
+									disabled={isSubmitting}
+									loading={isSubmitting}
+									sx={{
+										backgroundColor: "#c2410c",
+										color: "#fff",
+										"&:hover": {
+											backgroundColor: "#7c2d12",
+										},
+									}}
+								>
+									บันทึก
+								</Button>
+								<Button
+									variant="outlined"
+									color="neutral"
+									onClick={() => setIsOpen(false)}
+								>
+									ยกเลิก
+								</Button>
+							</DialogActions>
+						</Stack>
+					</form>
+				</ModalDialog>
+			</Modal>
+		</React.Fragment>
 	);
 };
 

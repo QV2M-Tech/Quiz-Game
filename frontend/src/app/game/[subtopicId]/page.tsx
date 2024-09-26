@@ -158,7 +158,7 @@ export default function GamePage({ params }: Props) {
 		<>
 			<GameNav time={time} score={score} />
 
-			<div className="flex flex-col lg:flex-row gap-8 justify-center lg:justify-startlg:items-center mt-12 py-8 px-8 h-[calc(100vh-48px)] overflow-y-auto">
+			<div className="flex flex-col lg:flex-row gap-8 items-center lg:items-start mt-14 py-8 px-4 sm:px-8 h-[calc(100vh-56px)] overflow-y-auto">
 				<Game
 					time={time}
 					setTime={setTime}

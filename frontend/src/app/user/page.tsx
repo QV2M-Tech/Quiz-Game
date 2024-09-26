@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { ArrowUpDown } from "lucide-react";
 import { Edit, Trash } from "lucide-react";
 import ModalUserEdit from "./components/ModalUserEdit";
-import { Button } from "@/components/ui/button";
 import axiosInstance from "@/lib/axiosInstance";
 import {
 	Table,

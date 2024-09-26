@@ -21,7 +21,7 @@ export default function Leaderboard({
 	}
 
 	return (
-		<div className="flex flex-col gap-6 sm:w-5/6 lg:w-2/6 tw-box h-[calc(100vh-112px)]">
+		<div className="flex flex-col gap-6 w-full sm:w-11/12 lg:w-1/3 tw-box h-[calc(100vh-120px)]">
 			<h1 className="text-center">คะแนนสูงสุด 10 อันดับ</h1>
 			<table className="w-full text-center">
 				<thead>

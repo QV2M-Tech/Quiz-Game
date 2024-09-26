@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+
 import {
-	Dialog,
-	DialogContent,
-	DialogFooter,
-	DialogHeader,
+	Button,
+	DialogActions,
 	DialogTitle,
-} from "@/components/ui/dialog";
+	Divider,
+	FormControl,
+	FormLabel,
+	Modal,
+	ModalClose,
+	ModalDialog,
+	Stack,
+} from "@mui/joy";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+
 import { SubtopicInput } from "@/types/SubTopic";
 
 interface ModalSubTopicProps {
@@ -17,6 +22,7 @@ interface ModalSubTopicProps {
 	mode: "add" | "edit";
 	initialData?: Partial<SubtopicInput>;
 	onSubmit: (data: SubtopicInput) => void;
+	isSubmitting: boolean;
 }
 
 export function ModalSubTopic({
@@ -25,6 +31,7 @@ export function ModalSubTopic({
 	mode,
 	initialData,
 	onSubmit,
+	isSubmitting,
 }: ModalSubTopicProps) {
 	// State เก็บเวลาหน่วยนาที
 	const [subtopicName, setSubtopicName] = useState(
@@ -44,6 +51,7 @@ export function ModalSubTopic({
 			category: category || "",
 			topicId: initialData?.topicId || "",
 		});
+
 		setIsOpen(false);
 	};
 
@@ -61,49 +69,73 @@ export function ModalSubTopic({
 	}, [initialData]);
 
 	return (
-		<Dialog open={isOpen} onOpenChange={setIsOpen}>
-			<DialogContent className="sm:max-w-[425px]">
-				<DialogHeader>
+		<React.Fragment>
+			<Modal open={isOpen} onClose={() => setIsOpen(false)}>
+				<ModalDialog
+					className={`animate-slide-down`}
+					variant="outlined"
+					role="alertdialog"
+				>
+					<ModalClose />
 					<DialogTitle>
 						{mode === "add" ? "เพิ่มหัวข้อย่อย" : "แก้ไขหัวข้อย่อย"}
 					</DialogTitle>
-				</DialogHeader>
-				<div className="grid gap-4 py-4">
-					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="subtopicName" className="text-right">
-							หัวข้อย่อย
-						</Label>
-						<Input
-							id="subtopicName"
-							placeholder="หัวข้อย่อย"
-							className="col-span-3"
-							value={subtopicName}
-							onChange={(e) => setSubtopicName(e.target.value)}
-						/>
-					</div>
-					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="time" className="text-right">
-							เวลา (นาที)
-						</Label>
-						<Input
-							id="time"
-							type="number"
-							placeholder="เวลา"
-							className="col-span-3"
-							value={time} // แสดงผลเป็นหน่วยนาที
-							onChange={(e) => setTime(e.target.value)} // เก็บค่าเป็นหน่วยนาที
-						/>
-					</div>
-				</div>
-				<DialogFooter>
-					<Button variant="outline" onClick={() => setIsOpen(false)}>
-						ยกเลิก
-					</Button>
-					<Button type="submit" variant="secondary" onClick={handleSubmit}>
-						ยืนยัน
-					</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+
+					<Divider />
+
+					<form
+						onSubmit={(event) => {
+							event.preventDefault();
+							handleSubmit();
+						}}
+					>
+						<Stack spacing={2}>
+							<FormControl>
+								<FormLabel>หัวข้อย่อย</FormLabel>
+								<Input
+									type="text"
+									value={subtopicName}
+									onChange={(e) => setSubtopicName(e.target.value)}
+									placeholder="หัวข้อย่อย"
+								/>
+							</FormControl>
+							<FormControl>
+								<FormLabel>เวลา (นาที)</FormLabel>
+								<Input
+									type="number"
+									value={time}
+									onChange={(e) => setTime(e.target.value)} // เก็บค่าเป็นหน่วยนาที
+									placeholder="เวลา"
+								/>
+							</FormControl>
+							<DialogActions>
+								<Button
+									type="submit"
+									color="warning"
+									disabled={isSubmitting}
+									loading={isSubmitting}
+									sx={{
+										backgroundColor: "#c2410c",
+										color: "#fff",
+										"&:hover": {
+											backgroundColor: "#7c2d12",
+										},
+									}}
+								>
+									บันทึก
+								</Button>
+								<Button
+									variant="outlined"
+									color="neutral"
+									onClick={() => setIsOpen(false)}
+								>
+									ยกเลิก
+								</Button>
+							</DialogActions>
+						</Stack>
+					</form>
+				</ModalDialog>
+			</Modal>
+		</React.Fragment>
 	);
 }

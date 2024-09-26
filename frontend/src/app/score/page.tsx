@@ -16,19 +16,11 @@ import Pagination from "@/components/ui/Pagination";
 import TooltipWrapper from "@/components/ui/TooltipWrapper";
 import { ArrowUpDown, Edit, Trash } from "lucide-react";
 
-import { AllScore, ScoreInput } from "@/types/score";
+import { AllScore } from "@/types/score";
 import { deleteScore, getAllScore, updateScore } from "@/lib/scoreApi";
 import { thDateTime } from "@/lib/format";
 import Loading from "@/components/ui/Loading";
-import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-	DialogFooter,
-} from "@/components/ui/dialog";
-import { Score } from "@mui/icons-material";
+import ScoreModal from "./components/ScoreModal";
 
 export default function ScorePage() {
 	const [data, setData] = useState<AllScore[]>([]);
@@ -47,6 +39,7 @@ export default function ScorePage() {
 	const [editingScore, setEditingScore] = useState<AllScore | null>(null);
 	const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 	const [editedScore, setEditedScore] = useState<number>(0);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	useEffect(() => {
 		window.scrollTo(0, 0);
@@ -118,6 +111,7 @@ export default function ScorePage() {
 			};
 
 			try {
+				setIsSubmitting(true);
 				// เรียก API เพื่ออัปเดตคะแนน
 				const message = await updateScore(editingScore._id, updatedScore);
 				console.log(message);
@@ -125,7 +119,9 @@ export default function ScorePage() {
 				// ปิด modal และรีเฟรชข้อมูล
 				setIsEditModalOpen(false);
 				setAction(!action);
+				setIsSubmitting(false);
 			} catch (error) {
+				setIsSubmitting(false);
 				console.error("Error updating score:", error);
 			}
 		}
@@ -137,7 +133,7 @@ export default function ScorePage() {
 	}
 
 	return (
-		<div className="flex flex-col items-center py-10">
+		<div className="flex flex-col items-center py-10 overflow-x-auto">
 			<div className="w-11/12">
 				<Table>
 					<TableHeader>
@@ -173,7 +169,7 @@ export default function ScorePage() {
 							</TableHead>
 							<TableHead
 								onClick={() => requestSort("category")}
-								className="cursor-pointer text-center w-2/12"
+								className="cursor-pointer text-center w-1/12"
 							>
 								หมวดหมู่ <ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
@@ -239,7 +235,7 @@ export default function ScorePage() {
 											<div
 												role="button"
 												onClick={() => handleEdit(item)}
-												className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-blue-400"
+												className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-primary-hover"
 											>
 												<Edit className="inline-block" size={16} />
 											</div>
@@ -276,33 +272,14 @@ export default function ScorePage() {
 					)}
 				</Table>
 			</div>
-			<div>
-				<Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-					<DialogContent className="max-w-sm w-30">
-						<DialogHeader>
-							<DialogTitle>แก้ไขคะแนน</DialogTitle>
-						</DialogHeader>
-						<div className="py-4 justify-center">
-							<Input
-								type="number"
-								value={editedScore}
-								onChange={(e) => setEditedScore(Number(e.target.value))}
-								className="w-24"
-								placeholder="Enter new score"
-							/>
-						</div>
-						<DialogFooter>
-							<Button
-								variant="outline"
-								onClick={() => setIsEditModalOpen(false)}
-							>
-								ยกเลิก
-							</Button>
-							<Button onClick={handleUpdateScore}>บันทึก</Button>
-						</DialogFooter>
-					</DialogContent>
-				</Dialog>
-			</div>
+			<ScoreModal
+				isEditModalOpen={isEditModalOpen}
+				setIsEditModalOpen={setIsEditModalOpen}
+				handleUpdateScore={handleUpdateScore}
+				editedScore={editedScore}
+				setEditedScore={setEditedScore}
+				isSubmitting={isSubmitting}
+			/>
 		</div>
 	);
 }

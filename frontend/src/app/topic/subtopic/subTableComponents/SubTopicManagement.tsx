@@ -45,6 +45,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [editingSubtopic, setEditingSubtopic] = useState<Subtopic | null>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
 	useEffect(() => {
 		window.scrollTo(0, 0);
@@ -111,6 +112,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 
 	const handleAddSubtopic = async (subtopicInput: SubtopicInput) => {
 		try {
+			setIsSubmitting(true);
 			const result = await SubTopicApi.createSubtopic({
 				...subtopicInput,
 				topicId: topicId, // Ensure topicId is always set
@@ -118,16 +120,21 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 			});
 
 			await fetchTopicAndSubtopics();
+			setIsSubmitting(false);
 		} catch (error) {
+			setIsSubmitting(false);
 			console.error("Error adding subtopic:", error);
 		}
 	};
 
 	const handleEditSubtopic = async (subtopicInput: SubtopicInput) => {
 		try {
+			setIsSubmitting(true);
 			await SubTopicApi.updateSubtopic(subtopicInput._id, subtopicInput);
 			await fetchTopicAndSubtopics();
+			setIsSubmitting(false);
 		} catch (error) {
+			setIsSubmitting(false);
 			console.error("Error editing subtopic:", error);
 		}
 	};
@@ -269,8 +276,9 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 					isOpen={isAddModalOpen}
 					setIsOpen={setIsAddModalOpen}
 					mode="add"
-					onSubmit={handleAddSubtopic}
 					initialData={{ topicId: topicId }}
+					onSubmit={handleAddSubtopic}
+					isSubmitting={isSubmitting}
 				/>
 				{editingSubtopic && (
 					<ModalSubTopic
@@ -279,6 +287,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 						mode="edit"
 						initialData={editingSubtopic}
 						onSubmit={handleEditSubtopic}
+						isSubmitting={isSubmitting}
 					/>
 				)}
 			</div>
