@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from "react";
+
 import {
-	Dialog,
-	DialogContent,
-	DialogFooter,
-	DialogHeader,
+	Button,
+	DialogActions,
 	DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+	Divider,
+	FormControl,
+	FormLabel,
+	Modal,
+	ModalClose,
+	ModalDialog,
+	Stack,
+} from "@mui/joy";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { QuestionInput } from "@/types/Question";
 import { Checkbox } from "@/components/ui/checkbox";
+
+import { QuestionInput } from "@/types/Question";
 
 interface QuestionModalProps {
 	isOpen: boolean;
@@ -42,6 +47,7 @@ const QuestionModal: React.FC<QuestionModalProps> = ({
 		hint: "",
 		subtopicId: subtopicId,
 	});
+	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (initialData) {
@@ -89,74 +95,96 @@ const QuestionModal: React.FC<QuestionModalProps> = ({
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
+		setIsSubmitting(true);
 		const now = new Date().toISOString();
 		onSubmit({ ...formData, createOn: now });
+		setIsSubmitting(false);
 	};
 
 	return (
-		<Dialog open={isOpen} onOpenChange={onClose}>
-			<DialogContent className="sm:max-w-[425px]">
-				<DialogHeader>
+		<React.Fragment>
+			<Modal open={isOpen} onClose={onClose}>
+				<ModalDialog
+					className={`animate-slide-down`}
+					variant="outlined"
+					role="alertdialog"
+					sx={{
+						width: "35%",
+					}}
+				>
+					<ModalClose />
 					<DialogTitle>
 						{mode === "edit" ? "แก้ไขโจทย์" : "เพิ่มโจทย์"}
 					</DialogTitle>
-				</DialogHeader>
-				<form onSubmit={handleSubmit}>
-					<div className="grid gap-4 py-4">
-						<div className="grid grid-cols-4 items-center gap-4">
-							<Label htmlFor="questionName" className="text-right">
-								โจทย์
-							</Label>
-							<Textarea
-								id="questionName"
-								name="questionName"
-								className="col-span-3"
-								value={formData.questionName}
-								onChange={handleChange}
-							/>
-						</div>
-						{formData.option.map((opt, index) => (
-							<div key={index} className="grid grid-cols-4 items-center gap-4">
-								<Label htmlFor={`option${index + 1}`} className="text-right">
-									ตัวเลือกที่ {index + 1}
-								</Label>
-								<Input
-									id={`option${index + 1}`}
-									name={`option${index + 1}`}
-									className="col-span-2"
-									value={opt.text}
-									onChange={(e) => handleOptionChange(index, e.target.value)}
+
+					<Divider />
+
+					<form onSubmit={handleSubmit} className="overflow-y-auto pr-4 -mr-4">
+						<Stack spacing={2}>
+							<FormControl>
+								<FormLabel>โจทย์</FormLabel>
+								<Textarea
+									name="questionName"
+									value={formData.questionName}
+									onChange={handleChange}
+									placeholder="โจทย์"
 								/>
-								<Checkbox
-									checked={opt.isCorrect}
-									onCheckedChange={() => handleCorrectChange(index)}
+							</FormControl>
+							{formData.option.map((opt, index) => (
+								<FormControl key={index}>
+									<FormLabel>ตัวเลือกที่ {index + 1}</FormLabel>
+									<div className="flex items-center gap-2">
+										<Input
+											id={`option${index + 1}`}
+											name={`option${index + 1}`}
+											value={opt.text}
+											onChange={(e) =>
+												handleOptionChange(index, e.target.value)
+											}
+											placeholder={`ตัวเลือกที่ ${index + 1}`}
+										/>
+										<Checkbox
+											checked={opt.isCorrect}
+											onCheckedChange={() => handleCorrectChange(index)}
+											className="w-4 h-4"
+										/>
+									</div>
+								</FormControl>
+							))}
+							<FormControl>
+								<FormLabel>คำใบ้</FormLabel>
+								<Textarea
+									name="hint"
+									value={formData.hint}
+									onChange={handleChange}
+									placeholder="คำใบ้"
 								/>
-							</div>
-						))}
-						<div className="grid grid-cols-4 items-center gap-4">
-							<Label htmlFor="hint" className="text-right">
-								คำใบ้
-							</Label>
-							<Input
-								id="hint"
-								name="hint"
-								className="col-span-3"
-								value={formData.hint}
-								onChange={handleChange}
-							/>
-						</div>
-					</div>
-					<DialogFooter>
-						<Button variant="outline" onClick={onClose}>
-							ยกเลิก
-						</Button>
-						<Button type="submit" variant="secondary">
-							ยืนยัน
-						</Button>
-					</DialogFooter>
-				</form>
-			</DialogContent>
-		</Dialog>
+							</FormControl>
+							<DialogActions>
+								<Button
+									type="submit"
+									color="warning"
+									disabled={isSubmitting}
+									loading={isSubmitting}
+									sx={{
+										backgroundColor: "#c2410c",
+										color: "#fff",
+										"&:hover": {
+											backgroundColor: "#7c2d12",
+										},
+									}}
+								>
+									บันทึก
+								</Button>
+								<Button variant="outlined" color="neutral" onClick={onClose}>
+									ยกเลิก
+								</Button>
+							</DialogActions>
+						</Stack>
+					</form>
+				</ModalDialog>
+			</Modal>
+		</React.Fragment>
 	);
 };
 
