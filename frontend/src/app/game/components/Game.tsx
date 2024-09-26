@@ -40,7 +40,7 @@ export default function Game({
 	const [showHint, setShowHint] = useState<boolean>(false);
 
 	useEffect(() => {
-		if (subtopic._id === "66d151ea62f384268532c45c") {
+		if (subtopic._id === "66f54da5b7e39f5480d16cce") {
 			setQuestionList((prevList: Question[]) => {
 				const newList = [...prevList];
 				newList.push(numberCrunching());
@@ -61,7 +61,7 @@ export default function Game({
 		if (isCorrect) {
 			setScore(score + 1);
 		}
-		if (!isCorrect && subtopic._id === "66d151ea62f384268532c45c") {
+		if (!isCorrect && subtopic._id === "66f54da5b7e39f5480d16cce") {
 			setTime(0);
 		}
 		setReload(!reload);

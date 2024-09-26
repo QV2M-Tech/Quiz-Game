@@ -72,7 +72,7 @@ const MainContent: React.FC = () => {
 	const router = useRouter();
 
 	const game24 = () => router.push(`/24`);
-	const fastMath = () => router.push(`/game/66d151ea62f384268532c45c`);
+	const fastMath = () => router.push(`/game/66f54da5b7e39f5480d16cce`);
 
 	React.useEffect(() => {
 		const fetchTopics = async () => {

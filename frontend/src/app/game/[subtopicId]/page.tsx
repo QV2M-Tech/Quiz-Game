@@ -77,7 +77,7 @@ export default function GamePage({ params }: Props) {
 
 		if (
 			time === 0 ||
-			(subtopicId !== "66d151ea62f384268532c45c" &&
+			(subtopicId !== "66f54da5b7e39f5480d16cce" &&
 				questionList.length === 0 &&
 				(score > 0 || countQuestion > 0))
 		) {
@@ -120,7 +120,7 @@ export default function GamePage({ params }: Props) {
 
 	async function getQuestion(id: string) {
 		try {
-			if (id === "66d151ea62f384268532c45c") {
+			if (id === "66f54da5b7e39f5480d16cce") {
 				setQuestionList((prevList: Question[]) => {
 					const newList = [...prevList];
 					newList.push(numberCrunching());
