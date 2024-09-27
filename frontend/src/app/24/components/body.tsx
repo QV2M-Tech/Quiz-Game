@@ -257,7 +257,7 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 
 			axiosInstance
 				.post("/scores24/createAndUpdate", {
-					userId: User?.id,
+					userId: User?._id,
 					score: score,
 					level: level,
 				})

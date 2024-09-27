@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-
+import React from "react";
 import {
 	Button,
 	DialogActions,
@@ -14,65 +13,48 @@ import {
 } from "@mui/joy";
 import { Input } from "@/components/ui/input";
 
-interface ModalUserEditProps {
-	isOpen: boolean;
-	setIsOpen: (isOpen: boolean) => void;
-	onSubmit: (newName: string) => Promise<void>;
-	initialName?: string;
-	isSubmitting: boolean;
-}
-
-const ModalUserEdit: React.FC<ModalUserEditProps> = ({
-	isOpen,
-	setIsOpen,
-	onSubmit,
-	initialName,
+export default function ScoreModal({
+	isEditModalOpen,
+	setIsEditModalOpen,
+	handleUpdateScore,
+	editedScore,
+	setEditedScore,
 	isSubmitting,
-}) => {
-	const [userName, setUserName] = useState(initialName || "");
-
-	useEffect(() => {
-		if (isOpen) {
-			setUserName(initialName || "");
-		}
-	}, [isOpen, initialName]);
-
-	const handleSubmit = async () => {
-		if (userName.trim() === "") {
-			alert("กรุณากรอกชื่อ");
-			return;
-		}
-		await onSubmit(userName);
-		setIsOpen(false);
-	};
-
+}: {
+	isEditModalOpen: boolean;
+	setIsEditModalOpen: Function;
+	handleUpdateScore: Function;
+	editedScore: number;
+	setEditedScore: Function;
+	isSubmitting: boolean;
+}) {
 	return (
 		<React.Fragment>
-			<Modal open={isOpen} onClose={() => setIsOpen(false)}>
+			<Modal open={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
 				<ModalDialog
 					className={`animate-slide-down`}
 					variant="outlined"
 					role="alertdialog"
 				>
 					<ModalClose />
-					<DialogTitle>แก้ไขชื่อ</DialogTitle>
+					<DialogTitle>แก้ไขคะแนน</DialogTitle>
 
 					<Divider />
-
 					<form
 						onSubmit={(event) => {
 							event.preventDefault();
-							handleSubmit();
+							handleUpdateScore();
+							setIsEditModalOpen(false);
 						}}
 					>
 						<Stack spacing={2}>
 							<FormControl>
-								<FormLabel>ชื่อ</FormLabel>
+								<FormLabel>คะแนน</FormLabel>
 								<Input
-									type="text"
-									value={userName}
-									onChange={(e) => setUserName(e.target.value)}
-									placeholder="ชื่อ"
+									type="number"
+									value={editedScore}
+									onChange={(e) => setEditedScore(Number(e.target.value))}
+									placeholder="คะแนน"
 								/>
 							</FormControl>
 							<DialogActions>
@@ -94,7 +76,7 @@ const ModalUserEdit: React.FC<ModalUserEditProps> = ({
 								<Button
 									variant="outlined"
 									color="neutral"
-									onClick={() => setIsOpen(false)}
+									onClick={() => setIsEditModalOpen(false)}
 								>
 									ยกเลิก
 								</Button>
@@ -105,6 +87,4 @@ const ModalUserEdit: React.FC<ModalUserEditProps> = ({
 			</Modal>
 		</React.Fragment>
 	);
-};
-
-export default ModalUserEdit;
+}

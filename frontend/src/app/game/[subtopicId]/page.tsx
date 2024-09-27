@@ -48,7 +48,7 @@ export default function GamePage({ params }: Props) {
 	const [countQuestion, setCountQuestion] = useState<number>(0);
 	const [score, setScore] = useState<number>(0);
 	const [scoreData, setScoreData] = useState<ScoreInput>({
-		userId: `${User?.id}`,
+		userId: `${User?._id}`,
 		subtopicId: `${subtopicId}`,
 		score: 0,
 		timeSpent: 0,
@@ -69,7 +69,7 @@ export default function GamePage({ params }: Props) {
 		setScoreData((prevData) => {
 			return {
 				...prevData,
-				userId: `${User?.id}`,
+				userId: `${User?._id}`,
 				score: score,
 				timeSpent: subtopic.time - time,
 			};
@@ -77,7 +77,7 @@ export default function GamePage({ params }: Props) {
 
 		if (
 			time === 0 ||
-			(subtopicId !== "66d151ea62f384268532c45c" &&
+			(subtopicId !== "66f54da5b7e39f5480d16cce" &&
 				questionList.length === 0 &&
 				(score > 0 || countQuestion > 0))
 		) {
@@ -88,7 +88,7 @@ export default function GamePage({ params }: Props) {
 			setScoreData((prevData) => {
 				const updatedData = {
 					...prevData,
-					userId: `${User?.id}`,
+					userId: `${User?._id}`,
 					score: score,
 					timeSpent: subtopic.time - time,
 				};
@@ -105,7 +105,7 @@ export default function GamePage({ params }: Props) {
 		}, 1000);
 
 		return () => clearInterval(intervalId);
-	}, [start, time, showExit, questionList.length, score, User?.id]);
+	}, [start, time, showExit, questionList.length, score, User?._id]);
 
 	async function getSubtopic(id: string) {
 		try {
@@ -120,7 +120,7 @@ export default function GamePage({ params }: Props) {
 
 	async function getQuestion(id: string) {
 		try {
-			if (id === "66d151ea62f384268532c45c") {
+			if (id === "66f54da5b7e39f5480d16cce") {
 				setQuestionList((prevList: Question[]) => {
 					const newList = [...prevList];
 					newList.push(numberCrunching());
@@ -158,7 +158,7 @@ export default function GamePage({ params }: Props) {
 		<>
 			<GameNav time={time} score={score} />
 
-			<div className="flex flex-col lg:flex-row gap-8 justify-center lg:justify-startlg:items-center mt-12 py-8 px-8 h-[calc(100vh-48px)] overflow-y-auto">
+			<div className="flex flex-col lg:flex-row gap-8 items-center lg:items-start mt-14 py-8 px-4 sm:px-8 h-[calc(100vh-56px)] overflow-y-auto">
 				<Game
 					time={time}
 					setTime={setTime}

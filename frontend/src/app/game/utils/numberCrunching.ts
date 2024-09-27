@@ -42,8 +42,8 @@ export default function numberCrunching(): Question {
 	options.sort(() => Math.random() - 0.5);
 
 	const question: Question = {
-		_id: "66d151ea62f384268532c45c",
-		subtopicId: "66d151ea62f384268532c45c",
+		_id: "66f3e854b4bc1daba5211ca3",
+		subtopicId: "66f54da5b7e39f5480d16cce",
 		questionName: `${num1} ${op} ${num2}`,
 		option: options,
 		hint: "",

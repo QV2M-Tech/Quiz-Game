@@ -14,13 +14,13 @@ import { Input } from "@/components/ui/input";
 import CategoryBadge from "@/components/ui/badge/CategoryBadge";
 import Pagination from "@/components/ui/Pagination";
 import TooltipWrapper from "@/components/ui/TooltipWrapper";
-import { ArrowUpDown, Trash } from "lucide-react";
+import { ArrowUpDown, Edit, Trash } from "lucide-react";
 
 import { AllScore } from "@/types/score";
-import { deleteScore, getAllScore } from "@/lib/scoreApi";
+import { deleteScore, getAllScore, updateScore } from "@/lib/scoreApi";
 import { thDateTime } from "@/lib/format";
 import Loading from "@/components/ui/Loading";
-import { Button } from "@/components/ui/button";
+import ScoreModal from "./components/ScoreModal";
 
 export default function ScorePage() {
 	const [data, setData] = useState<AllScore[]>([]);
@@ -35,6 +35,11 @@ export default function ScorePage() {
 		key: keyof AllScore;
 		direction: "asc" | "desc";
 	} | null>(null);
+
+	const [editingScore, setEditingScore] = useState<AllScore | null>(null);
+	const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+	const [editedScore, setEditedScore] = useState<number>(0);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	useEffect(() => {
 		window.scrollTo(0, 0);
@@ -92,13 +97,43 @@ export default function ScorePage() {
 		setSortConfig({ key, direction });
 	};
 
+	const handleEdit = (score: AllScore) => {
+		setEditingScore(score);
+		setEditedScore(score.score);
+		setIsEditModalOpen(true);
+	};
+
+	const handleUpdateScore = async () => {
+		if (editingScore) {
+			// กำหนดข้อมูลที่ต้องการอัปเดตแค่ score
+			const updatedScore = {
+				score: editedScore,
+			};
+
+			try {
+				setIsSubmitting(true);
+				// เรียก API เพื่ออัปเดตคะแนน
+				const message = await updateScore(editingScore._id, updatedScore);
+				console.log(message);
+
+				// ปิด modal และรีเฟรชข้อมูล
+				setIsEditModalOpen(false);
+				setAction(!action);
+				setIsSubmitting(false);
+			} catch (error) {
+				setIsSubmitting(false);
+				console.error("Error updating score:", error);
+			}
+		}
+	};
+
 	async function handleDelete(scoreId: string) {
 		const message = await deleteScore(scoreId);
 		setAction(!action);
 	}
 
 	return (
-		<div className="flex flex-col items-center py-10">
+		<div className="flex flex-col items-center py-10 overflow-x-auto">
 			<div className="w-11/12">
 				<Table>
 					<TableHeader>
@@ -134,7 +169,7 @@ export default function ScorePage() {
 							</TableHead>
 							<TableHead
 								onClick={() => requestSort("category")}
-								className="cursor-pointer text-center w-2/12"
+								className="cursor-pointer text-center w-1/12"
 							>
 								หมวดหมู่ <ArrowUpDown className="inline-block ml-2" size={16} />
 							</TableHead>
@@ -196,14 +231,21 @@ export default function ScorePage() {
 									<TableCell>{item.subtopic}</TableCell>
 									<TableCell className="text-center">{item.score}</TableCell>
 									<TableCell className="text-center">
+										<TooltipWrapper content="แก้ไขคะแนน">
+											<div
+												role="button"
+												onClick={() => handleEdit(item)}
+												className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-primary-hover"
+											>
+												<Edit className="inline-block" size={16} />
+											</div>
+										</TooltipWrapper>
 										<TooltipWrapper content="ลบคะแนน">
 											<div
 												role="button"
 												onClick={() => handleDelete(item._id)}
 												className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-red-400"
-												// disabled={isDeleting}
 											>
-												{/* {isDeleting ? "กำลังลบ..." : ""} */}
 												<Trash className="inline-block" size={16} />
 											</div>
 										</TooltipWrapper>
@@ -230,6 +272,14 @@ export default function ScorePage() {
 					)}
 				</Table>
 			</div>
+			<ScoreModal
+				isEditModalOpen={isEditModalOpen}
+				setIsEditModalOpen={setIsEditModalOpen}
+				handleUpdateScore={handleUpdateScore}
+				editedScore={editedScore}
+				setEditedScore={setEditedScore}
+				isSubmitting={isSubmitting}
+			/>
 		</div>
 	);
 }

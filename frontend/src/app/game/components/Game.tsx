@@ -40,7 +40,7 @@ export default function Game({
 	const [showHint, setShowHint] = useState<boolean>(false);
 
 	useEffect(() => {
-		if (subtopic._id === "66d151ea62f384268532c45c") {
+		if (subtopic._id === "66f54da5b7e39f5480d16cce") {
 			setQuestionList((prevList: Question[]) => {
 				const newList = [...prevList];
 				newList.push(numberCrunching());
@@ -61,7 +61,7 @@ export default function Game({
 		if (isCorrect) {
 			setScore(score + 1);
 		}
-		if (!isCorrect && subtopic._id === "66d151ea62f384268532c45c") {
+		if (!isCorrect && subtopic._id === "66f54da5b7e39f5480d16cce") {
 			setTime(0);
 		}
 		setReload(!reload);
@@ -74,32 +74,28 @@ export default function Game({
 	}
 
 	return (
-		<div className="flex flex-col justify-between gap-6 sm:w-4/5 lg:w-3/4 xl:w-2/3 tw-box min-h-[calc(100vh-112px)] h-fit">
+		<div className="flex flex-col justify-between gap-6 w-full sm:w-11/12 lg:w-2/3 tw-box lg:min-h-[calc(100vh-120px)] h-fit">
 			<div className="flex flex-col items-center gap-4">
 				<h1>เกมส์ตอบคำถาม</h1>
 				<div className="flex flex-col md:flex-row justify-center items-center md:justify-around md:gap-4 w-full">
 					<h2>หมวดหมู่ {subtopic?.category}</h2>
 					<h2>หัวข้อ {subtopic?.topicName}</h2>
 				</div>
-				<h2>หัวข้อย่อย {subtopic?.subtopicName}</h2>
+				<h2 className="text-center">หัวข้อย่อย {subtopic?.subtopicName}</h2>
 			</div>
 
-			<div className="flex flex-col items-center gap-4">
-				<h1>{questionList[0]?.questionName}</h1>
-			</div>
+			<h1 className="text-center">{questionList[0]?.questionName}</h1>
 
 			<div className="flex flex-col items-center gap-4 w-full">
-				<div className="flex flex-col sm:flex-row items-center justify-start gap-1 w-full px-4">
+				<div className="flex flex-col sm:flex-row items-center justify-start gap-1 w-full px-4 sm:text-lg">
 					<button
 						onClick={handleHint}
-						className="flex items-center gap-2 hover:bg-primary py-2 px-4 rounded-full text-lg"
+						className="flex items-center gap-2 hover:bg-primary py-2 px-4 rounded-full"
 					>
 						<FaRegLightbulb /> กดดูคำใบ้ (เหลือ {countHint})
 					</button>
 					{showHint && (
-						<h3 className="text-lg">
-							{questionList[0]?.hint || "โจทย์ข้อนี้ไม่มีคำใบ้"}
-						</h3>
+						<h3>{questionList[0]?.hint || "โจทย์ข้อนี้ไม่มีคำใบ้"}</h3>
 					)}
 				</div>
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full px-4 max-w-2xl">
@@ -118,7 +114,7 @@ export default function Game({
 						);
 					})}
 				</div>
-				<div className="flex gap-4 mt-4">
+				<div className="flex flex-col sm:flex-row gap-4 mt-4 min-w-[50%]">
 					<button
 						onClick={() => handleRestart()}
 						className="tw-btn bg-white border border-secondary shadow-md hover:bg-secondary/20 p-3 text-lg"
