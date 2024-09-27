@@ -28,13 +28,10 @@ export default function GamePage({ params }: Props) {
 	const { User } = useUser();
 
 	const [reload, setReload] = useState<boolean>(false);
-
 	const [time, setTime] = useState<number>(30000);
 	const [start, setStart] = useState<boolean>(false);
-
 	const [showTimeout, setShowTimeout] = useState<boolean>(false);
 	const [showExit, setShowExit] = useState<boolean>(false);
-
 	const [subtopic, setSubtopic] = useState<Subtopic>({
 		_id: "",
 		subtopicName: "",
@@ -48,8 +45,8 @@ export default function GamePage({ params }: Props) {
 	const [countQuestion, setCountQuestion] = useState<number>(0);
 	const [score, setScore] = useState<number>(0);
 	const [scoreData, setScoreData] = useState<ScoreInput>({
-		userId: `${User?._id}`,
-		subtopicId: `${subtopicId}`,
+		userId: "", // เริ่มต้นเป็นค่าว่างเพื่อป้องกันปัญหา
+		subtopicId: subtopicId,
 		score: 0,
 		timeSpent: 0,
 	});
@@ -66,14 +63,15 @@ export default function GamePage({ params }: Props) {
 	}, []);
 
 	useEffect(() => {
-		setScoreData((prevData) => {
-			return {
+		// ตรวจสอบว่า User มีค่า _id หรือไม่ก่อนทำการอัพเดท scoreData
+		if (User?._id) {
+			setScoreData((prevData) => ({
 				...prevData,
-				userId: `${User?._id}`,
+				userId: User._id, // ใช้ค่า _id ตรง ๆ โดยไม่ต้องใช้ `${}`
 				score: score,
 				timeSpent: subtopic.time - time,
-			};
-		});
+			}));
+		}
 
 		if (
 			time === 0 ||
@@ -85,18 +83,18 @@ export default function GamePage({ params }: Props) {
 		}
 
 		if ((time === 0 || questionList.length === 0) && score !== 0) {
-			setScoreData((prevData) => {
+			// ตรวจสอบว่า User มีค่า _id ก่อนส่ง scoreData
+			if (User?._id) {
 				const updatedData = {
-					...prevData,
-					userId: `${User?._id}`,
+					...scoreData,
+					userId: User._id, // ใช้ค่า _id ตรง ๆ
 					score: score,
 					timeSpent: subtopic.time - time,
 				};
-
 				saveScore(updatedData);
-				return updatedData;
-			});
+			}
 		}
+
 		if (!start || time <= 0) return;
 		if (showExit === true) return;
 
@@ -110,7 +108,6 @@ export default function GamePage({ params }: Props) {
 	async function getSubtopic(id: string) {
 		try {
 			const getSubtopic = await SubTopicApi.getSubtopicById(id);
-
 			setSubtopic(getSubtopic);
 			setTime(getSubtopic.time);
 		} catch (error) {
@@ -136,6 +133,10 @@ export default function GamePage({ params }: Props) {
 	}
 
 	async function saveScore(data: ScoreInput) {
+		if (!data.userId || data.userId === "") {
+			console.error("User ID is missing, score will not be saved.");
+			return;
+		}
 		await createScore(data);
 	}
 

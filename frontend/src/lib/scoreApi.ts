@@ -28,13 +28,24 @@ export async function getAllScore(): Promise<AllScore[] | undefined> {
 // Create a new score
 export async function createScore(scoreInput: ScoreInput): Promise<string> {
 	try {
-		await axiosInstance.post("/scores", scoreInput);
-		return "Create score success";
+	  console.log("Attempting to create score with input:", scoreInput);
+	  
+	  // ตรวจสอบว่ามีการส่งค่า userId มาหรือไม่
+	  if (!scoreInput.userId) {
+		console.error("Error: Missing userId in scoreInput");
+		return "Failed to create score: Missing userId";
+	  }
+	  
+	  const response = await axiosInstance.post("/scores", scoreInput);
+	  console.log("Create score response:", response.data);
+	  return "Create score success";
 	} catch (error: any) {
-		console.log("Failed to create score:", error.response?.data || error.message);
-		return "Failed to create score";
+	  console.error("Failed to create score:", error);
+	  console.error("Error response:", error.response?.data);
+	  console.error("Error message:", error.message);
+	  return "Failed to create score";
 	}
-}
+  }
 
 // Update an existing score
 export async function updateScore(scoreId: string, updatedScore: { score: number }): Promise<string> {
