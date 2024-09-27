@@ -99,7 +99,7 @@ const MainContent: React.FC = () => {
 	const filterTopicsByCategory = (category: string) => {
 		return topics.filter(
 			(topic) =>
-				topic.category === category && topic._id !== "66f3e854b4bc1daba5211ca3"
+				topic.category === category && topic._id !== "66f66af778ff4fe3b7930359"
 		);
 	};
 
