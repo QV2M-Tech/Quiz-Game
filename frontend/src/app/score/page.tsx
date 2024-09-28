@@ -130,7 +130,7 @@ export default function ScorePage() {
 	}
 
 	return (
-		<div className="flex flex-col items-center py-10 overflow-x-auto">
+		<div className="flex flex-col items-center py-10 mt-4 overflow-x-auto">
 			<div className="w-11/12">
 				{/* Desktop version */}
 				<div className="hidden md:block">
@@ -256,12 +256,28 @@ export default function ScorePage() {
 								))
 							)}
 						</TableBody>
+						{sortedData.length > 0 && (
+							<TableFooter>
+								<TableRow>
+									<TableCell colSpan={8}>
+										<Pagination
+											currentPage={currentPage}
+											totalPages={totalPages}
+											onPageChange={setCurrentPage}
+											itemsPerPage={itemsPerPage}
+											totalItems={sortedData.length}
+										/>
+									</TableCell>
+								</TableRow>
+							</TableFooter>
+						)}
 					</Table>
 				</div>
 
 				{/* Mobile/Tablet version */}
 				<div className="md:hidden">
 					<div className="mb-4">
+						<h2 className="font-bold mb-4">จัดการคะแนน</h2>
 						<Input
 							className="w-full"
 							placeholder="ค้นหา"
@@ -274,66 +290,69 @@ export default function ScorePage() {
 					) : sortedData.length === 0 ? (
 						<h2>ไม่พบข้อมูลคะแนน</h2>
 					) : (
-						paginatedData.map((item) => (
-							<div
-								key={item._id}
-								className="bg-white p-4 rounded-lg shadow mb-4"
-							>
-								<div className="flex justify-between items-center mb-2">
-									<div>
-										<div className="font-medium">{item.name}</div>
-										<div className="text-sm text-gray-500">{item.username}</div>
+						<>
+							{paginatedData.map((item) => (
+								<div
+									key={item._id}
+									className="bg-white p-4 rounded-lg shadow mb-4"
+								>
+									<div className="flex justify-between items-center mb-2">
+										<div>
+											<div className="font-medium">{item.name}</div>
+											<div className="text-sm text-gray-500">
+												{item.username}
+											</div>
+										</div>
+										<CategoryBadge category={item.category} />
 									</div>
-									<CategoryBadge category={item.category} />
-								</div>
-								<div className="mb-2">
-									<div>{item.topic}</div>
-									<div className="text-sm text-gray-500">{item.subtopic}</div>
-								</div>
-								<div className="flex justify-between items-center">
-									<div>
-										<div className="font-medium">คะแนน: {item.score}</div>
-										<div className="text-sm text-gray-500">
-											{thDateTime(item.createOn)}
+									<div className="mb-2">
+										<div>{item.topic}</div>
+										<div className="text-sm text-gray-500">{item.subtopic}</div>
+									</div>
+									<div className="flex justify-between items-center">
+										<div>
+											<div className="font-medium">คะแนน: {item.score}</div>
+											<div className="text-sm text-gray-500">
+												{thDateTime(item.createOn)}
+											</div>
+										</div>
+										<div>
+											<TooltipWrapper content="แก้ไขคะแนน">
+												<div
+													role="button"
+													onClick={() => handleEdit(item)}
+													className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-primary-hover"
+												>
+													<Edit className="inline-block" size={16} />
+												</div>
+											</TooltipWrapper>
+											<TooltipWrapper content="ลบคะแนน">
+												<div
+													role="button"
+													onClick={() => handleDelete(item._id)}
+													className="cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-red-400"
+												>
+													<Trash className="inline-block" size={16} />
+												</div>
+											</TooltipWrapper>
 										</div>
 									</div>
-									<div>
-										<TooltipWrapper content="แก้ไขคะแนน">
-											<div
-												role="button"
-												onClick={() => handleEdit(item)}
-												className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-primary-hover"
-											>
-												<Edit className="inline-block" size={16} />
-											</div>
-										</TooltipWrapper>
-										<TooltipWrapper content="ลบคะแนน">
-											<div
-												role="button"
-												onClick={() => handleDelete(item._id)}
-												className="cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-red-400"
-											>
-												<Trash className="inline-block" size={16} />
-											</div>
-										</TooltipWrapper>
-									</div>
 								</div>
-							</div>
-						))
+							))}
+							{sortedData.length > 0 && (
+								<div className="mt-4">
+									<Pagination
+										currentPage={currentPage}
+										totalPages={totalPages}
+										onPageChange={setCurrentPage}
+										itemsPerPage={itemsPerPage}
+										totalItems={sortedData.length}
+									/>
+								</div>
+							)}
+						</>
 					)}
 				</div>
-
-				{sortedData.length > 0 && (
-					<div className="mt-4">
-						<Pagination
-							currentPage={currentPage}
-							totalPages={totalPages}
-							onPageChange={setCurrentPage}
-							itemsPerPage={itemsPerPage}
-							totalItems={sortedData.length}
-						/>
-					</div>
-				)}
 			</div>
 
 			<ScoreModal
