@@ -103,13 +103,13 @@ const Pagination: React.FC<PaginationProps> = ({
 	};
 
 	return (
-		<div className="flex items-center justify-between">
-			<div className="text-sm text-gray-700">
+		<div className="flex flex-col items-center space-y-4 md:flex-row md:justify-between md:space-y-0">
+			<div className="hidden md:block text-sm text-gray-700 order-1 md:order-none">
 				แสดง {Math.min((currentPage - 1) * itemsPerPage + 1, totalItems)} ถึง{" "}
 				{Math.min(currentPage * itemsPerPage, totalItems)} จาก {totalItems}{" "}
 				รายการ
 			</div>
-			<div className="flex items-center space-x-2">
+			<div className="flex items-center space-x-2 order-2 md:order-none">
 				<Button
 					variant="outline"
 					size="icon"
@@ -127,6 +127,11 @@ const Pagination: React.FC<PaginationProps> = ({
 				>
 					<ChevronRight className="h-4 w-4" />
 				</Button>
+			</div>
+			<div className="md:hidden text-sm text-gray-700 text-center w-full order-3 md:order-none">
+				แสดง {Math.min((currentPage - 1) * itemsPerPage + 1, totalItems)} ถึง{" "}
+				{Math.min(currentPage * itemsPerPage, totalItems)} จาก {totalItems}{" "}
+				รายการ
 			</div>
 		</div>
 	);

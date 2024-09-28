@@ -73,9 +73,9 @@ const TopicManagementPage: React.FC = () => {
 	);
 
 	return (
-		<div className="flex flex-col items-center py-10">
+		<div className="flex flex-col items-center py-10 px-4 md:px-0">
 			{/* Container ของ Table */}
-			<div className="w-11/12">
+			<div className="w-full md:w-11/12">
 				<div className="hidden md:block">
 					<Table>
 						<TableHeader>
@@ -161,55 +161,65 @@ const TopicManagementPage: React.FC = () => {
 				</div>
 			</div>
 
-			{/* Responsive Section */}
-			<div className="md:hidden">
-				<h2 className="font-bold mb-4 mt-4">จัดการหัวข้อ</h2>
-				<Input
-					className="w-full mb-4"
-					placeholder="ค้นหา"
-					value={searchTerm}
-					onChange={(e) => setSearchTerm(e.target.value)}
-				/>
-				{isLoading ? (
-					<Loading />
-				) : filteredTopics.length === 0 ? (
-					<h2>ไม่พบข้อมูลหัวข้อ</h2>
-				) : (
-					paginatedData.map((topic) => (
-						<div
-							key={topic._id}
-							className="bg-white p-4 rounded-lg shadow mb-4"
-						>
-							<div className="flex justify-between items-center mb-2">
-								<div>
-									<div className="font-medium">{topic.topicName}</div>
-									<CategoryBadge category={topic.category} />
+			{/* Mobile/Tablet version */}
+			<div className="md:hidden w-11/12">
+				<div className="fixed top-0 left-0 right-0 bg-primary  z-10 p-4 shadow-md pt-10">
+					<h2 className="font-bold mb-4 mt-4">จัดการหัวข้อ</h2>
+					<input
+						type="text"
+						placeholder="ค้นหา..."
+						value={searchTerm}
+						onChange={(e) => setSearchTerm(e.target.value)}
+						className="w-full p-2 border rounded"
+					/>
+				</div>
+
+				<div className="mt-28 pt-12 ">
+					{" "}
+					{/* เพิ่ม margin-top ให้ไม่ชน search bar */}
+					{isLoading ? (
+						<Loading />
+					) : filteredTopics.length === 0 ? (
+						<h2>ไม่พบข้อมูลคะแนน</h2>
+					) : (
+						<>
+							{paginatedData.map((item) => (
+								<div
+									key={item._id} // Also note: use 'item' here, not 'topic'
+									className="bg-white p-4 rounded-lg shadow mb-4"
+								>
+									<div className="flex justify-between items-center mb-2">
+										<div>
+											<div className="font-medium">{item.topicName}</div>
+											<CategoryBadge category={item.category} />
+										</div>
+									</div>
+									<div className="flex justify-end">
+										<TableActions
+											topicId={item._id}
+											topicName={item.topicName}
+											category={item.category}
+											onEdit={() => openModal(item)}
+											onDelete={() => handleDeleteTopic(item._id)}
+											isDeleting={isDeleting}
+										/>
+									</div>
 								</div>
-							</div>
-							<div className="flex justify-end">
-								<TableActions
-									topicId={topic._id}
-									topicName={topic.topicName}
-									category={topic.category}
-									onEdit={() => openModal(topic)}
-									onDelete={() => handleDeleteTopic(topic._id)}
-									isDeleting={isDeleting}
-								/>
-							</div>
+							))}
+						</>
+					)}
+					{filteredTopics.length > 0 && (
+						<div className="mt-4">
+							<Pagination
+								currentPage={currentPage}
+								totalPages={totalPages}
+								onPageChange={setCurrentPage}
+								itemsPerPage={itemsPerPage}
+								totalItems={filteredTopics.length}
+							/>
 						</div>
-					))
-				)}
-				{filteredTopics.length > 0 && (
-					<div className="mt-4">
-						<Pagination
-							currentPage={currentPage}
-							totalPages={totalPages}
-							onPageChange={setCurrentPage}
-							itemsPerPage={itemsPerPage}
-							totalItems={filteredTopics.length}
-						/>
-					</div>
-				)}
+					)}
+				</div>
 			</div>
 
 			{/* Floating Action Button and Modal */}
