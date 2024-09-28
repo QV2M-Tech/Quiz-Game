@@ -303,7 +303,7 @@ const SubtopicManagementPage: React.FC<SubtopicManagementProps> = ({
 							/>
 						</div>
 					</div>
-					<div className="mt-28 pt-12 ">
+					<div className="mt-40 pt-4 ">
 						{" "}
 						{/* เพิ่ม margin-top ให้ไม่ชน search bar */}
 						{isLoading ? (
