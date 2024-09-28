@@ -5,6 +5,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useUser } from "@/context/userContext";
 import axiosInstance from "@/lib/axiosInstance";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+	Card,
+	CardContent,
+	CardFooter,
+	CardHeader,
+} from "@/components/ui/card";
 
 interface BodyProps {
 	level: any;
@@ -337,53 +345,54 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 	};
 
 	return (
-		<>
-			<div className="flex flex-col items-center gap-6 w-8/12 max-w-md mx-auto p-6 bg-white shadow-lg rounded-xl">
-				<h1>เกม 24</h1>
-				<div className="flex w-full gap-4">
-					<div className="bg-primary p-2 w-1/2 text-center rounded-md">
-						คะแนน : {score} คะแนน
+		<Card className="w-full max-w-md mx-auto">
+			<CardHeader>
+				<h2 className="text-2xl font-bold text-center">เกม 24</h2>
+			</CardHeader>
+			<CardContent>
+				<div className="flex justify-between mb-4">
+					<div className="bg-primary text-white p-2 rounded">
+						คะแนน: {score}
 					</div>
-					<div className="bg-primary p-2 w-1/2 text-center rounded-md">
-						เวลา : {timeLeft} วิ
+					<div className="bg-primary text-white p-2 rounded">
+						เวลา: {timeLeft} วิ
 					</div>
 				</div>
-				<div className="flex flex-col gap-4 w-full items-start text-left">
-					<h3>ชุดตัวเลข: {numbers.join(", ")}</h3>
-					<h3>คำตอบ: {target}</h3>
+				<div className="mb-4">
+					<h3 className="font-semibold">ชุดตัวเลข: {numbers.join(", ")}</h3>
+					<h3 className="font-semibold">คำตอบ: {target}</h3>
 				</div>
-				<input
+				<Input
 					type="text"
 					value={input}
 					onChange={handleChange}
 					onKeyPress={handleKeyPress}
-					className="w-full p-2 border border-gray-300 rounded-md"
+					className="w-full mb-4"
 					placeholder="วิธีคิด"
 				/>
-				{message && <p>{message}</p>}
-				<button
+				{message && <p className="text-center mb-4">{message}</p>}
+				<Button
 					onClick={checkAnswer}
-					className="w-full bg-accent hover:bg-accent-hover border border-secondary py-2 px-4 rounded-md shadow-md"
+					className="w-full bg-accent hover:bg-accent-hover text-white mb-4"
 				>
 					ตอบ
-				</button>
-				<div className="flex gap-4 w-full">
-					<button
-						onClick={resetGame}
-						className="tw-btn w-1/2 bg-white border border-secondary hover:bg-secondary/20 shadow-md p-3 text-lg"
-					>
-						เริ่มเกมใหม่
-					</button>
-					<button
-						onClick={() => router.push("/selectgame")}
-						className="tw-btn w-1/2 bg-secondary hover:bg-secondary-hover text-white shadow-md p-3 text-lg"
-					>
-						ออกจากเกม
-					</button>
-				</div>
-			</div>
-			{/* <ToastContainer /> */}
-		</>
+				</Button>
+			</CardContent>
+			<CardFooter className="flex justify-between">
+				<Button
+					onClick={resetGame}
+					className="w-5/12 bg-white border border-secondary hover:bg-secondary/20"
+				>
+					เริ่มเกมใหม่
+				</Button>
+				<Button
+					onClick={() => router.push("/selectgame")}
+					className="w-5/12 bg-secondary hover:bg-secondary-hover text-white"
+				>
+					ออกจากเกม
+				</Button>
+			</CardFooter>
+		</Card>
 	);
 };
 
