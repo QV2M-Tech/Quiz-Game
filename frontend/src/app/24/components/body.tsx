@@ -13,7 +13,6 @@ import {
 	CardFooter,
 	CardHeader,
 } from "@/components/ui/card";
-import MobileScoreBoard from "./MobileScoreBoard";
 
 interface BodyProps {
 	level: any;
@@ -395,9 +394,6 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 					</Button>
 				</CardFooter>
 			</Card>
-			<div className="md:hidden">
-				<MobileScoreBoard level={level} IsEnd={IsEnd} />
-			</div>
 		</div>
 	);
 };

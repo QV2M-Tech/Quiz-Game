@@ -10,16 +10,24 @@ import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import Description from "./components/description";
 
+interface MobileScoreModalProps {
+	isOpen: boolean;
+	onClose: () => void;
+	level: string;
+	IsEnd: boolean;
+}
+
 function Page() {
 	const [level, setLevel] = useState<string>("easy");
 	const { User } = useUser();
 	const [IsEnd, setIsEnd] = useState<boolean>(false);
-	const [isMobile, setIsMobile] = useState<boolean>(false);
+	const [isMobileOrTablet, setIsMobileOrTablet] = useState<boolean>(false);
 	const [showRules, setShowRules] = useState<boolean>(false);
+	const [showScore, setShowScore] = useState(false);
 
 	useEffect(() => {
 		const handleResize = () => {
-			setIsMobile(window.innerWidth <= 768);
+			setIsMobileOrTablet(window.innerWidth <= 1024);
 		};
 
 		window.addEventListener("resize", handleResize);
@@ -33,19 +41,52 @@ function Page() {
 	const handleLevelChange = (newLevel: string) => {
 		setLevel(newLevel);
 	};
+	const MobileScoreModal: React.FC<MobileScoreModalProps> = ({
+		isOpen,
+		onClose,
+		level,
+		IsEnd,
+	}) => {
+		if (!isOpen) return null;
+
+		return (
+			<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+				<div className="bg-white p-6 rounded-lg max-w-sm w-full">
+					<h2 className="text-xl font-bold mb-4">คะแนน</h2>
+					<Score level={level} IsEnd={IsEnd} />
+					<Button
+						onClick={onClose}
+						className="mt-4 w-full bg-secondary text-white"
+					>
+						ปิด
+					</Button>
+				</div>
+			</div>
+		);
+	};
 
 	return (
-		<div className="min-h-screen bg-gray-primary">
-			{isMobile ? (
-				<div className="p-4">
-					<div className="flex justify-end gap-3 mb-4">
-						<Button
-							onClick={() => setShowRules(true)}
-							className="bg-secondary text-white"
-						>
-							วิธีเล่น
-						</Button>
+		<div
+			className={`min-h-screen bg-gray-primary mx-auto md:container ${
+				isMobileOrTablet ? "h-screen overflow-hidden" : ""
+			}`}
+		>
+			{isMobileOrTablet ? (
+				<div className="p-4 md:p-8 mt-20 max-w-2xl mx-auto">
+					<div className=" flex-1 flex flex-col p-4 md:p-8">
+						<div className="flex justify-between bg-white rounded-lg px-2 py-1 md:px-3 md:py-2 mb-2 text-center">
+							<div className="bg-white rounded-lg px-3 py-2">
+								<h3 className="text-sm md:text-base">หมวดหมู่: บันเทิง</h3>
+							</div>
+							<div className="bg-white rounded-lg px-3 py-2">
+								<h3 className="text-sm md:text-base">หัวข้อย่อย: เกม 24</h3>
+							</div>
+							<div className="bg-white rounded-lg px-3 py-2">
+								<h3 className="text-sm md:text-base">ชื่อ: TeamDev01</h3>
+							</div>
+						</div>
 					</div>
+
 					<MobileLevelSelector
 						level={level}
 						onLevelChange={handleLevelChange}
@@ -56,6 +97,26 @@ function Page() {
 						onClose={() => setShowRules(false)}
 						level={level}
 					/>
+					<MobileScoreModal
+						isOpen={showScore}
+						onClose={() => setShowScore(false)}
+						level={level}
+						IsEnd={IsEnd}
+					/>
+					<div className="flex justify-between space-x-2 mt-4">
+						<Button
+							onClick={() => setShowRules(true)}
+							className="bg-secondary text-white"
+						>
+							วิธีเล่น
+						</Button>
+						<Button
+							onClick={() => setShowScore(true)}
+							className="bg-secondary text-white"
+						>
+							ดูคะแนน
+						</Button>
+					</div>
 				</div>
 			) : (
 				<section className="flex flex-col gap-8">

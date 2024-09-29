@@ -289,7 +289,6 @@ export default function ScorePage() {
 
 					<div className="mt-20 pt-10">
 						{" "}
-						{/* เพิ่ม margin-top ให้ไม่ชน search bar */}
 						{isLoading ? (
 							<Loading />
 						) : sortedData.length === 0 ? (
@@ -363,6 +362,14 @@ export default function ScorePage() {
 					</div>
 				</div>
 			</div>
+			<ScoreModal
+				isEditModalOpen={isEditModalOpen}
+				setIsEditModalOpen={setIsEditModalOpen}
+				handleUpdateScore={handleUpdateScore}
+				editedScore={editedScore}
+				setEditedScore={setEditedScore}
+				isSubmitting={isSubmitting}
+			/>
 		</div>
 	);
 }

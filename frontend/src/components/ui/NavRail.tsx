@@ -114,7 +114,7 @@ const NavRail: React.FC = () => {
 						</React.Fragment>
 					))}
 				</div>
-				<div className="flex flex-col items-center">
+				<div className="flex flex-col items-center mb-10">
 					<IconButton
 						onClick={handleLogout}
 						size="large"
