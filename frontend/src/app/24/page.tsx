@@ -67,13 +67,13 @@ function Page() {
 
 	return (
 		<div
-			className={`min-h-screen bg-gray-primary mx-auto md:container ${
+			className={`min-h-screen bg-gray-primary mx-auto md:container lg:px-16 xl:px-24 ${
 				isMobileOrTablet ? "h-screen overflow-hidden" : ""
 			}`}
 		>
 			{isMobileOrTablet ? (
 				<div className="p-4 md:p-8 mt-20 max-w-2xl mx-auto">
-					<div className=" flex-1 flex flex-col p-4 md:p-8">
+					<div className="flex-1 flex flex-col p-4 md:p-8">
 						<div className="flex justify-between bg-white rounded-lg px-2 py-1 md:px-3 md:py-2 mb-2 text-center">
 							<div className="bg-white rounded-lg px-3 py-2">
 								<h3 className="text-sm md:text-base">หมวดหมู่: บันเทิง</h3>
