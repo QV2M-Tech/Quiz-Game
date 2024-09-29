@@ -55,7 +55,7 @@ export default function Game({
 		});
 
 		setShowHint(false);
-	}, [reload]);
+	}, [reload, setQuestionList, subtopic._id]);
 
 	function handleScore(isCorrect: boolean) {
 		if (isCorrect) {

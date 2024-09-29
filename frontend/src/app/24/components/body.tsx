@@ -222,7 +222,7 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 		setScore(0);
 		setStart(false); // เพิ่มบรรทัดนี้เพื่อหยุดเวลาเมื่อเปลี่ยนโหมด
 		setIsEnd(false);
-	}, [level, IsEnd]);
+	}, [level, IsEnd, setIsEnd]);
 
 	const newEaxample = () => {
 		const generatedNumbers = generateRandomNumbers(level);
@@ -278,7 +278,7 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 					setIsEnd(true);
 				});
 		}
-	}, [timeLeft, start]);
+	}, [timeLeft, start, User?._id, score, level, setIsEnd]);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setInput(e.target.value);

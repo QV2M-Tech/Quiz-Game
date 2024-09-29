@@ -40,7 +40,9 @@ const ModalUserDelete: React.FC<ModalUserDeleteProps> = ({
 				<ModalClose />
 				<DialogTitle>ยืนยันการลบผู้ใช้</DialogTitle>
 				<Divider />
-				<Typography>คุณแน่ใจหรือไม่ที่ต้องการลบผู้ใช้ "{userName}"?</Typography>
+				<Typography>
+					คุณแน่ใจหรือไม่ที่ต้องการลบผู้ใช้ &quot;{userName}&quot;?
+				</Typography>
 				<Typography color="danger">
 					การดำเนินการนี้ไม่สามารถยกเลิกได้
 				</Typography>
