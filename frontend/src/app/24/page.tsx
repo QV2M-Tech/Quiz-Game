@@ -1,89 +1,104 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Description from "./components/description";
+import React, { useState, useEffect } from "react";
+import { useUser } from "@/context/userContext";
 import Body from "./components/body";
 import Score from "./components/score";
+import MobileLevelSelector from "./components/MobileLevelSelector";
+import MobileRulesModal from "./components/MobileRulesModal";
+
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/context/userContext";
+import { Menu } from "lucide-react";
+import Description from "./components/description";
 
 function Page() {
 	const [level, setLevel] = useState<string>("easy");
-	const { User } = useUser(); // Use the custom hook
+	const { User } = useUser();
 	const [IsEnd, setIsEnd] = useState<boolean>(false);
-	const [isPortrait, setIsPortrait] = useState<boolean>(false);
+	const [isMobile, setIsMobile] = useState<boolean>(false);
+	const [showRules, setShowRules] = useState<boolean>(false);
 
-	// Handle orientation change
 	useEffect(() => {
-		const handleOrientationChange = () => {
-			setIsPortrait(window.innerHeight > window.innerWidth);
+		const handleResize = () => {
+			setIsMobile(window.innerWidth <= 768);
 		};
 
-		window.addEventListener("resize", handleOrientationChange);
-		handleOrientationChange(); // Initial check
+		window.addEventListener("resize", handleResize);
+		handleResize();
 
 		return () => {
-			window.removeEventListener("resize", handleOrientationChange);
+			window.removeEventListener("resize", handleResize);
 		};
 	}, []);
 
-	// Handle button click and set level
 	const handleLevelChange = (newLevel: string) => {
 		setLevel(newLevel);
 	};
 
 	return (
-		<>
-			{isPortrait && (
-				<div className="mx-auto bg-center">
-					กรุณาหมุนอุปกรณ์เป็นแนวนอนเพื่อเล่นเกม
-				</div>
-			)}
-			<section
-				className={`flex flex-col gap-8 h-screen page-content ${
-					isPortrait ? "hidden" : ""
-				}`}
-			>
-				<header className="flex w-full gap-10 p-6">
-					<div className="flex w-2/5 items-center gap-6">
+		<div className="min-h-screen bg-gray-primary">
+			{isMobile ? (
+				<div className="p-4">
+					<div className="flex justify-end gap-3 mb-4">
 						<Button
-							className={`w-1/3 px-2 py-3 bg-white border border-secondary hover:bg-secondary hover:text-white
-								${level === "easy" ? "bg-secondary text-white" : ""}`}
-							onClick={() => handleLevelChange("easy")}
+							onClick={() => setShowRules(true)}
+							className="bg-secondary text-white"
 						>
-							ง่าย
-						</Button>
-						<Button
-							className={`w-1/3 px-2 py-3 bg-white border border-secondary hover:bg-secondary hover:text-white
-								${level === "medium" ? "bg-secondary text-white" : ""}`}
-							onClick={() => handleLevelChange("medium")}
-						>
-							ปานกลาง
-						</Button>
-						<Button
-							className={`w-1/3 px-2 py-3 bg-white border border-secondary hover:bg-secondary hover:text-white
-								${level === "hard" ? "bg-secondary text-white" : ""}`}
-							onClick={() => handleLevelChange("hard")}
-						>
-							ยาก
+							วิธีเล่น
 						</Button>
 					</div>
-					<div className="flex w-2/5 items-center justify-around px-2 py-3 bg-white rounded-lg">
-						<h3>หมวดหมู่: บันเทิง</h3>
-						<h3>หัวข้อย่อย: เกม 24</h3>
-					</div>
-					<div className="flex w-1/5 items-center justify-center px-2 py-3 bg-white rounded-lg">
-						<h3>ชื่อ {User?.name}</h3>{" "}
-						{/* Safe access using optional chaining */}
-					</div>
-				</header>
-
-				<div className="flex gap-8 justify-center px-10">
-					<Description level={level} />
+					<MobileLevelSelector
+						level={level}
+						onLevelChange={handleLevelChange}
+					/>
 					<Body level={level} IsEnd={IsEnd} setIsEnd={setIsEnd} />
-					<Score level={level} IsEnd={IsEnd} />
+					<MobileRulesModal
+						isOpen={showRules}
+						onClose={() => setShowRules(false)}
+						level={level}
+					/>
 				</div>
-			</section>
-		</>
+			) : (
+				<section className="flex flex-col gap-8">
+					<header className="flex w-full gap-10 p-6">
+						<div className="flex w-2/5 items-center gap-6">
+							<Button
+								className={`w-1/3 px-2 py-3 bg-white border border-secondary hover:bg-secondary hover:text-white
+              ${level === "easy" ? "bg-secondary text-white" : ""}`}
+								onClick={() => handleLevelChange("easy")}
+							>
+								ง่าย
+							</Button>
+							<Button
+								className={`w-1/3 px-2 py-3 bg-white border border-secondary hover:bg-secondary hover:text-white
+              ${level === "medium" ? "bg-secondary text-white" : ""}`}
+								onClick={() => handleLevelChange("medium")}
+							>
+								ปานกลาง
+							</Button>
+							<Button
+								className={`w-1/3 px-2 py-3 bg-white border border-secondary hover:bg-secondary hover:text-white
+              ${level === "hard" ? "bg-secondary text-white" : ""}`}
+								onClick={() => handleLevelChange("hard")}
+							>
+								ยาก
+							</Button>
+						</div>
+						<div className="flex w-2/5 items-center justify-around px-2 py-3 bg-white rounded-lg">
+							<h3>หมวดหมู่: บันเทิง</h3>
+							<h3>หัวข้อย่อย: เกม 24</h3>
+						</div>
+						<div className="flex w-1/5 items-center justify-center px-2 py-3 bg-white rounded-lg">
+							<h3>ชื่อ {User?.name}</h3>
+						</div>
+					</header>
+					<div className="flex gap-8 justify-center px-10">
+						<Description level={level} />
+						<Body level={level} IsEnd={IsEnd} setIsEnd={setIsEnd} />
+						<Score level={level} IsEnd={IsEnd} />
+					</div>
+				</section>
+			)}
+		</div>
 	);
 }
 

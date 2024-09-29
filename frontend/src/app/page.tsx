@@ -25,6 +25,10 @@ const LoginUserPage = () => {
 	const router = useRouter();
 	const { setUserFromToken } = useUser();
 
+	const handleProfileImageUpload = (imageUrl: React.SetStateAction<string>) => {
+		setProfile(imageUrl);
+	};
+
 	const handleSubmit = async (isLogin: boolean) => {
 		try {
 			if (isLogin) {
@@ -39,7 +43,7 @@ const LoginUserPage = () => {
 					setUserFromToken(token);
 
 					setIsError(false);
-					router.push("/selectgame");
+					window.location.href = "/selectgame";
 				}
 			} else {
 				// Register
@@ -57,6 +61,11 @@ const LoginUserPage = () => {
 					setIsError(false);
 					setTitle("ลงทะเบียนสำเร็จ");
 					setContent("");
+
+					// เพิ่ม redirect หลังจากลงทะเบียนสำเร็จ
+					setTimeout(() => {
+						window.location.href = "/selectgame";
+					}, 2000); // รอ 2 วินาทีก่อน redirect เพื่อให้ผู้ใช้เห็น popup
 				}
 			}
 		} catch (error) {
@@ -75,40 +84,6 @@ const LoginUserPage = () => {
 			handleSubmit(isLogin);
 		}
 	};
-	const InputField: React.FC<{
-		id: string;
-		label: string;
-		value: string;
-		onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-		type?: string;
-	}> = ({ id, label, value, onChange, type = "text" }) => (
-		<div className="mb-4">
-			<label htmlFor={id} className="block text-sm font-medium text-gray-700">
-				{label}
-			</label>
-			<input
-				id={id}
-				type={type}
-				value={value}
-				onChange={onChange}
-				required
-				className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-			/>
-		</div>
-	);
-
-	const SubmitButton: React.FC<{
-		onClick: () => void;
-		children: React.ReactNode;
-	}> = ({ onClick, children }) => (
-		<button
-			type="button"
-			onClick={onClick}
-			className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-		>
-			{children}
-		</button>
-	);
 
 	return (
 		<div className="flex flex-col justify-center items-center sm:-ml-20">
@@ -236,7 +211,7 @@ const LoginUserPage = () => {
 				</div>
 			</section>
 
-			{/* Mobile Layout */}
+			{/* Mobile layout */}
 			<div className="lg:hidden w-full max-w-md space-y-8 px-4 py-8">
 				<div className="text-center">
 					<Image
@@ -275,51 +250,75 @@ const LoginUserPage = () => {
 						</button>
 					</div>
 
-					<form onSubmit={(e) => e.preventDefault()} onKeyDown={handleKeyDown}>
+					<fieldset className="flex flex-col gap-3">
 						{!isLogin && (
-							<>
-								<UploadProfileImage
-									onImageUpload={(imageUrl: any) => setProfile(imageUrl)}
-									profileImg={""}
-								/>
-								<InputField
-									id="signup-name"
-									label="ชื่อ"
+							<label htmlFor="mobile-signup-name" className="login-label">
+								ชื่อ
+								<input
+									id="mobile-signup-name"
 									value={name}
 									onChange={(e) => setName(e.target.value)}
+									required
+									className="login-input"
 								/>
-							</>
+							</label>
 						)}
-						<InputField
-							id={isLogin ? "login-username" : "signup-username"}
-							label="ชื่อผู้ใช้"
-							value={isLogin ? username : usernamer}
-							onChange={(e) =>
-								isLogin
-									? setUsername(e.target.value)
-									: setUsernamer(e.target.value)
+
+						<label
+							htmlFor={
+								isLogin ? "mobile-login-username" : "mobile-signup-username"
 							}
-						/>
-						<InputField
-							id={isLogin ? "login-password" : "signup-password"}
-							label="รหัสผ่าน"
-							type="password"
-							value={isLogin ? password : passwordr}
-							onChange={(e) =>
-								isLogin
-									? setPassword(e.target.value)
-									: setPasswordr(e.target.value)
+							className="login-label"
+						>
+							ชื่อผู้ใช้
+							<input
+								id={
+									isLogin ? "mobile-login-username" : "mobile-signup-username"
+								}
+								value={isLogin ? username : usernamer}
+								onChange={(e) =>
+									isLogin
+										? setUsername(e.target.value)
+										: setUsernamer(e.target.value)
+								}
+								required
+								className="login-input"
+							/>
+						</label>
+
+						<label
+							htmlFor={
+								isLogin ? "mobile-login-password" : "mobile-signup-password"
 							}
-						/>
-						<div className="mt-6">
-							<button onClick={() => handleSubmit(isLogin)}>
-								{isLogin ? "เข้าสู่ระบบ" : "ลงทะเบียน"}
-							</button>
-						</div>
-					</form>
+							className="login-label"
+						>
+							รหัสผ่าน
+							<input
+								id={
+									isLogin ? "mobile-login-password" : "mobile-signup-password"
+								}
+								type="password"
+								value={isLogin ? password : passwordr}
+								onChange={(e) =>
+									isLogin
+										? setPassword(e.target.value)
+										: setPasswordr(e.target.value)
+								}
+								required
+								className="login-input"
+							/>
+						</label>
+
+						<button
+							type="button"
+							className="login-btn"
+							onClick={() => handleSubmit(isLogin)}
+						>
+							{isLogin ? "เข้าสู่ระบบ" : "ลงทะเบียน"}
+						</button>
+					</fieldset>
 				</div>
 			</div>
-
 			<LoginModal
 				popup={popup}
 				setpopup={setPopup}

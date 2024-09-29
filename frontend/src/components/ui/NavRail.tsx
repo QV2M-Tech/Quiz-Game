@@ -17,12 +17,9 @@ import { useUser } from "@/context/userContext";
 import {
 	NavigationMenu,
 	NavigationMenuContent,
-	NavigationMenuIndicator,
 	NavigationMenuItem,
-	NavigationMenuLink,
 	NavigationMenuList,
 	NavigationMenuTrigger,
-	NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 
 interface LinkItem {
@@ -70,6 +67,29 @@ const NavRail: React.FC = () => {
 		refreshUser();
 	};
 
+	const renderNavLink = (link: LinkItem) => (
+		<Link
+			href={link.path}
+			className={`group flex flex-col items-center gap-1 transition-all ${
+				pathname.startsWith(link.path) ? "text-[#FA8072]" : "text-[default]"
+			}`}
+		>
+			<IconButton
+				size="large"
+				className="transition-all duration-300 ease-in-out group-hover:bg-[rgba(250,128,114,0.05)]"
+			>
+				{React.cloneElement(link.icon as React.ReactElement, {
+					className: `${
+						pathname.startsWith(link.path) ? "text-[#FA8072]" : "text-[default]"
+					} group-hover:text-[#E9967A]`,
+				})}
+			</IconButton>
+			<span className="text-xs text-center transition-colors duration-300 group-hover:text-[#E9967A]">
+				{link.name}
+			</span>
+		</Link>
+	);
+
 	return (
 		<>
 			<nav className="hidden sm:flex flex-col justify-between fixed z-20 gap-4 h-screen sm:w-20 px-2 py-4 bg-white shadow-md">
@@ -89,32 +109,7 @@ const NavRail: React.FC = () => {
 					</Link>
 					{links.map((link, index) => (
 						<React.Fragment key={link.name}>
-							{(!link.isAdmin || (User && User.isAdmin)) && (
-								<Link
-									href={link.path}
-									className={`group flex flex-col items-center gap-1 transition-all ${
-										pathname.startsWith(link.path)
-											? "text-[#FA8072]"
-											: "text-[default]"
-									}`}
-								>
-									<IconButton
-										size="large"
-										className="transition-all duration-300 ease-in-out group-hover:bg-[rgba(250,128,114,0.05)]"
-									>
-										{React.cloneElement(link.icon as React.ReactElement, {
-											className: `${
-												pathname.startsWith(link.path)
-													? "text-[#FA8072]"
-													: "text-[default]"
-											} group-hover:text-[#E9967A]`,
-										})}
-									</IconButton>
-									<span className="text-xs text-center transition-colors duration-300 group-hover:text-[#E9967A]">
-										{link.name}
-									</span>
-								</Link>
-							)}
+							{(!link.isAdmin || (User && User.isAdmin)) && renderNavLink(link)}
 							{index === 0 && <div className="w-3/4 h-px bg-gray-300" />}
 						</React.Fragment>
 					))}
@@ -150,7 +145,7 @@ const NavRail: React.FC = () => {
 												: "text-[default]"
 										}`}
 									>
-										<NavigationMenuLink>โปรไฟล์</NavigationMenuLink>
+										โปรไฟล์
 									</Link>
 								</div>
 								{links.map(
@@ -165,7 +160,7 @@ const NavRail: React.FC = () => {
 															: "text-[default]"
 													}`}
 												>
-													<NavigationMenuLink>{link.name}</NavigationMenuLink>
+													{link.name}
 												</Link>
 											</div>
 										)
@@ -174,7 +169,7 @@ const NavRail: React.FC = () => {
 									onClick={handleLogout}
 									className="p-2 flex justify-center items-center cursor-pointer"
 								>
-									<NavigationMenuLink>ออกจากระบบ</NavigationMenuLink>
+									ออกจากระบบ
 								</div>
 							</NavigationMenuContent>
 						</NavigationMenuItem>

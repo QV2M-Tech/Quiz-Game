@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useUser } from "@/context/userContext";
-import { getUserById, updateUserById } from "@/lib/userApi";
+import { updateUserById } from "@/lib/userApi";
 import { User } from "@/types/user";
 import UploadProfileImage from "@/components/login/UploadProfileImage";
 import ProfileModal from "./components/ProfileModal";
@@ -21,9 +21,8 @@ export default function Profile() {
 		}
 	}, [User]);
 
-	function handleChange(e: { target: { name: string; value: any } }) {
+	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const { name, value } = e.target;
-
 		setUserProfile((prev) => (prev ? { ...prev, [name]: value } : null));
 	}
 
@@ -33,7 +32,7 @@ export default function Profile() {
 
 		try {
 			const res = await updateUserById(userId, userProfile);
-			setPopupTitle(res);
+			setPopupTitle("Success");
 			setPopupContent(res);
 		} catch (error) {
 			setPopupTitle("มีข้อผิดพลาด");
@@ -53,7 +52,7 @@ export default function Profile() {
 				>
 					<h2 className="font-bold">แก้ไขข้อมูลผู้ใช้</h2>
 					<UploadProfileImage
-						profileImg={userProfile?.profile || User?.profile || ""}
+						profileImg={userProfile?.profile || ""}
 						onImageUpload={(imageUrl: string) => {
 							setUserProfile((prev) =>
 								prev ? { ...prev, profile: imageUrl } : null
@@ -65,7 +64,7 @@ export default function Profile() {
 						ชื่อ
 						<input
 							name="name"
-							value={userProfile?.name}
+							value={userProfile?.name || ""}
 							onChange={handleChange}
 							required
 							className="border border-neutral-300 px-4 py-2 rounded-lg"
@@ -74,7 +73,7 @@ export default function Profile() {
 					<label className="login-label">
 						ชื่อผู้ใช้
 						<input
-							value={userProfile?.username}
+							value={userProfile?.username || ""}
 							disabled
 							className="border border-neutral-300 px-4 py-2 rounded-lg"
 						/>
@@ -84,7 +83,7 @@ export default function Profile() {
 						<input
 							type="password"
 							name="password"
-							value={userProfile?.password}
+							value={userProfile?.password || ""}
 							onChange={handleChange}
 							className="border border-neutral-300 px-4 py-2 rounded-lg"
 						/>

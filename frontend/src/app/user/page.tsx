@@ -3,8 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Pagination from "@/components/ui/Pagination";
 import { Input } from "@/components/ui/input";
-import { ArrowUpDown } from "lucide-react";
-import { Edit, Trash } from "lucide-react";
+import { ArrowUpDown, Edit, Trash } from "lucide-react";
 import ModalUserEdit from "./components/ModalUserEdit";
 import axiosInstance from "@/lib/axiosInstance";
 import {
@@ -131,116 +130,186 @@ export default function ScorePage() {
 	return (
 		<div className="flex flex-col items-center py-10">
 			<div className="w-11/12">
-				<Table>
-					<TableHeader>
-						<TableRow>
-							<TableCell colSpan={4}>
-								<div className="flex justify-between items-center">
-									<h2 className="font-bold">จัดการผู้ใช้งาน</h2>
-									<div className="flex gap-4">
-										<Input
-											className="w-64"
-											placeholder="ค้นหา"
-											value={searchTerm}
-											onChange={(e) => setSearchTerm(e.target.value)}
-										/>
+				{/* Desktop version */}
+				<div className="hidden md:block">
+					<Table>
+						<TableHeader>
+							<TableRow>
+								<TableCell colSpan={4}>
+									<div className="flex justify-between items-center">
+										<h2 className="font-bold">จัดการผู้ใช้งาน</h2>
+										<div className="flex gap-4">
+											<Input
+												className="w-64"
+												placeholder="ค้นหา"
+												value={searchTerm}
+												onChange={(e) => setSearchTerm(e.target.value)}
+											/>
+										</div>
 									</div>
-								</div>
-							</TableCell>
-						</TableRow>
-						<TableRow>
-							<TableHead
-								onClick={() => requestSort("createOn")}
-								className="cursor-pointer text-center w-1/4"
-							>
-								วันที่สร้าง{" "}
-								<ArrowUpDown className="inline-block ml-2" size={16} />
-							</TableHead>
-							<TableHead
-								onClick={() => requestSort("name")}
-								className="cursor-pointer text-center w-1/4"
-							>
-								ชื่อ <ArrowUpDown className="inline-block ml-2" size={16} />
-							</TableHead>
-							<TableHead
-								onClick={() => requestSort("username")}
-								className="cursor-pointer text-center w-1/4"
-							>
-								ชื่อผู้ใช้{" "}
-								<ArrowUpDown className="inline-block ml-2" size={16} />
-							</TableHead>
-							<TableHead className="text-center w-1/4">ตัวเลือก</TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{isLoading ? (
-							<TableRow>
-								<TableCell colSpan={4}>
-									<Loading />
 								</TableCell>
 							</TableRow>
-						) : sortedData.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={4}>
-									<h2>ไม่พบข้อมูลผู้ใช้</h2>
-								</TableCell>
+								<TableHead
+									onClick={() => requestSort("createOn")}
+									className="cursor-pointer text-center w-1/4"
+								>
+									วันที่สร้าง{" "}
+									<ArrowUpDown className="inline-block ml-2" size={16} />
+								</TableHead>
+								<TableHead
+									onClick={() => requestSort("name")}
+									className="cursor-pointer text-center w-1/4"
+								>
+									ชื่อ <ArrowUpDown className="inline-block ml-2" size={16} />
+								</TableHead>
+								<TableHead
+									onClick={() => requestSort("username")}
+									className="cursor-pointer text-center w-1/4"
+								>
+									ชื่อผู้ใช้{" "}
+									<ArrowUpDown className="inline-block ml-2" size={16} />
+								</TableHead>
+								<TableHead className="text-center w-1/4">ตัวเลือก</TableHead>
 							</TableRow>
-						) : (
-							paginatedData.map((item) => (
-								<TableRow key={item._id}>
-									<TableCell className="text-center">
-										<div className="font-medium">
-											{thDateTime(item.createOn).split(" ")[0]}
-										</div>
-										<div className="text-sm text-gray-500">
-											{thDateTime(item.createOn).split(" ")[1]}
-										</div>
-									</TableCell>
-									<TableCell className="text-center">{item.name}</TableCell>
-									<TableCell className="text-center">{item.username}</TableCell>
-									<TableCell className="text-center">
-										<TooltipWrapper content="แก้ไขผู้ใช้">
-											<div
-												role="button"
-												aria-label="แก้ไขผู้ใช้"
-												tabIndex={0}
-												onClick={() => openEditModal(item._id, item.name)}
-												className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-primary-hover"
-											>
-												<Edit className="inline-block" size={16} />
-											</div>
-										</TooltipWrapper>
-										<TooltipWrapper content="ลบผู้ใช้">
-											<div
-												role="button"
-												className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-red-400"
-												onClick={() => handleDelete(item._id)}
-											>
-												<Trash className="inline-block" size={16} />
-											</div>
-										</TooltipWrapper>
+						</TableHeader>
+						<TableBody>
+							{isLoading ? (
+								<TableRow>
+									<TableCell colSpan={4}>
+										<Loading />
 									</TableCell>
 								</TableRow>
-							))
+							) : sortedData.length === 0 ? (
+								<TableRow>
+									<TableCell colSpan={4}>
+										<h2>ไม่พบข้อมูลผู้ใช้</h2>
+									</TableCell>
+								</TableRow>
+							) : (
+								paginatedData.map((item) => (
+									<TableRow key={item._id}>
+										<TableCell className="text-center">
+											<div className="font-medium">
+												{thDateTime(item.createOn).split(" ")[0]}
+											</div>
+											<div className="text-sm text-gray-500">
+												{thDateTime(item.createOn).split(" ")[1]}
+											</div>
+										</TableCell>
+										<TableCell className="text-center">{item.name}</TableCell>
+										<TableCell className="text-center">
+											{item.username}
+										</TableCell>
+										<TableCell className="text-center">
+											<TooltipWrapper content="แก้ไขผู้ใช้">
+												<div
+													role="button"
+													aria-label="แก้ไขผู้ใช้"
+													tabIndex={0}
+													onClick={() => openEditModal(item._id, item.name)}
+													className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-primary-hover"
+												>
+													<Edit className="inline-block" size={16} />
+												</div>
+											</TooltipWrapper>
+											<TooltipWrapper content="ลบผู้ใช้">
+												<div
+													role="button"
+													className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-red-400"
+													onClick={() => handleDelete(item._id)}
+												>
+													<Trash className="inline-block" size={16} />
+												</div>
+											</TooltipWrapper>
+										</TableCell>
+									</TableRow>
+								))
+							)}
+						</TableBody>
+						{sortedData.length > 0 && (
+							<TableFooter>
+								<TableRow>
+									<TableCell colSpan={4}>
+										<Pagination
+											currentPage={currentPage}
+											totalPages={totalPages}
+											onPageChange={setCurrentPage}
+											itemsPerPage={itemsPerPage}
+											totalItems={sortedData.length}
+										/>
+									</TableCell>
+								</TableRow>
+							</TableFooter>
 						)}
-					</TableBody>
+					</Table>
+				</div>
 
-					{sortedData.length > 0 && (
-						<TableFooter>
-							<TableRow>
-								<TableCell colSpan={4}>
-									<Pagination
-										currentPage={currentPage}
-										totalPages={totalPages}
-										onPageChange={setCurrentPage}
-										itemsPerPage={itemsPerPage}
-										totalItems={sortedData.length}
-									/>
-								</TableCell>
-							</TableRow>
-						</TableFooter>
+				{/* Mobile/Tablet version */}
+				<div className="md:hidden">
+					<h2 className="font-bold mt-4 mb-4">จัดการผู้ใช้งาน</h2>
+					<Input
+						className="w-full mb-4"
+						placeholder="ค้นหา"
+						value={searchTerm}
+						onChange={(e) => setSearchTerm(e.target.value)}
+					/>
+					{isLoading ? (
+						<Loading />
+					) : sortedData.length === 0 ? (
+						<h2>ไม่พบข้อมูลผู้ใช้</h2>
+					) : (
+						paginatedData.map((item) => (
+							<div
+								key={item._id}
+								className="bg-white p-4 rounded-lg shadow mb-4"
+							>
+								<div className="flex justify-between items-center mb-2">
+									<div>
+										<div className="font-medium">{item.name}</div>
+										<div className="text-sm text-gray-500">{item.username}</div>
+									</div>
+									<div className="text-sm text-gray-500">
+										{thDateTime(item.createOn)}
+									</div>
+								</div>
+								<div className="flex justify-end">
+									<TooltipWrapper content="แก้ไขผู้ใช้">
+										<div
+											role="button"
+											aria-label="แก้ไขผู้ใช้"
+											tabIndex={0}
+											onClick={() => openEditModal(item._id, item.name)}
+											className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-primary-hover"
+										>
+											<Edit className="inline-block" size={16} />
+										</div>
+									</TooltipWrapper>
+									<TooltipWrapper content="ลบผู้ใช้">
+										<div
+											role="button"
+											className="cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-red-400"
+											onClick={() => handleDelete(item._id)}
+										>
+											<Trash className="inline-block" size={16} />
+										</div>
+									</TooltipWrapper>
+								</div>
+							</div>
+						))
 					)}
-				</Table>
+					{sortedData.length > 0 && (
+						<div className="mt-4">
+							<Pagination
+								currentPage={currentPage}
+								totalPages={totalPages}
+								onPageChange={setCurrentPage}
+								itemsPerPage={itemsPerPage}
+								totalItems={sortedData.length}
+							/>
+						</div>
+					)}
+				</div>
 			</div>
 
 			<ModalUserEdit
