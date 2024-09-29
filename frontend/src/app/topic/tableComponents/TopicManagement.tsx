@@ -185,7 +185,7 @@ const TopicManagementPage: React.FC = () => {
 						<>
 							{paginatedData.map((item) => (
 								<div
-									key={item._id} // Also note: use 'item' here, not 'topic'
+									key={item._id}
 									className="bg-white p-4 rounded-lg shadow mb-4"
 								>
 									<div className="flex justify-between items-center mb-2">
