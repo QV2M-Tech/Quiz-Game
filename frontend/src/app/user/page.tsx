@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Pagination from "@/components/ui/Pagination";
 import { Input } from "@/components/ui/input";
-import { ArrowUpDown, Edit, Trash } from "lucide-react";
+import { ArrowUpDown, Edit, Trash, Shield } from "lucide-react";
 import ModalUserEdit from "./components/ModalUserEdit";
 import axiosInstance from "@/lib/axiosInstance";
 import {
@@ -24,6 +24,7 @@ interface User {
 	name: string;
 	username: string;
 	createOn: string;
+	isAdmin: boolean;
 }
 
 export default function ScorePage() {
@@ -39,6 +40,7 @@ export default function ScorePage() {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [isAdminSubmitting, setIsAdminSubmitting] = useState(false);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -54,22 +56,41 @@ export default function ScorePage() {
 		fetchData();
 	}, []);
 
-	const handleEdit = async (newName: string) => {
+	const handleEdit = async (newName: string, isAdmin: boolean) => {
 		if (!currentUserId) return;
 		setIsSubmitting(true);
 		try {
 			await axiosInstance.patch(`/users/${currentUserId}`, {
 				name: newName,
+				isAdmin: isAdmin,
 			});
 			setData((prevData) =>
 				prevData.map((item) =>
-					item._id === currentUserId ? { ...item, name: newName } : item
+					item._id === currentUserId
+						? { ...item, name: newName, isAdmin: isAdmin }
+						: item
 				)
 			);
 		} catch (error) {
 			console.error("Error updating user:", error);
 		} finally {
 			setIsSubmitting(false);
+		}
+	};
+
+	const handleSetAdmin = async (userId: string, isAdmin: boolean) => {
+		setIsAdminSubmitting(true);
+		try {
+			await axiosInstance.patch(`/users/${userId}/set-admin`, { isAdmin });
+			setData((prevData) =>
+				prevData.map((item) =>
+					item._id === userId ? { ...item, isAdmin } : item
+				)
+			);
+		} catch (error) {
+			console.error("Error setting user as admin:", error);
+		} finally {
+			setIsAdminSubmitting(false);
 		}
 	};
 
@@ -176,7 +197,7 @@ export default function ScorePage() {
 						<TableBody>
 							{isLoading ? (
 								<TableRow>
-									<TableCell colSpan={4}>
+									<TableCell colSpan={5}>
 										<Loading />
 									</TableCell>
 								</TableRow>
@@ -211,6 +232,25 @@ export default function ScorePage() {
 													className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-primary-hover"
 												>
 													<Edit className="inline-block" size={16} />
+												</div>
+											</TooltipWrapper>
+											<TooltipWrapper
+												content={
+													item.isAdmin ? "ยกเลิกสิทธิ์แอดมิน" : "ตั้งเป็นแอดมิน"
+												}
+											>
+												<div
+													role="button"
+													className={`mr-2 cursor-pointer inline-flex items-center rounded-md p-2 ${
+														item.isAdmin
+															? "hover:bg-yellow-400"
+															: "hover:bg-green-400"
+													}`}
+													onClick={() =>
+														handleSetAdmin(item._id, !item.isAdmin)
+													}
+												>
+													<Shield className="inline-block" size={16} />
 												</div>
 											</TooltipWrapper>
 											<TooltipWrapper content="ลบผู้ใช้">
@@ -283,6 +323,23 @@ export default function ScorePage() {
 											className="mr-2 cursor-pointer inline-flex items-center rounded-md p-2 hover:bg-primary-hover"
 										>
 											<Edit className="inline-block" size={16} />
+										</div>
+									</TooltipWrapper>
+									<TooltipWrapper
+										content={
+											item.isAdmin ? "ยกเลิกสิทธิ์แอดมิน" : "ตั้งเป็นแอดมิน"
+										}
+									>
+										<div
+											role="button"
+											className={`mr-2 cursor-pointer inline-flex items-center rounded-md p-2 ${
+												item.isAdmin
+													? "hover:bg-yellow-400"
+													: "hover:bg-green-400"
+											}`}
+											onClick={() => handleSetAdmin(item._id, !item.isAdmin)}
+										>
+											<Shield className="inline-block" size={16} />
 										</div>
 									</TooltipWrapper>
 									<TooltipWrapper content="ลบผู้ใช้">

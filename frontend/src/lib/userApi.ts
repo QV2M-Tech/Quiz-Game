@@ -23,3 +23,13 @@ export async function updateUserById(
 		throw error;
 	}
 }
+
+export async function setUserAsAdmin(userId: string): Promise<string> {
+	try {
+		await axiosInstance.patch(`/users/${userId}/set-admin`, { isAdmin: true });
+		return "แก้ไขสถานะผู้ใช้เป็นแอดมินสำเร็จ";
+	} catch (error) {
+		console.log(`Failed to set user with id ${userId} as admin:`, error);
+		throw error;
+	}
+}
