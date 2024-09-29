@@ -11,14 +11,16 @@ import {
 	ModalClose,
 	ModalDialog,
 	Stack,
+	Checkbox,
 } from "@mui/joy";
 import { Input } from "@/components/ui/input";
 
 interface ModalUserEditProps {
 	isOpen: boolean;
 	setIsOpen: (isOpen: boolean) => void;
-	onSubmit: (newName: string) => Promise<void>;
+	onSubmit: (newName: string, isAdmin: boolean) => Promise<void>;
 	initialName?: string;
+	initialIsAdmin?: boolean;
 	isSubmitting: boolean;
 }
 
@@ -27,22 +29,25 @@ const ModalUserEdit: React.FC<ModalUserEditProps> = ({
 	setIsOpen,
 	onSubmit,
 	initialName,
+	initialIsAdmin,
 	isSubmitting,
 }) => {
 	const [userName, setUserName] = useState(initialName || "");
+	const [isAdmin, setIsAdmin] = useState(initialIsAdmin || false);
 
 	useEffect(() => {
 		if (isOpen) {
 			setUserName(initialName || "");
+			setIsAdmin(initialIsAdmin || false);
 		}
-	}, [isOpen, initialName]);
+	}, [isOpen, initialName, initialIsAdmin]);
 
 	const handleSubmit = async () => {
 		if (userName.trim() === "") {
 			alert("กรุณากรอกชื่อ");
 			return;
 		}
-		await onSubmit(userName);
+		await onSubmit(userName, isAdmin);
 		setIsOpen(false);
 	};
 
@@ -55,7 +60,7 @@ const ModalUserEdit: React.FC<ModalUserEditProps> = ({
 					role="alertdialog"
 				>
 					<ModalClose />
-					<DialogTitle>แก้ไขชื่อ</DialogTitle>
+					<DialogTitle>แก้ไขผู้ใช้</DialogTitle>
 
 					<Divider />
 
@@ -73,6 +78,13 @@ const ModalUserEdit: React.FC<ModalUserEditProps> = ({
 									value={userName}
 									onChange={(e) => setUserName(e.target.value)}
 									placeholder="ชื่อ"
+								/>
+							</FormControl>
+							<FormControl>
+								<Checkbox
+									checked={isAdmin}
+									onChange={(e) => setIsAdmin(e.target.checked)}
+									label="สิทธิ์แอดมิน"
 								/>
 							</FormControl>
 							<DialogActions>
