@@ -5,7 +5,7 @@ import Body from "./components/body";
 import Score from "./components/score";
 import MobileLevelSelector from "./components/MobileLevelSelector";
 import MobileRulesModal from "./components/MobileRulesModal";
-import MobileScoreBoard from "./components/MobileScoreBoard";
+
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import Description from "./components/description";
