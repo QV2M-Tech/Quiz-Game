@@ -13,6 +13,7 @@ import {
 	CardFooter,
 	CardHeader,
 } from "@/components/ui/card";
+import MobileScoreBoard from "./MobileScoreBoard";
 
 interface BodyProps {
 	level: any;
@@ -345,54 +346,59 @@ const Body: React.FC<BodyProps> = ({ level, IsEnd, setIsEnd }) => {
 	};
 
 	return (
-		<Card className="w-full max-w-md mx-auto">
-			<CardHeader>
-				<h2 className="text-2xl font-bold text-center">เกม 24</h2>
-			</CardHeader>
-			<CardContent>
-				<div className="flex justify-between mb-4">
-					<div className="bg-primary text-white p-2 rounded">
-						คะแนน: {score}
+		<div className="w-full max-w-md mx-auto">
+			<Card>
+				<CardHeader>
+					<h2 className="text-2xl font-bold text-center">เกม 24</h2>
+				</CardHeader>
+				<CardContent>
+					<div className="flex justify-between mb-4">
+						<div className="bg-orange-400 text-white p-2 rounded">
+							คะแนน: {score}
+						</div>
+						<div className="bg-orange-400 text-white p-2 rounded">
+							เวลา: {timeLeft} วิ
+						</div>
 					</div>
-					<div className="bg-primary text-white p-2 rounded">
-						เวลา: {timeLeft} วิ
+					<div className="mb-4">
+						<h3 className="font-semibold">ชุดตัวเลข: {numbers.join(", ")}</h3>
+						<h3 className="font-semibold">คำตอบ: {target}</h3>
 					</div>
-				</div>
-				<div className="mb-4">
-					<h3 className="font-semibold">ชุดตัวเลข: {numbers.join(", ")}</h3>
-					<h3 className="font-semibold">คำตอบ: {target}</h3>
-				</div>
-				<Input
-					type="text"
-					value={input}
-					onChange={handleChange}
-					onKeyPress={handleKeyPress}
-					className="w-full mb-4"
-					placeholder="วิธีคิด"
-				/>
-				{message && <p className="text-center mb-4">{message}</p>}
-				<Button
-					onClick={checkAnswer}
-					className="w-full bg-accent hover:bg-accent-hover text-white mb-4"
-				>
-					ตอบ
-				</Button>
-			</CardContent>
-			<CardFooter className="flex justify-between">
-				<Button
-					onClick={resetGame}
-					className="w-5/12 bg-white border border-secondary hover:bg-secondary/20"
-				>
-					เริ่มเกมใหม่
-				</Button>
-				<Button
-					onClick={() => router.push("/selectgame")}
-					className="w-5/12 bg-secondary hover:bg-secondary-hover text-white"
-				>
-					ออกจากเกม
-				</Button>
-			</CardFooter>
-		</Card>
+					<Input
+						type="text"
+						value={input}
+						onChange={handleChange}
+						onKeyPress={handleKeyPress}
+						className="w-full mb-4"
+						placeholder="วิธีคิด"
+					/>
+					{message && <p className="text-center mb-4">{message}</p>}
+					<Button
+						onClick={checkAnswer}
+						className="w-full bg-accent hover:bg-accent-hover text-white mb-4"
+					>
+						ตอบ
+					</Button>
+				</CardContent>
+				<CardFooter className="flex justify-between">
+					<Button
+						onClick={resetGame}
+						className="w-5/12 bg-white border border-secondary hover:bg-secondary/20"
+					>
+						เริ่มเกมใหม่
+					</Button>
+					<Button
+						onClick={() => router.push("/selectgame")}
+						className="w-5/12 bg-secondary hover:bg-secondary-hover text-white"
+					>
+						ออกจากเกม
+					</Button>
+				</CardFooter>
+			</Card>
+			<div className="md:hidden">
+				<MobileScoreBoard level={level} IsEnd={IsEnd} />
+			</div>
+		</div>
 	);
 };
 

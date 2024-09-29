@@ -43,7 +43,7 @@ const LoginUserPage = () => {
 					setUserFromToken(token);
 
 					setIsError(false);
-					router.push("/selectgame");
+					window.location.href = "/selectgame";
 				}
 			} else {
 				// Register
@@ -61,6 +61,11 @@ const LoginUserPage = () => {
 					setIsError(false);
 					setTitle("ลงทะเบียนสำเร็จ");
 					setContent("");
+
+					// เพิ่ม redirect หลังจากลงทะเบียนสำเร็จ
+					setTimeout(() => {
+						window.location.href = "/selectgame";
+					}, 2000); // รอ 2 วินาทีก่อน redirect เพื่อให้ผู้ใช้เห็น popup
 				}
 			}
 		} catch (error) {
@@ -207,7 +212,6 @@ const LoginUserPage = () => {
 			</section>
 
 			{/* Mobile layout */}
-			{/* Mobile layout */}
 			<div className="lg:hidden w-full max-w-md space-y-8 px-4 py-8">
 				<div className="text-center">
 					<Image
@@ -247,13 +251,6 @@ const LoginUserPage = () => {
 					</div>
 
 					<fieldset className="flex flex-col gap-3">
-						{!isLogin && (
-							<UploadProfileImage
-								onImageUpload={(imageUrl) => setProfile(imageUrl)}
-								profileImg={profile}
-							/>
-						)}
-
 						{!isLogin && (
 							<label htmlFor="mobile-signup-name" className="login-label">
 								ชื่อ

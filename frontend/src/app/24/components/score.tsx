@@ -38,32 +38,34 @@ const Score: React.FC<Props> = ({ level, IsEnd }) => {
 	}, [level, IsEnd]);
 
 	return (
-		<div className="flex w-4/12">
-			<div className="flex flex-col gap-6 w-full tw-box">
+		<div className="w-full">
+			<div className="flex flex-col gap-4 w-full tw-box">
 				<h2 className="text-center">คะแนนสูงสุด 10 อันดับ</h2>
 				{loading ? (
 					<p>Loading...</p>
 				) : error ? (
 					<p className="text-red-500">{error}</p>
 				) : (
-					<table className="w-full text-center">
-						<thead>
-							<tr className="h-12">
-								<th className="w-1/5">อันดับ</th>
-								<th className="w-3/5">ชื่อ</th>
-								<th className="w-1/5">คะแนน</th>
-							</tr>
-						</thead>
-						<tbody className="divide-y divide-primary-hover">
-							{scores.map((row, index) => (
-								<tr key={index} className="h-10 hover:bg-primary">
-									<td>{index + 1}</td>
-									<td>{row.name}</td>
-									<td>{row.score}</td>
+					<div className="overflow-x-auto">
+						<table className="w-full text-center">
+							<thead>
+								<tr className="h-12">
+									<th className="w-1/5">อันดับ</th>
+									<th className="w-3/5">ชื่อ</th>
+									<th className="w-1/5">คะแนน</th>
 								</tr>
-							))}
-						</tbody>
-					</table>
+							</thead>
+							<tbody className="divide-y divide-primary-hover">
+								{scores.map((row, index) => (
+									<tr key={index} className="h-10 hover:bg-primary">
+										<td>{index + 1}</td>
+										<td>{row.name}</td>
+										<td>{row.score}</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
 				)}
 			</div>
 		</div>

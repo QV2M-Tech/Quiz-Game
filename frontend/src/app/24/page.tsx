@@ -16,7 +16,6 @@ function Page() {
 	const [IsEnd, setIsEnd] = useState<boolean>(false);
 	const [isMobile, setIsMobile] = useState<boolean>(false);
 	const [showRules, setShowRules] = useState<boolean>(false);
-	const [showScoreBoard, setShowScoreBoard] = useState<boolean>(false);
 
 	useEffect(() => {
 		const handleResize = () => {
@@ -44,31 +43,18 @@ function Page() {
 							onClick={() => setShowRules(true)}
 							className="bg-secondary text-white"
 						>
-							<Menu size={24} />
-						</Button>
-
-						<Button
-							onClick={() => setShowScoreBoard(true)}
-							className="bg-secondary text-white"
-						>
-							คะแนน
+							วิธีเล่น
 						</Button>
 					</div>
 					<MobileLevelSelector
 						level={level}
-						onLevelChange={handleLevelChange} // This is the correct place for onLevelChange
+						onLevelChange={handleLevelChange}
 					/>
 					<Body level={level} IsEnd={IsEnd} setIsEnd={setIsEnd} />
 					<MobileRulesModal
-						isOpen={showRules} // This opens/closes the rules modal
-						onClose={() => setShowRules(false)} // Closes the modal when needed
-						level={level} // Passes the selected level to the modal
-					/>
-					<MobileScoreBoard
-						isOpen={showScoreBoard}
-						onClose={() => setShowScoreBoard(false)}
+						isOpen={showRules}
+						onClose={() => setShowRules(false)}
 						level={level}
-						IsEnd={IsEnd}
 					/>
 				</div>
 			) : (
@@ -77,21 +63,21 @@ function Page() {
 						<div className="flex w-2/5 items-center gap-6">
 							<Button
 								className={`w-1/3 px-2 py-3 bg-white border border-secondary hover:bg-secondary hover:text-white
-                  ${level === "easy" ? "bg-secondary text-white" : ""}`}
+              ${level === "easy" ? "bg-secondary text-white" : ""}`}
 								onClick={() => handleLevelChange("easy")}
 							>
 								ง่าย
 							</Button>
 							<Button
 								className={`w-1/3 px-2 py-3 bg-white border border-secondary hover:bg-secondary hover:text-white
-                  ${level === "medium" ? "bg-secondary text-white" : ""}`}
+              ${level === "medium" ? "bg-secondary text-white" : ""}`}
 								onClick={() => handleLevelChange("medium")}
 							>
 								ปานกลาง
 							</Button>
 							<Button
 								className={`w-1/3 px-2 py-3 bg-white border border-secondary hover:bg-secondary hover:text-white
-                  ${level === "hard" ? "bg-secondary text-white" : ""}`}
+              ${level === "hard" ? "bg-secondary text-white" : ""}`}
 								onClick={() => handleLevelChange("hard")}
 							>
 								ยาก
@@ -105,7 +91,6 @@ function Page() {
 							<h3>ชื่อ {User?.name}</h3>
 						</div>
 					</header>
-
 					<div className="flex gap-8 justify-center px-10">
 						<Description level={level} />
 						<Body level={level} IsEnd={IsEnd} setIsEnd={setIsEnd} />

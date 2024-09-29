@@ -13,31 +13,22 @@ const MobileLevelSelector: React.FC<MobileLevelSelectorProps> = ({
 	return (
 		<div className="flex justify-center gap-2 mb-4">
 			<Button
-				className={`px-2 py-1 ${
-					level === "easy"
-						? "bg-secondary text-white"
-						: "bg-white text-secondary"
-				}`}
+				variant={level === "easy" ? "secondary" : "outline"}
+				size="sm"
 				onClick={() => onLevelChange("easy")}
 			>
 				ง่าย
 			</Button>
 			<Button
-				className={`px-2 py-1 ${
-					level === "medium"
-						? "bg-secondary text-white"
-						: "bg-white text-secondary"
-				}`}
+				variant={level === "medium" ? "secondary" : "outline"}
+				size="sm"
 				onClick={() => onLevelChange("medium")}
 			>
 				ปานกลาง
 			</Button>
 			<Button
-				className={`px-2 py-1 ${
-					level === "hard"
-						? "bg-secondary text-white"
-						: "bg-white text-secondary"
-				}`}
+				variant={level === "hard" ? "secondary" : "outline"}
+				size="sm"
 				onClick={() => onLevelChange("hard")}
 			>
 				ยาก
