@@ -152,10 +152,14 @@ function Page() {
 							<h3>ชื่อ {User?.name}</h3>
 						</div>
 					</header>
-					<div className="flex gap-8 justify-center px-10">
-						<Description level={level} />
+					<div className="grid grid-cols-2 gap-8 justify-center px-10">
+						{/* Body and Score are above */}
 						<Body level={level} IsEnd={IsEnd} setIsEnd={setIsEnd} />
 						<Score level={level} IsEnd={IsEnd} />
+						<div className="col-span-2 w-full">
+							{/* Description moved below */}
+							<Description level={level} />
+						</div>
 					</div>
 				</section>
 			)}

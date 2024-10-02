@@ -6,7 +6,7 @@ interface DescriptionProps {
 
 const Description: React.FC<DescriptionProps> = ({ level }) => {
 	return (
-		<div className="flex gap-6 w-4/12 bg-white shadow-lg rounded-xl justify-center p-6">
+		<div className="flex gap-6 w-full bg-white shadow-lg rounded-xl justify-center p-6">
 			{level === "easy" && (
 				<div className="flex flex-col gap-3">
 					<h2 className="flex justify-center items-center">กติกา</h2>
