@@ -82,7 +82,7 @@ function Page() {
 								<h3 className="text-sm md:text-base">หัวข้อย่อย: เกม 24</h3>
 							</div>
 							<div className="bg-white rounded-lg px-3 py-2">
-								<h3 className="text-sm md:text-base">ชื่อ: TeamDev01</h3>
+								<h3 className="text-sm md:text-base">ชื่อ: {User?.name}</h3>
 							</div>
 						</div>
 					</div>
